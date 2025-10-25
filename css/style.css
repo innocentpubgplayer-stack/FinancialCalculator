@@ -1,3 +1,19 @@
+/* Add to your existing style.css */
+/* Performance optimizations */
+* {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Critical above-the-fold CSS */
+.hero, .tools-section {
+  will-change: transform;
+}
+
 /* Reset and Base Styles */
 * {
     margin: 0;
@@ -563,4 +579,5 @@ footer {
     .page-header h1 {
         font-size: 2rem;
     }
+
 }
