@@ -1,0 +1,9 @@
+/* TEAM */
+Owner: FinancialCalculator
+Email: info@financialcalculator.live
+Website: https://financialcalculator.live
+
+/* SITE */
+Last update: 2024/01/25
+Standards: HTML5, CSS3, JavaScript
+Components: Custom financial calculators
