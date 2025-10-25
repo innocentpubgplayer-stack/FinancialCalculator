@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://paisekimadad.com/sitemap.xml
-Sitemap: https://www.paisekimadad.com/sitemap.xml
