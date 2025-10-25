@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /css/
+Disallow: /js/
+Disallow: /images/
+
+Sitemap: https://www.paisekimadad.com/sitemap.xml
+
+# Crawl delay (optional - adjust based on your server capacity)
+Crawl-delay: 1
