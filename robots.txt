@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /css/
+Disallow: /js/
+Disallow: /images/
+
+# Sitemap
+Sitemap: https://financialcalculator.live/sitemap.xml
