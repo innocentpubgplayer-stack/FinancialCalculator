@@ -1,0 +1,17 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Financial Calculator",
+  "name_for_model": "financial_calculator",
+  "description_for_human": "Free online financial calculators for loans, investments, taxes, and savings.",
+  "description_for_model": "Tool for calculating EMI, SIP, loans, GST, taxes, FD/RD, and savings goals.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://financialcalculator.live/openapi.yaml"
+  },
+  "logo_url": "https://financialcalculator.live/images/logo.jpg",
+  "contact_email": "info@financialcalculator.live",
+  "legal_info_url": "https://financialcalculator.live/pages/terms-conditions.html"
+}
