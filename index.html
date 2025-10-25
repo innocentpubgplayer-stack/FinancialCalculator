@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PaisekiMadad - Your Financial Companion for Smart Money Management</title>
+    <meta name="description" content="Free financial calculators: EMI Calculator, Loan Eligibility, SIP Calculator, GST Calculator, FD/RD Calculator, Income Tax Calculator, and Savings Goal Tracker.">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="index.html" class="logo">Paiseki<span>Madad</span></a>
+            <button class="mobile-menu-btn">☰</button>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="pages/about.html">About Us</a></li>
+                    <li><a href="#tools">Tools</a></li>
+                    <li><a href="pages/contact.html">Contact Us</a></li>
+                    <li><a href="pages/privacy-policy.html">Privacy Policy</a></li>
+                    <li><a href="pages/disclaimer.html">Disclaimer</a></li>
+                    <li><a href="pages/terms-conditions.html">Terms & Conditions</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Your Financial Companion for Smart Money Management</h1>
+            <p>Access our suite of free financial calculators to make informed decisions about loans, investments, taxes, and savings.</p>
+            <a href="#tools" class="cta-button">Explore Tools</a>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section class="tools-section" id="tools">
+        <div class="container">
+            <h2 class="section-title">Our Financial Tools</h2>
+            <div class="tools-grid">
+                <!-- EMI Calculator -->
+                <div class="tool-card">
+                    <div class="tool-icon">₹</div>
+                    <div class="tool-content">
+                        <h3>EMI Calculator</h3>
+                        <p>Calculate your Equated Monthly Installment for home loans, car loans, personal loans, and more.</p>
+                        <a href="#emi-calculator" class="tool-button">Use Tool</a>
+                    </div>
+                </div>
+                
+                <!-- Loan Eligibility Checker -->
+                <div class="tool-card">
+                    <div class="tool-icon">✓</div>
+                    <div class="tool-content">
+                        <h3>Loan Eligibility Checker</h3>
+                        <p>Determine how much loan you're eligible for based on your income, expenses, and credit profile.</p>
+                        <a href="#loan-eligibility" class="tool-button">Use Tool</a>
+                    </div>
+                </div>
+                
+                <!-- SIP Calculator -->
+                <div class="tool-card">
+                    <div class="tool-icon">↗</div>
+                    <div class="tool-content">
+                        <h3>SIP Calculator</h3>
+                        <p>Plan your Systematic Investment Plan and see how small regular investments can grow over time.</p>
+                        <a href="#sip-calculator" class="tool-button">Use Tool</a>
+                    </div>
+                </div>
+                
+                <!-- GST Calculator -->
+                <div class="tool-card">
+                    <div class="tool-icon">%</div>
+                    <div class="tool-content">
+                        <h3>GST Calculator</h3>
+                        <p>Calculate GST amounts for your purchases and understand the tax components easily.</p>
+                        <a href="#gst-calculator" class="tool-button">Use Tool</a>
+                    </div>
+                </div>
+                
+                <!-- FD/RD Calculator -->
+                <div class="tool-card">
+                    <div class="tool-icon">🏦</div>
+                    <div class="tool-content">
+                        <h3>FD/RD Calculator</h3>
+                        <p>Calculate returns on your Fixed Deposits and Recurring Deposits with different interest rates.</p>
+                        <a href="#fd-rd-calculator" class="tool-button">Use Tool</a>
+                    </div>
+                </div>
+                
+                <!-- Income Tax Calculator -->
+                <div class="tool-card">
+                    <div class="tool-icon">📊</div>
+                    <div class="tool-content">
+                        <h3>Income Tax Calculator</h3>
+                        <p>Estimate your income tax liability and plan your taxes efficiently with our calculator.</p>
+                        <a href="#income-tax-calculator" class="tool-button">Use Tool</a>
+                    </div>
+                </div>
+                
+                <!-- Savings Goal Tracker -->
+                <div class="tool-card">
+                    <div class="tool-icon">🎯</div>
+                    <div class="tool-content">
+                        <h3>Savings Goal Tracker</h3>
+                        <p>Set financial goals and track your progress towards achieving them with our savings tracker.</p>
+                        <a href="#savings-tracker" class="tool-button">Use Tool</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EMI Calculator -->
+    <section id="emi-calculator" class="container">
+        <div class="calculator">
+            <h2>EMI Calculator</h2>
+            <div class="input-group">
+                <label for="loan-amount">Loan Amount (₹)</label>
+                <input type="number" id="loan-amount" placeholder="Enter loan amount">
+            </div>
+            <div class="input-group">
+                <label for="interest-rate">Interest Rate (% per annum)</label>
+                <input type="number" id="interest-rate" placeholder="Enter interest rate">
+            </div>
+            <div class="input-group">
+                <label for="loan-tenure">Loan Tenure (in months)</label>
+                <input type="number" id="loan-tenure" placeholder="Enter tenure in months">
+            </div>
+            <button class="calculate-btn" onclick="calculateEMI()">Calculate EMI</button>
+            <div class="result" id="emi-result">
+                <h3>Your EMI Calculation</h3>
+                <div class="result-item">
+                    <span>Monthly EMI:</span>
+                    <span id="monthly-emi">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Total Interest Payable:</span>
+                    <span id="total-interest">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Total Payment (Principal + Interest):</span>
+                    <span id="total-payment">₹0</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tool-description">
+            <h3>Understanding EMI: Your Guide to Equated Monthly Installments</h3>
+            <p>An Equated Monthly Installment (EMI) is a fixed payment amount made by a borrower to a lender at a specified date each calendar month. EMIs are used to pay off both interest and principal each month, so that over a specified number of years, the loan is paid off in full.</p>
+            
+            <h3>How is EMI Calculated?</h3>
+            <p>The EMI calculation formula is based on three key factors: the principal loan amount, the interest rate, and the loan tenure. The mathematical formula for calculating EMI is: EMI = [P x R x (1+R)^N]/[(1+R)^N-1], where P is the principal loan amount, R is the monthly interest rate (annual rate divided by 12), and N is the number of monthly installments.</p>
+            
+            <h3>What Factors Affect Your EMI?</h3>
+            <p>Several factors can influence your EMI amount. The principal amount directly affects EMI - higher loan amounts mean higher EMIs. Interest rates play a crucial role - even a small difference in interest rates can significantly impact your monthly payments. Loan tenure is another critical factor - longer tenures reduce your EMI but increase the total interest paid over the loan's lifetime.</p>
+            
+            <h3>Common Questions About EMI</h3>
+            <p><strong>How can I reduce my EMI burden?</strong> You can reduce your EMI by opting for a longer tenure, making a larger down payment, or negotiating for a lower interest rate.</p>
+            <p><strong>What is the difference between reducing balance and flat interest rate?</strong> In reducing balance method, interest is calculated on the outstanding principal, which decreases over time. In flat rate method, interest is calculated on the original principal throughout the loan tenure.</p>
+            <p><strong>Can I prepay my loan to reduce EMI?</strong> Yes, most lenders allow partial prepayments which can either reduce your EMI or shorten your loan tenure.</p>
+        </div>
+    </section>
+
+    <!-- Loan Eligibility Checker -->
+    <section id="loan-eligibility" class="container">
+        <div class="calculator">
+            <h2>Loan Eligibility Checker</h2>
+            <div class="input-group">
+                <label for="monthly-income">Monthly Income (₹)</label>
+                <input type="number" id="monthly-income" placeholder="Enter your monthly income">
+            </div>
+            <div class="input-group">
+                <label for="monthly-expenses">Monthly Expenses (₹)</label>
+                <input type="number" id="monthly-expenses" placeholder="Enter your monthly expenses">
+            </div>
+            <div class="input-group">
+                <label for="existing-emis">Existing EMIs (₹)</label>
+                <input type="number" id="existing-emis" placeholder="Enter existing EMIs if any">
+            </div>
+            <div class="input-group">
+                <label for="loan-type">Type of Loan</label>
+                <select id="loan-type">
+                    <option value="home">Home Loan</option>
+                    <option value="personal">Personal Loan</option>
+                    <option value="car">Car Loan</option>
+                    <option value="education">Education Loan</option>
+                </select>
+            </div>
+            <button class="calculate-btn" onclick="checkLoanEligibility()">Check Eligibility</button>
+            <div class="result" id="eligibility-result">
+                <h3>Your Loan Eligibility</h3>
+                <div class="result-item">
+                    <span>Eligible Loan Amount:</span>
+                    <span id="eligible-amount">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Eligibility Status:</span>
+                    <span id="eligibility-status">Not Eligible</span>
+                </div>
+                <div class="result-item">
+                    <span>Recommended Tenure:</span>
+                    <span id="recommended-tenure">0 years</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tool-description">
+            <h3>Understanding Loan Eligibility: How Lenders Evaluate Your Application</h3>
+            <p>Loan eligibility refers to the maximum loan amount a financial institution is willing to lend you based on your financial profile. Lenders assess multiple factors to determine your repayment capacity and the risk associated with lending to you.</p>
+            
+            <h3>Key Factors That Determine Loan Eligibility</h3>
+            <p>Your income is the primary factor lenders consider. Most banks use a fixed percentage of your income (usually 40-60%) as the maximum EMI you can afford. Your existing financial obligations, including other loans and credit card dues, significantly impact your eligibility. Credit score plays a crucial role - a higher score improves your chances of loan approval and may get you better interest rates. Employment stability and type (salaried vs self-employed) also affect eligibility criteria.</p>
+            
+            <h3>How to Improve Your Loan Eligibility</h3>
+            <p>To enhance your loan eligibility, maintain a stable income source and demonstrate consistent employment history. Reduce your existing debt burden before applying for a new loan. Maintain a good credit score by paying all your bills and EMIs on time. Include all income sources in your application, and consider applying with a co-applicant to increase the eligible loan amount.</p>
+            
+            <h3>Common Questions About Loan Eligibility</h3>
+            <p><strong>Why was my loan application rejected despite having a good income?</strong> Loan rejections can happen due to various reasons like low credit score, high existing debt, inconsistent employment history, or discrepancies in provided documents.</p>
+            <p><strong>Does checking loan eligibility affect my credit score?</strong> Preliminary eligibility checks usually don't affect your credit score. However, when the lender makes a hard inquiry during the formal application process, it may temporarily impact your score.</p>
+            <p><strong>Can I get a loan if I'm self-employed?</strong> Yes, self-employed individuals can get loans, but they may need to provide additional documentation like business registration proofs, bank statements, and income tax returns for the past 2-3 years.</p>
+        </div>
+    </section>
+
+    <!-- SIP Calculator -->
+    <section id="sip-calculator" class="container">
+        <div class="calculator">
+            <h2>SIP Calculator</h2>
+            <div class="input-group">
+                <label for="sip-amount">Monthly Investment (₹)</label>
+                <input type="number" id="sip-amount" placeholder="Enter monthly investment amount">
+            </div>
+            <div class="input-group">
+                <label for="sip-return">Expected Annual Return (%)</label>
+                <input type="number" id="sip-return" placeholder="Enter expected return rate">
+            </div>
+            <div class="input-group">
+                <label for="sip-years">Investment Period (years)</label>
+                <input type="number" id="sip-years" placeholder="Enter investment period">
+            </div>
+            <button class="calculate-btn" onclick="calculateSIP()">Calculate SIP</button>
+            <div class="result" id="sip-result">
+                <h3>Your SIP Calculation</h3>
+                <div class="result-item">
+                    <span>Future Value:</span>
+                    <span id="sip-future-value">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Total Investment:</span>
+                    <span id="sip-total-investment">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Total Returns:</span>
+                    <span id="sip-total-returns">₹0</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tool-description">
+            <h3>Understanding SIP: Systematic Investment Plan Explained</h3>
+            <p>A Systematic Investment Plan (SIP) is an investment strategy that allows you to invest a fixed amount regularly in mutual funds. Instead of investing a lump sum amount, SIP enables you to invest small amounts at regular intervals (monthly, quarterly, etc.), which helps in averaging the purchase cost and building wealth over time through the power of compounding.</p>
+            
+            <h3>How SIP Works and Its Benefits</h3>
+            <p>SIP works on the principle of rupee cost averaging. When markets are high, your fixed investment buys fewer units, and when markets are low, the same amount buys more units. This averages out the purchase cost over time. The key benefits of SIP include disciplined investing, power of compounding, affordability with small amounts, and reduced impact of market volatility.</p>
+            
+            <h3>Power of Compounding in SIP</h3>
+            <p>The real magic of SIP lies in the power of compounding. When your investments generate returns, those returns start generating their own returns over time. The longer you stay invested, the more significant the compounding effect becomes. This is why starting early with SIP investments can lead to substantial wealth creation even with relatively small monthly contributions.</p>
+            
+            <h3>Common Questions About SIP</h3>
+            <p><strong>What is the minimum amount for SIP?</strong> Most mutual funds allow SIP investments starting from as low as ₹500 per month, making it accessible to most investors.</p>
+            <p><strong>Can I stop my SIP anytime?</strong> Yes, SIPs are flexible, and you can stop them anytime without any major penalties, though some funds may have a minimum lock-in period.</p>
+            <p><strong>Is SIP better than lump sum investment?</strong> SIP helps average out market volatility and is generally recommended for retail investors, while lump sum investing might be better when markets are significantly down.</p>
+        </div>
+    </section>
+
+    <!-- GST Calculator -->
+    <section id="gst-calculator" class="container">
+        <div class="calculator">
+            <h2>GST Calculator</h2>
+            <div class="input-group">
+                <label for="gst-amount">Amount (₹)</label>
+                <input type="number" id="gst-amount" placeholder="Enter amount before GST">
+            </div>
+            <div class="input-group">
+                <label for="gst-rate">GST Rate (%)</label>
+                <select id="gst-rate">
+                    <option value="5">5%</option>
+                    <option value="12">12%</option>
+                    <option value="18">18%</option>
+                    <option value="28">28%</option>
+                </select>
+            </div>
+            <button class="calculate-btn" onclick="calculateGST()">Calculate GST</button>
+            <div class="result" id="gst-result">
+                <h3>GST Calculation</h3>
+                <div class="result-item">
+                    <span>GST Amount:</span>
+                    <span id="gst-tax-amount">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Total Amount (including GST):</span>
+                    <span id="gst-total-amount">₹0</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tool-description">
+            <h3>Understanding GST: Goods and Services Tax in India</h3>
+            <p>GST (Goods and Services Tax) is a comprehensive indirect tax levied on the supply of goods and services in India. It has replaced multiple cascading taxes levied by the central and state governments, creating a unified national market. GST is a destination-based tax, meaning it is collected at the point of consumption rather than the point of origin.</p>
+            
+            <h3>GST Slabs and Their Application</h3>
+            <p>GST in India is structured across four main tax slabs: 5%, 12%, 18%, and 28%. Essential items like food grains, fresh vegetables, and milk are taxed at 0% or exempted. Gold and precious stones attract 3% GST, while luxury items, sin goods (like tobacco, aerated drinks), and automobiles fall under the 28% slab, often with additional cess.</p>
+            
+            <h3>How GST Benefits Businesses and Consumers</h3>
+            <p>GST has eliminated the cascading effect of taxes (tax on tax), making products cheaper for end consumers. It has simplified the tax structure, reduced compliance costs for businesses, and created a common national market. The input tax credit mechanism allows businesses to claim credit for taxes paid on inputs, reducing the overall tax burden.</p>
+            
+            <h3>Common Questions About GST</h3>
+            <p><strong>What is the difference between CGST, SGST, and IGST?</strong> CGST (Central GST) and SGST (State GST) are levied on intra-state supplies, while IGST (Integrated GST) is levied on inter-state supplies and imports.</p>
+            <p><strong>Who needs to register for GST?</strong> Businesses with annual turnover exceeding ₹40 lakh (₹20 lakh for special category states) must register for GST. Certain businesses like e-commerce operators and those making inter-state supplies must register regardless of turnover.</p>
+            <p><strong>How often are GST returns filed?</strong> Regular taxpayers typically file monthly returns (GSTR-1 and GSTR-3B), while composition scheme dealers file quarterly returns.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>PaisekiMadad</h3>
+                    <p>Your trusted financial companion for all money management needs. We provide free tools and resources to help you make informed financial decisions.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="pages/about.html">About Us</a></li>
+                        <li><a href="#tools">Tools</a></li>
+                        <li><a href="pages/contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="pages/privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="pages/terms-conditions.html">Terms & Conditions</a></li>
+                        <li><a href="pages/disclaimer.html">Disclaimer</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li>Email: info@paisekimadad.com</li>
+                        <li>Address: New Delhi-110044, Delhi, India</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 PaisekiMadad. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
