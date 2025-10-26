@@ -281,59 +281,54 @@ function calculateFD() {
     document.getElementById('fd-result').style.display = 'block';
 }
 
-// Income Tax Calculator Function
+// Income Tax Calculator Function (New Regime FY 2025–26)
 function calculateTax() {
     const income = parseFloat(document.getElementById('annual-income').value);
     const ageGroup = document.getElementById('age-group').value;
     const deductions = parseFloat(document.getElementById('deductions').value) || 0;
-    
+
     if (isNaN(income)) {
-        alert('Please enter valid annual income');
+        alert('Please enter a valid annual income');
         return;
     }
-    
-    // Calculate taxable income
-    const taxableIncome = Math.max(0, income - deductions);
-    
-    // Set basic exemption limit based on age
-    let exemptionLimit = 250000; // Below 60
-    if (ageGroup === '60-80') exemptionLimit = 300000;
-    if (ageGroup === 'above-80') exemptionLimit = 500000;
-    
-    const incomeAfterExemption = Math.max(0, taxableIncome - exemptionLimit);
-    
-    // Calculate tax as per slabs
+
+    // Under the New Regime, deductions are mostly not applicable
+    const taxableIncome = Math.max(0, income);
+
     let tax = 0;
-    
-    if (incomeAfterExemption > 0) {
-        // 0-2.5L already exempted, calculate from 2.5L onwards
-        const slab1 = Math.min(incomeAfterExemption, 250000);
-        const slab2 = Math.min(Math.max(incomeAfterExemption - 250000, 0), 250000);
-        const slab3 = Math.max(incomeAfterExemption - 500000, 0);
-        
-        tax = (slab1 * 0) + (slab2 * 0.05) + (slab3 * 0.20);
-        
-        // For income above 10L, additional 30% on excess
-        if (incomeAfterExemption > 1000000) {
-            const slab4 = incomeAfterExemption - 1000000;
-            tax += slab4 * 0.30;
-        }
+
+    // New Regime Slabs (FY 2025–26)
+    if (taxableIncome <= 300000) {
+        tax = 0;
+    } else if (taxableIncome <= 600000) {
+        tax = (taxableIncome - 300000) * 0.05;
+    } else if (taxableIncome <= 900000) {
+        tax = (300000 * 0.05) + (taxableIncome - 600000) * 0.10;
+    } else if (taxableIncome <= 1200000) {
+        tax = (300000 * 0.05) + (300000 * 0.10) + (taxableIncome - 900000) * 0.15;
+    } else if (taxableIncome <= 1500000) {
+        tax = (300000 * 0.05) + (300000 * 0.10) + (300000 * 0.15) + (taxableIncome - 1200000) * 0.20;
+    } else {
+        tax = (300000 * 0.05) + (300000 * 0.10) + (300000 * 0.15) + (300000 * 0.20) + (taxableIncome - 1500000) * 0.30;
     }
-    
-    // Apply rebate under Section 87A if applicable
-    if (taxableIncome <= 500000) {
-        tax = Math.max(0, tax - 12500);
+
+    // Rebate under Section 87A — full rebate if income ≤ ₹7,00,000
+    if (taxableIncome <= 700000) {
+        tax = 0;
     }
-    
-    const cess = tax * 0.04; // Health and education cess
+
+    // Health & Education Cess (4%)
+    const cess = tax * 0.04;
     const totalTax = tax + cess;
-    
+
+    // Display Results
     document.getElementById('taxable-income').textContent = '₹' + Math.round(taxableIncome).toLocaleString();
     document.getElementById('income-tax').textContent = '₹' + Math.round(tax).toLocaleString();
     document.getElementById('cess-amount').textContent = '₹' + Math.round(cess).toLocaleString();
     document.getElementById('total-tax').textContent = '₹' + Math.round(totalTax).toLocaleString();
     document.getElementById('tax-result').style.display = 'block';
 }
+
 
 // Savings Goal Tracker Function
 function calculateSavings() {
@@ -385,3 +380,4 @@ function handleContactForm(event) {
     alert('Thank you for your message! We will get back to you soon.');
     event.target.reset();
 }
+
