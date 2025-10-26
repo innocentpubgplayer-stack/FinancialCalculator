@@ -127,7 +127,7 @@ input:checked + .slider:before {
     font-size: 1.2rem;
 }
 
-/* Header Styles */
+/* Header Styles - FIXED CONSISTENCY */
 header {
     background: var(--surface);
     color: var(--text-primary);
@@ -136,6 +136,7 @@ header {
     top: 0;
     z-index: 1000;
     border-bottom: 1px solid var(--border);
+    width: 100%;
 }
 
 .header-container {
@@ -150,12 +151,14 @@ header {
     font-size: 1.8rem;
     font-weight: 800;
     color: var(--text-primary);
+    white-space: nowrap;
 }
 
 .logo span {
     color: var(--secondary);
 }
 
+/* FIX: Consistent navigation for desktop */
 nav ul {
     display: flex;
     list-style: none;
@@ -163,6 +166,7 @@ nav ul {
     align-items: center;
     margin: 0;
     padding: 0;
+    flex-wrap: nowrap;
 }
 
 nav ul li a {
@@ -172,6 +176,7 @@ nav ul li a {
     border-radius: 8px;
     font-size: 0.9rem;
     color: var(--text-primary);
+    white-space: nowrap;
 }
 
 nav ul li a:hover {
@@ -529,6 +534,16 @@ footer {
     }
 }
 
+@media (max-width: 768px) {
+    .header-container {
+        padding: 12px 0;
+    }
+    
+    .logo {
+        font-size: 1.5rem;
+    }
+}
+
 @media (max-width: 480px) {
     .tools-grid {
         grid-template-columns: 1fr;
@@ -544,5 +559,10 @@ footer {
     
     .hero p {
         font-size: 1rem;
+    }
+    
+    nav ul li a {
+        padding: 12px 15px;
+        font-size: 0.9rem;
     }
 }
