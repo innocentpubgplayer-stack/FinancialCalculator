@@ -69,56 +69,39 @@
     
     <!-- Blog Specific Styles -->
     <style>
-        /* Fix header positioning */
-        header {
-            position: relative !important;
-            top: auto !important;
-            z-index: 1000;
-            background: var(--surface) !important;
-        }
-        
         .blog-article {
             max-width: 800px;
             margin: 0 auto;
             padding: 40px 20px;
-            position: relative;
-            z-index: 1;
         }
         
         .article-header {
             text-align: center;
             margin-bottom: 40px;
-            padding: 60px 0 30px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 50%, var(--secondary) 100%);
+            padding: 80px 0 50px;
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 50%, #1e3a8a 100%);
             color: white;
             position: relative;
             overflow: hidden;
-        }
-        
-        .article-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="rgba(255,255,255,0.05)" points="0,1000 1000,0 1000,1000"/></svg>');
-            background-size: cover;
+            border-radius: 0 0 20px 20px;
         }
         
         .article-title {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             margin-bottom: 20px;
             color: white;
             line-height: 1.3;
-            position: relative;
+            font-weight: 800;
         }
         
         .article-meta {
-            color: rgba(255,255,255,0.8);
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-            position: relative;
+            color: rgba(255,255,255,0.9);
+            font-size: 1rem;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
         }
         
         .article-content {
@@ -129,205 +112,53 @@
         
         .article-content h2 {
             color: var(--text-primary);
-            margin: 40px 0 20px;
+            margin: 50px 0 25px;
             font-size: 1.8rem;
-            border-bottom: 2px solid var(--secondary);
-            padding-bottom: 10px;
+            border-bottom: 3px solid var(--secondary);
+            padding-bottom: 12px;
         }
         
         .article-content h3 {
             color: var(--text-primary);
-            margin: 30px 0 15px;
+            margin: 35px 0 18px;
             font-size: 1.4rem;
-        }
-        
-        .article-content p {
-            margin-bottom: 20px;
-            color: var(--text-secondary);
-        }
-        
-        .article-content ul, .article-content ol {
-            margin: 20px 0;
-            padding-left: 30px;
-        }
-        
-        .article-content li {
-            margin-bottom: 10px;
-            color: var(--text-secondary);
-        }
-        
-        .article-content code {
-            background: var(--light);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-            color: var(--text-primary);
-        }
-        
-        .article-content strong {
-            color: var(--text-primary);
         }
         
         .key-points {
             background: linear-gradient(135deg, var(--light), color-mix(in srgb, var(--light) 80%, transparent 20%));
-            padding: 25px;
-            border-radius: 12px;
-            margin: 25px 0;
-            border-left: 4px solid var(--secondary);
-        }
-        
-        .key-points h3 {
-            margin-top: 0;
-            color: var(--secondary);
+            padding: 30px;
+            border-radius: 16px;
+            margin: 35px 0;
+            border-left: 5px solid var(--secondary);
         }
         
         .example-box {
             background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 25px;
-            margin: 25px 0;
-            box-shadow: var(--shadow);
-        }
-        
-        .example-title {
-            color: var(--secondary);
-            font-weight: 700;
-            margin-bottom: 15px;
-            font-size: 1.2rem;
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 35px 0;
+            border-left: 4px solid var(--secondary);
         }
         
         .back-to-blog {
-            display: inline-block;
-            margin-top: 40px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 50px;
             color: var(--secondary);
             font-weight: 600;
             text-decoration: none;
             transition: all 0.3s ease;
-            padding: 12px 24px;
+            padding: 14px 28px;
             border: 2px solid var(--secondary);
-            border-radius: 8px;
+            border-radius: 10px;
         }
         
         .back-to-blog:hover {
             color: white;
             background: var(--secondary);
             transform: translateX(-5px);
-        }
-
-        /* Mobile menu fixes - Ensure header appears OVER content */
-        @media (max-width: 968px) {
-            .header-container {
-                flex-wrap: wrap;
-                gap: 15px;
-            }
-            
-            nav {
-                order: 3;
-                width: 100%;
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: var(--surface);
-                box-shadow: var(--shadow-hover);
-                border: 1px solid var(--border);
-                border-top: none;
-                z-index: 1001; /* Higher than content */
-            }
-            
-            nav.active {
-                display: block;
-                animation: slideIn 0.3s ease-out;
-            }
-            
-            nav ul {
-                flex-direction: column;
-                gap: 10px;
-                background: var(--surface);
-                padding: 20px;
-                margin-top: 0;
-                border: none;
-            }
-            
-            .mobile-menu-btn {
-                display: block;
-                position: static;
-            }
-            
-            .header-container {
-                min-height: auto;
-                padding: 15px 0;
-            }
-            
-            .theme-toggle {
-                margin-left: auto;
-                margin-right: 15px;
-            }
-
-            /* Ensure header stays on top of content */
-            header {
-                position: relative !important;
-                z-index: 1002 !important;
-            }
-
-            .blog-article {
-                margin-top: 0;
-                z-index: 1;
-            }
-        }
-
-        /* Desktop theme toggle fixes */
-        @media (min-width: 969px) {
-            .theme-toggle {
-                margin-left: 20px;
-            }
-            
-            .theme-switch {
-                position: relative;
-                display: inline-block;
-                width: 60px;
-                height: 30px;
-            }
-            
-            .theme-switch input {
-                opacity: 0;
-                width: 0;
-                height: 0;
-            }
-            
-            .slider {
-                position: absolute;
-                cursor: pointer;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background-color: #ccc;
-                transition: .4s;
-                border-radius: 34px;
-            }
-            
-            .slider:before {
-                position: absolute;
-                content: "";
-                height: 22px;
-                width: 22px;
-                left: 4px;
-                bottom: 4px;
-                background-color: white;
-                transition: transform 0.4s ease;
-                border-radius: 50%;
-            }
-            
-            input:checked + .slider {
-                background: linear-gradient(135deg, var(--secondary), var(--accent));
-            }
-            
-            input:checked + .slider:before {
-                transform: translateX(30px);
-            }
         }
 
         @media (max-width: 768px) {
@@ -339,27 +170,8 @@
                 font-size: 1rem;
             }
             
-            .article-content h2 {
-                font-size: 1.5rem;
-            }
-            
-            .article-content h3 {
-                font-size: 1.2rem;
-            }
-            
             .article-header {
-                padding: 40px 0 20px;
-            }
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+                padding: 60px 0 40px;
             }
         }
     </style>
@@ -375,11 +187,8 @@
                     <li><a href="../index.html">Home</a></li>
                     <li><a href="../pages/about.html">About Us</a></li>
                     <li><a href="../index.html#tools">Tools</a></li>
-                    <li><a href="../pages/contact.html">Contact Us</a></li>
                     <li><a href="blog.html">Blog</a></li>
-                    <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
-                    <li><a href="../pages/disclaimer.html">Disclaimer</a></li>
-                    <li><a href="../pages/terms-conditions.html">Terms & Conditions</a></li>
+                    <li><a href="../pages/contact.html">Contact Us</a></li>
                     <li class="theme-toggle">
                         <span class="theme-icon">☀️</span>
                         <label class="theme-switch">
@@ -399,8 +208,8 @@
                 <div class="container">
                     <h1 class="article-title">How to Use a Financial Calculator: A Beginner's Guide</h1>
                     <div class="article-meta">
-                        <span>Published on December 1, 2025</span> | 
-                        <span>By Financial Calculator Team</span> |
+                        <span>Published on December 1, 2023</span>
+                        <span>By Financial Calculator Team</span>
                         <span>10 min read</span>
                     </div>
                 </div>
@@ -408,89 +217,9 @@
             
             <div class="container">
                 <div class="article-content">
-                    <p>Learning <strong>how to use a financial calculator</strong> can seem intimidating at first, but it's an incredibly valuable skill for managing your money, planning for the future, and making smart financial decisions. Whether you're a student, a professional, or just someone who wants to take control of their finances, this guide will walk you through everything you need to know.</p>
+                    <p>Learning <strong>how to use a financial calculator</strong> can seem intimidating at first, but it's an incredibly valuable skill for managing your money, planning for the future, and making smart financial decisions.</p>
                     
-                    <div class="key-points">
-                        <h3>Key Takeaways</h3>
-                        <ul>
-                            <li>Financial calculators have dedicated keys for complex financial calculations</li>
-                            <li>Mastering just 5 essential keys unlocks most financial calculations</li>
-                            <li>Understanding cash flow direction (positive/negative values) is crucial</li>
-                            <li>Practice with real-world examples builds confidence quickly</li>
-                        </ul>
-                    </div>
-                    
-                    <h2>What is a Financial Calculator and Why Do You Need One?</h2>
-                    <p>A <strong>financial calculator</strong> is a specialized electronic device designed to perform complex financial calculations quickly and accurately. Unlike a basic calculator, it has dedicated keys for financial functions like calculating loan payments, interest rates, and investment growth.</p>
-                    
-                    <p><strong>Common uses for a financial calculator include:</strong></p>
-                    <ul>
-                        <li>Calculating monthly loan or mortgage payments</li>
-                        <li>Determining how much to save for retirement</li>
-                        <li>Figuring out the future value of an investment</li>
-                        <li>Comparing different loan or investment options</li>
-                    </ul>
-                    
-                    <p>Popular models like the Texas Instruments BA II Plus or the Hewlett Packard HP 12C are industry standards. While smartphone apps exist, a dedicated device helps you focus and understand the process better.</p>
-                    
-                    <h2>The 5 Essential Keys to Master on Your Financial Calculator</h2>
-                    <p>Before we dive into calculations, you need to be familiar with the five most important keys. Think of these as the basic alphabet before you form words and sentences.</p>
-                    
-                    <div class="key-points">
-                        <h3>The 5 Essential Keys</h3>
-                        <p><strong>[N] - Number of Periods:</strong> Total number of payment periods</p>
-                        <p><strong>[I/Y] - Interest Rate per Year:</strong> Annual interest rate (enter as percentage)</p>
-                        <p><strong>[PV] - Present Value:</strong> Current value of money or investment</p>
-                        <p><strong>[PMT] - Payment:</strong> Regular payment amount</p>
-                        <p><strong>[FV] - Future Value:</strong> Value at a future point in time</p>
-                    </div>
-                    
-                    <div class="key-points">
-                        <h3>The Golden Rule of Cash Flow</h3>
-                        <p>Money going <em>out of your pocket</em> (like a loan you receive or a cost you pay) is entered as a <em>negative</em> number. Money coming <em>into your pocket</em> (like an investment's future value or income you receive) is a <em>positive</em> number. This is crucial for getting the correct answer!</p>
-                    </div>
-                    
-                    <h2>Step-by-Step Guide: Common Financial Calculations</h2>
-                    <p>Let's put these keys into action with some real-world examples.</p>
-                    
-                    <div class="example-box">
-                        <p class="example-title">Example 1: Calculating a Loan Payment</p>
-                        <p>Imagine you want to take out a $20,000 car loan at 4% annual interest for 5 years. What will your monthly payment be?</p>
-                        <ol>
-                            <li>Clear all previous entries (often a <code>2nd</code> → <code>CLR TVM</code> button sequence).</li>
-                            <li>Enter the Number of Periods: <code>5</code> → <code>2nd</code> → <code>N</code> (This multiplies by 12 for monthly payments). You should see <code>N = 60</code>.</li>
-                            <li>Enter the Interest Rate: <code>4</code> → <code>I/Y</code>. You should see <code>I/Y = 4</code>.</li>
-                            <li>Enter the Present Value (the loan amount you receive <em>into your pocket</em>): <code>20000</code> → <code>PV</code>. You should see <code>PV = 20000</code>.</li>
-                            <li>Enter the Future Value (the loan will be paid off, so it's zero): <code>0</code> → <code>FV</code>. You should see <code>FV = 0</code>.</li>
-                            <li>Compute the Payment: Press <code>CPT</code> (Compute) → <code>PMT</code>.</li>
-                        </ol>
-                        <p>Your calculator should display <strong><code>PMT = -368.33</code></strong>. This means your monthly payment will be $368.33. The negative sign indicates it's money leaving your pocket.</p>
-                    </div>
-                    
-                    <div class="example-box">
-                        <p class="example-title">Example 2: Saving for a Goal (Future Value)</p>
-                        <p>You have $1,000 saved and can add $50 every month. Your investment earns 6% per year. How much will you have in 10 years?</p>
-                        <ol>
-                            <li>Clear all previous entries.</li>
-                            <li>Enter the Number of Periods: <code>10</code> → <code>2nd</code> → <code>N</code> for <code>N = 120</code>.</li>
-                            <li>Enter the Interest Rate: <code>6</code> → <code>I/Y</code> for <code>I/Y = 6</code>.</li>
-                            <li>Enter the Present Value (your initial savings): <code>1000</code> → <code>PV</code> for <code>PV = 1000</code>.</li>
-                            <li>Enter the Payment (your monthly contribution, which is money leaving your pocket): <code>50</code> → <code>+/-</code> → <code>PMT</code> for <code>PMT = -50</code>.</li>
-                            <li>Compute the Future Value: Press <code>CPT</code> → <code>FV</code>.</li>
-                        </ol>
-                        <p>Your calculator should display <strong><code>FV = 9,200.64</code></strong>. In 10 years, your investment will be worth about $9,200. The positive sign indicates it's money coming to you in the future.</p>
-                    </div>
-                    
-                    <h2>Pro Tips and Common Mistakes to Avoid</h2>
-                    <ul>
-                        <li><strong>Clear Everything First:</strong> Always reset your calculator (<code>2nd</code> → <code>CLR TVM</code>) before a new calculation to avoid errors from old data.</li>
-                        <li><strong>Be Consistent with Timing:</strong> Ensure your periods (<code>N</code>), interest rate (<code>I/Y</code>), and payments (<code>PMT</code>) are all for the same timeframe (e.g., all monthly or all annual).</li>
-                        <li><strong>Master the Negative Sign:</strong> Remember the cash flow rule! Forgetting the <code>+/-</code> key is the #1 reason for incorrect answers.</li>
-                        <li><strong>P/Y (Payments per Year):</strong> Many calculators have a <code>P/Y</code> setting. You can set <code>P/Y = 12</code> (for monthly) and then just enter years for <code>N</code> and the annual rate for <code>I/Y</code>, and the calculator does the conversion for you.</li>
-                    </ul>
-                    
-                    <h2>Conclusion: You're Now a Financial Calculator Pro!</h2>
-                    <p>Learning <strong>how to operate a financial calculator</strong> is a powerful step towards financial literacy. By mastering the five basic keys and practicing these common scenarios, you can confidently <strong>calculate loan payments</strong>, plan for your retirement, and make informed decisions about your money. It might feel tricky at first, but with a little practice, <strong>using a financial calculator</strong> will become second nature. So grab your calculator and start exploring your financial future today!</p>
+                    <!-- Your article content here -->
                     
                     <a href="blog.html" class="back-to-blog">← Back to All Articles</a>
                 </div>
@@ -510,9 +239,9 @@
                     <h3>Quick Links</h3>
                     <ul>
                         <li><a href="../index.html">Home</a></li>
-                        <li><a href="blog.html">Blog</a></li>
                         <li><a href="../pages/about.html">About Us</a></li>
                         <li><a href="../index.html#tools">Tools</a></li>
+                        <li><a href="blog.html">Blog</a></li>
                         <li><a href="../pages/contact.html">Contact Us</a></li>
                     </ul>
                 </div>
@@ -520,8 +249,8 @@
                     <h3>Legal</h3>
                     <ul>
                         <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
-                        <li><a href="../pages/disclaimer.html">Disclaimer</a></li>
                         <li><a href="../pages/terms-conditions.html">Terms & Conditions</a></li>
+                        <li><a href="../pages/disclaimer.html">Disclaimer</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -541,145 +270,6 @@
         </div>
     </footer>
 
-    <script>
-        // Enhanced theme and mobile menu functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-            const nav = document.querySelector('nav');
-            const themeToggle = document.getElementById('theme-toggle');
-            
-            // Initialize theme from localStorage or system preference
-            function initTheme() {
-                const savedTheme = localStorage.getItem('theme');
-                const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                const currentTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
-                
-                applyTheme(currentTheme);
-            }
-
-            function applyTheme(theme) {
-                document.documentElement.setAttribute('data-theme', theme);
-                localStorage.setItem('theme', theme);
-                
-                // Update toggle and icon
-                if (themeToggle) {
-                    themeToggle.checked = theme === 'dark';
-                }
-                updateThemeIcon(theme);
-            }
-
-            function updateThemeIcon(theme) {
-                const themeIcon = document.querySelector('.theme-icon');
-                if (themeIcon) {
-                    themeIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
-                }
-            }
-
-            function toggleTheme() {
-                const currentTheme = document.documentElement.getAttribute('data-theme');
-                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-                applyTheme(newTheme);
-            }
-
-            // Mobile menu functionality
-            if (mobileMenuBtn && nav) {
-                mobileMenuBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const isActive = !nav.classList.contains('active');
-                    nav.classList.toggle('active');
-                    this.textContent = isActive ? '✕' : '☰';
-                    
-                    // Prevent body scroll when menu is open
-                    document.body.style.overflow = isActive ? 'hidden' : '';
-                });
-            }
-
-            // Close mobile menu when clicking on links
-            document.querySelectorAll('nav a').forEach(link => {
-                link.addEventListener('click', () => {
-                    if (nav && nav.classList.contains('active')) {
-                        nav.classList.remove('active');
-                        if (mobileMenuBtn) {
-                            mobileMenuBtn.textContent = '☰';
-                        }
-                        document.body.style.overflow = '';
-                    }
-                });
-            });
-
-            // Close mobile menu when clicking outside (improved)
-            document.addEventListener('click', function(e) {
-                if (nav && nav.classList.contains('active')) {
-                    const isClickInsideNav = nav.contains(e.target);
-                    const isClickOnMenuBtn = mobileMenuBtn && mobileMenuBtn.contains(e.target);
-                    
-                    if (!isClickInsideNav && !isClickOnMenuBtn) {
-                        nav.classList.remove('active');
-                        if (mobileMenuBtn) {
-                            mobileMenuBtn.textContent = '☰';
-                        }
-                        document.body.style.overflow = '';
-                    }
-                }
-            });
-
-            // Theme toggle events
-            if (themeToggle) {
-                themeToggle.addEventListener('change', toggleTheme);
-            }
-
-            // Also allow clicking on the theme icon
-            const themeIcon = document.querySelector('.theme-icon');
-            if (themeIcon) {
-                themeIcon.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    if (themeToggle) {
-                        themeToggle.checked = !themeToggle.checked;
-                        toggleTheme();
-                    }
-                });
-            }
-
-            // Handle window resize - close mobile menu on desktop
-            window.addEventListener('resize', function() {
-                if (window.innerWidth > 968) {
-                    if (nav && nav.classList.contains('active')) {
-                        nav.classList.remove('active');
-                        if (mobileMenuBtn) {
-                            mobileMenuBtn.textContent = '☰';
-                        }
-                        document.body.style.overflow = '';
-                    }
-                }
-            });
-
-            // Prevent scrolling when mobile menu is open
-            document.addEventListener('touchmove', function(e) {
-                if (nav && nav.classList.contains('active')) {
-                    e.preventDefault();
-                }
-            }, { passive: false });
-
-            // Initialize everything
-            initTheme();
-        });
-
-        // Add smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    targetElement.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-    </script>
+    <script src="../js/script.js"></script>
 </body>
 </html>
