@@ -11,9 +11,12 @@ class ThemeManager {
     }
 
     applyTheme(theme) {
-        document.documentElement.setAttribute('data-theme', theme);
+        // Batch DOM updates
+        requestAnimationFrame(() => {
+            document.documentElement.setAttribute('data-theme', theme);
+            this.updateToggleSwitch(theme);
+        });
         localStorage.setItem('theme', theme);
-        this.updateToggleSwitch(theme);
     }
 
     toggleTheme() {
@@ -23,28 +26,28 @@ class ThemeManager {
 
     updateToggleSwitch(theme) {
         const toggle = document.getElementById('theme-toggle');
+        const themeIcon = document.querySelector('.theme-icon');
+        
+        // Batch DOM updates
         if (toggle) {
             toggle.checked = theme === 'dark';
         }
         
-        // Update theme icon
-        const themeIcon = document.querySelector('.theme-icon');
         if (themeIcon) {
             themeIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
         }
     }
 
     setupEventListeners() {
-        // Theme toggle switch
         const themeToggle = document.getElementById('theme-toggle');
+        const themeButton = document.getElementById('theme-button');
+
         if (themeToggle) {
             themeToggle.addEventListener('change', () => {
                 this.toggleTheme();
             });
         }
 
-        // Theme toggle button (alternative)
-        const themeButton = document.getElementById('theme-button');
         if (themeButton) {
             themeButton.addEventListener('click', () => {
                 this.toggleTheme();
@@ -53,45 +56,8 @@ class ThemeManager {
     }
 }
 
-// Mobile menu toggle
-document.addEventListener('DOMContentLoaded', function() {
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    const nav = document.querySelector('nav');
-    const themeManager = new ThemeManager();
-    
-    // Mobile menu functionality
-    if (mobileMenuBtn && nav) {
-        mobileMenuBtn.addEventListener('click', function() {
-            nav.classList.toggle('active');
-            this.textContent = nav.classList.contains('active') ? '✕' : '☰';
-        });
-    }
-
-    // Close mobile menu when clicking on links
-    document.querySelectorAll('nav a').forEach(link => {
-        link.addEventListener('click', () => {
-            if (nav && nav.classList.contains('active')) {
-                nav.classList.remove('active');
-                if (mobileMenuBtn) {
-                    mobileMenuBtn.textContent = '☰';
-                }
-            }
-        });
-    });
-
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', (e) => {
-        if (nav && nav.classList.contains('active') && 
-            !nav.contains(e.target) && 
-            e.target !== mobileMenuBtn) {
-            nav.classList.remove('active');
-            if (mobileMenuBtn) {
-                mobileMenuBtn.textContent = '☰';
-            }
-        }
-    });
-
-    // Smooth scrolling for anchor links
+// Enhanced Smooth Scrolling
+function initSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
@@ -101,13 +67,112 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
-                window.scrollTo({
-                    top: targetElement.offsetTop - 100,
-                    behavior: 'smooth'
+                smoothScrollTo(targetElement);
+            }
+        });
+    });
+}
+
+function smoothScrollTo(targetElement) {
+    // More reliable position calculation without forced reflow
+    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - 100;
+    
+    // Use native smooth scroll if available
+    if ('scrollBehavior' in document.documentElement.style) {
+        window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+        });
+    } else {
+        // Fallback for older browsers
+        const startPosition = window.pageYOffset;
+        const distance = targetPosition - startPosition;
+        const duration = 800;
+        let startTime = null;
+
+        function animation(currentTime) {
+            if (startTime === null) startTime = currentTime;
+            const timeElapsed = currentTime - startTime;
+            const run = easeInOutQuad(timeElapsed, startPosition, distance, duration);
+            window.scrollTo(0, run);
+            if (timeElapsed < duration) {
+                requestAnimationFrame(animation);
+            }
+        }
+
+        // Easing function for smooth animation
+        function easeInOutQuad(t, b, c, d) {
+            t /= d / 2;
+            if (t < 1) return c / 2 * t * t + b;
+            t--;
+            return -c / 2 * (t * (t - 2) - 1) + b;
+        }
+
+        requestAnimationFrame(animation);
+    }
+}
+
+// Debounce utility for performance
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Mobile menu toggle and main initialization
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const nav = document.querySelector('nav');
+    const themeManager = new ThemeManager();
+    
+    // Mobile menu functionality
+    if (mobileMenuBtn && nav) {
+        mobileMenuBtn.addEventListener('click', function() {
+            // Batch DOM updates
+            requestAnimationFrame(() => {
+                const isActive = !nav.classList.contains('active');
+                nav.classList.toggle('active');
+                this.textContent = isActive ? '✕' : '☰';
+            });
+        });
+    }
+
+    // Close mobile menu when clicking on links
+    document.querySelectorAll('nav a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (nav && nav.classList.contains('active')) {
+                requestAnimationFrame(() => {
+                    nav.classList.remove('active');
+                    if (mobileMenuBtn) {
+                        mobileMenuBtn.textContent = '☰';
+                    }
                 });
             }
         });
     });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (nav && nav.classList.contains('active') && 
+            !nav.contains(e.target) && 
+            e.target !== mobileMenuBtn) {
+            requestAnimationFrame(() => {
+                nav.classList.remove('active');
+                if (mobileMenuBtn) {
+                    mobileMenuBtn.textContent = '☰';
+                }
+            });
+        }
+    });
+
+    // Initialize smooth scrolling
+    initSmoothScroll();
 
     // Add active class to current section in viewport
     const observerOptions = {
@@ -119,7 +184,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('in-view');
+                requestAnimationFrame(() => {
+                    entry.target.classList.add('in-view');
+                });
             }
         });
     }, observerOptions);
@@ -128,6 +195,19 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.calculator').forEach(section => {
         observer.observe(section);
     });
+
+    // Debounced resize handler (if needed in future)
+    window.addEventListener('resize', debounce(() => {
+        // Handle resize events efficiently
+        if (nav && nav.classList.contains('active')) {
+            requestAnimationFrame(() => {
+                nav.classList.remove('active');
+                if (mobileMenuBtn) {
+                    mobileMenuBtn.textContent = '☰';
+                }
+            });
+        }
+    }, 250));
 });
 
 // Calculator Functions
@@ -148,10 +228,13 @@ function calculateEMI() {
     const totalPayment = emi * months;
     const totalInterest = totalPayment - principal;
     
-    document.getElementById('monthly-emi').textContent = '₹' + emi.toFixed(2);
-    document.getElementById('total-interest').textContent = '₹' + totalInterest.toFixed(2);
-    document.getElementById('total-payment').textContent = '₹' + totalPayment.toFixed(2);
-    document.getElementById('emi-result').style.display = 'block';
+    // Batch DOM updates
+    requestAnimationFrame(() => {
+        document.getElementById('monthly-emi').textContent = '₹' + emi.toFixed(2);
+        document.getElementById('total-interest').textContent = '₹' + totalInterest.toFixed(2);
+        document.getElementById('total-payment').textContent = '₹' + totalPayment.toFixed(2);
+        document.getElementById('emi-result').style.display = 'block';
+    });
 }
 
 // Loan Eligibility Checker Function
@@ -197,10 +280,13 @@ function checkLoanEligibility() {
         }
     }
     
-    document.getElementById('eligible-amount').textContent = '₹' + Math.round(eligibleAmount);
-    document.getElementById('eligibility-status').textContent = eligibilityStatus;
-    document.getElementById('recommended-tenure').textContent = recommendedTenure;
-    document.getElementById('eligibility-result').style.display = 'block';
+    // Batch DOM updates
+    requestAnimationFrame(() => {
+        document.getElementById('eligible-amount').textContent = '₹' + Math.round(eligibleAmount);
+        document.getElementById('eligibility-status').textContent = eligibilityStatus;
+        document.getElementById('recommended-tenure').textContent = recommendedTenure;
+        document.getElementById('eligibility-result').style.display = 'block';
+    });
 }
 
 // SIP Calculator Function
@@ -220,10 +306,13 @@ function calculateSIP() {
     const totalInvestment = monthlyInvestment * months;
     const totalReturns = futureValue - totalInvestment;
     
-    document.getElementById('sip-future-value').textContent = '₹' + Math.round(futureValue);
-    document.getElementById('sip-total-investment').textContent = '₹' + totalInvestment;
-    document.getElementById('sip-total-returns').textContent = '₹' + Math.round(totalReturns);
-    document.getElementById('sip-result').style.display = 'block';
+    // Batch DOM updates
+    requestAnimationFrame(() => {
+        document.getElementById('sip-future-value').textContent = '₹' + Math.round(futureValue);
+        document.getElementById('sip-total-investment').textContent = '₹' + totalInvestment;
+        document.getElementById('sip-total-returns').textContent = '₹' + Math.round(totalReturns);
+        document.getElementById('sip-result').style.display = 'block';
+    });
 }
 
 // GST Calculator Function
@@ -239,9 +328,12 @@ function calculateGST() {
     const gstAmount = (amount * gstRate) / 100;
     const totalAmount = amount + gstAmount;
     
-    document.getElementById('gst-tax-amount').textContent = '₹' + gstAmount.toFixed(2);
-    document.getElementById('gst-total-amount').textContent = '₹' + totalAmount.toFixed(2);
-    document.getElementById('gst-result').style.display = 'block';
+    // Batch DOM updates
+    requestAnimationFrame(() => {
+        document.getElementById('gst-tax-amount').textContent = '₹' + gstAmount.toFixed(2);
+        document.getElementById('gst-total-amount').textContent = '₹' + totalAmount.toFixed(2);
+        document.getElementById('gst-result').style.display = 'block';
+    });
 }
 
 // FD/RD Calculator Function
@@ -275,10 +367,13 @@ function calculateFD() {
     
     const totalInterest = maturityAmount - totalInvestment;
     
-    document.getElementById('maturity-amount').textContent = '₹' + Math.round(maturityAmount).toLocaleString();
-    document.getElementById('total-interest-fd').textContent = '₹' + Math.round(totalInterest).toLocaleString();
-    document.getElementById('total-investment').textContent = '₹' + Math.round(totalInvestment).toLocaleString();
-    document.getElementById('fd-result').style.display = 'block';
+    // Batch DOM updates
+    requestAnimationFrame(() => {
+        document.getElementById('maturity-amount').textContent = '₹' + Math.round(maturityAmount).toLocaleString();
+        document.getElementById('total-interest-fd').textContent = '₹' + Math.round(totalInterest).toLocaleString();
+        document.getElementById('total-investment').textContent = '₹' + Math.round(totalInvestment).toLocaleString();
+        document.getElementById('fd-result').style.display = 'block';
+    });
 }
 
 // Income Tax Calculator Function (New Regime FY 2025–26)
@@ -321,14 +416,15 @@ function calculateTax() {
     const cess = tax * 0.04;
     const totalTax = tax + cess;
 
-    // Display Results
-    document.getElementById('taxable-income').textContent = '₹' + Math.round(taxableIncome).toLocaleString();
-    document.getElementById('income-tax').textContent = '₹' + Math.round(tax).toLocaleString();
-    document.getElementById('cess-amount').textContent = '₹' + Math.round(cess).toLocaleString();
-    document.getElementById('total-tax').textContent = '₹' + Math.round(totalTax).toLocaleString();
-    document.getElementById('tax-result').style.display = 'block';
+    // Batch DOM updates
+    requestAnimationFrame(() => {
+        document.getElementById('taxable-income').textContent = '₹' + Math.round(taxableIncome).toLocaleString();
+        document.getElementById('income-tax').textContent = '₹' + Math.round(tax).toLocaleString();
+        document.getElementById('cess-amount').textContent = '₹' + Math.round(cess).toLocaleString();
+        document.getElementById('total-tax').textContent = '₹' + Math.round(totalTax).toLocaleString();
+        document.getElementById('tax-result').style.display = 'block';
+    });
 }
-
 
 // Savings Goal Tracker Function
 function calculateSavings() {
@@ -367,11 +463,14 @@ function calculateSavings() {
     
     const years = Math.ceil(months / 12);
     
-    document.getElementById('amount-needed').textContent = '₹' + Math.round(needed).toLocaleString();
-    document.getElementById('progress-percent').textContent = progressPercent.toFixed(1) + '%';
-    document.getElementById('time-to-goal').textContent = months < 600 ? `${Math.ceil(months)} months (${years} years)` : 'More than 50 years';
-    document.getElementById('future-value').textContent = '₹' + Math.round(futureValue).toLocaleString();
-    document.getElementById('savings-result').style.display = 'block';
+    // Batch DOM updates
+    requestAnimationFrame(() => {
+        document.getElementById('amount-needed').textContent = '₹' + Math.round(needed).toLocaleString();
+        document.getElementById('progress-percent').textContent = progressPercent.toFixed(1) + '%';
+        document.getElementById('time-to-goal').textContent = months < 600 ? `${Math.ceil(months)} months (${years} years)` : 'More than 50 years';
+        document.getElementById('future-value').textContent = '₹' + Math.round(futureValue).toLocaleString();
+        document.getElementById('savings-result').style.display = 'block';
+    });
 }
 
 // Contact Form Handler
@@ -380,4 +479,3 @@ function handleContactForm(event) {
     alert('Thank you for your message! We will get back to you soon.');
     event.target.reset();
 }
-
