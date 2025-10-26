@@ -399,6 +399,64 @@
                 </div>
             </div>
         </div>
+
+        <!-- FD/RD Calculator -->
+<section id="fd-rd-calculator" class="container">
+    <div class="calculator">
+        <h2>FD/RD Calculator</h2>
+        <div class="input-group">
+            <label for="deposit-type">Deposit Type</label>
+            <select id="deposit-type">
+                <option value="fd">Fixed Deposit (FD)</option>
+                <option value="rd">Recurring Deposit (RD)</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="principal-amount">Principal Amount (₹)</label>
+            <input type="number" id="principal-amount" placeholder="Enter principal amount">
+        </div>
+        <div class="input-group">
+            <label for="interest-rate-fd">Interest Rate (% per annum)</label>
+            <input type="number" id="interest-rate-fd" placeholder="Enter interest rate" step="0.1">
+        </div>
+        <div class="input-group">
+            <label for="tenure-fd">Tenure (in years)</label>
+            <input type="number" id="tenure-fd" placeholder="Enter tenure in years">
+        </div>
+        <button class="calculate-btn" onclick="calculateFD()">Calculate Returns</button>
+        <div class="result" id="fd-result">
+            <h3>Your FD/RD Calculation</h3>
+            <div class="result-item">
+                <span>Maturity Amount:</span>
+                <span id="maturity-amount">₹0</span>
+            </div>
+            <div class="result-item">
+                <span>Total Interest Earned:</span>
+                <span id="total-interest-fd">₹0</span>
+            </div>
+            <div class="result-item">
+                <span>Total Investment:</span>
+                <span id="total-investment">₹0</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="tool-description">
+        <h3>Understanding FD and RD Calculators</h3>
+        <p>Fixed Deposits (FD) and Recurring Deposits (RD) are popular savings instruments in India that offer guaranteed returns with minimal risk. While FDs involve a lump sum investment for a fixed period, RDs allow you to invest fixed amounts regularly.</p>
+        
+        <h3>How FD Returns are Calculated</h3>
+        <p>FD interest is typically calculated using compound interest formula: A = P(1 + r/n)^(nt), where A = Maturity amount, P = Principal amount, r = Annual interest rate, n = Number of compounding periods per year, t = Time in years. Most banks in India compound interest quarterly.</p>
+        
+        <h3>How RD Returns are Calculated</h3>
+        <p>RD calculation is more complex as each monthly installment compounds for different periods. The formula considers that each monthly installment earns interest for the remaining months of the tenure. The first installment compounds for the full tenure, while the last installment compounds for just one month.</p>
+        
+        <h3>Common Questions About FD/RD</h3>
+        <p><strong>What is the difference between FD and RD?</strong> FD requires a lump sum investment, while RD allows monthly investments. FD typically offers slightly higher interest rates than RD for the same tenure.</p>
+        <p><strong>Are FD and RD returns taxable?</strong> Yes, interest earned from both FD and RD is taxable under Income Tax Act. TDS is deducted if interest exceeds ₹40,000 (₹50,000 for senior citizens) in a financial year.</p>
+        <p><strong>Can I withdraw FD/RD before maturity?</strong> Yes, but premature withdrawal attracts penalty and you'll get lower interest rates. Most banks charge 0.5-1% lower interest for premature withdrawals.</p>
+    </div>
+</section>
         
         <div class="tool-description">
             <h3>Understanding GST: Goods and Services Tax in India</h3>
@@ -460,4 +518,5 @@
 </body>
 
 </html>
+
 
