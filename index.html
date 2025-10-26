@@ -2,14 +2,13 @@
 <html lang="en">
 <head>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CM48WSB7Y0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-CM48WSB7Y0');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CM48WSB7Y0"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-CM48WSB7Y0');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Financial Calculator - EMI, SIP, Loan, GST, Tax, FD/RD Calculator Online</title>
@@ -126,13 +125,13 @@
                     <li><a href="pages/privacy-policy.html">Privacy Policy</a></li>
                     <li><a href="pages/disclaimer.html">Disclaimer</a></li>
                     <li><a href="pages/terms-conditions.html">Terms & Conditions</a></li>
-                            <li class="theme-toggle">
-            <span class="theme-icon">☀️</span>
-            <label class="theme-switch">
-                <input type="checkbox" id="theme-toggle">
-                <span class="slider"></span>
-            </label>
-        </li>
+                    <li class="theme-toggle">
+                        <span class="theme-icon">☀️</span>
+                        <label class="theme-switch">
+                            <input type="checkbox" id="theme-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -367,7 +366,6 @@
                     <span>Total Returns:</span>
                     <span id="sip-total-returns">₹0</span>
                 </div>
-                <!-- ADDED MISSING RETURN PERCENTAGE ELEMENT -->
                 <div class="result-item">
                     <span>Return Percentage:</span>
                     <span id="sip-return-percentage">0%</span>
@@ -476,7 +474,11 @@
                 </div>
                 <div class="result-item">
                     <span>Total Investment:</span>
-                    <span id="total-investment">₹0</span>
+                    <span id="total-investment-fd">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Effective Annual Yield:</span>
+                    <span id="effective-rate">0%</span>
                 </div>
             </div>
         </div>
@@ -537,55 +539,60 @@
                     <span>Total Tax Liability:</span>
                     <span id="total-tax">₹0</span>
                 </div>
+                <div class="result-item">
+                    <span>Effective Tax Rate:</span>
+                    <span id="effective-tax-rate">0%</span>
+                </div>
             </div>
         </div>
         
-<div class="tool-description">
-    <h3>Understanding Income Tax Calculation in India (FY 2025–26)</h3>
-    <p>Income tax in India is calculated based on the progressive tax slab system. Under the <strong>new tax regime (default)</strong>, different portions of your income are taxed at different rates, while certain deductions and exemptions are limited compared to the old regime.</p>
-    
-    <h3>Current Tax Slabs (FY 2025–26)</h3>
-    <p><strong>New Tax Regime (Default – for all Individuals):</strong><br>
-    • Up to ₹3,00,000: No tax<br>
-    • ₹3,00,001 to ₹6,00,000: 5%<br>
-    • ₹6,00,001 to ₹9,00,000: 10%<br>
-    • ₹9,00,001 to ₹12,00,000: 15%<br>
-    • ₹12,00,001 to ₹15,00,000: 20%<br>
-    • Above ₹15,00,000: 30%</p>
-    
-    <p><strong>Rebate under Section 87A (New Regime):</strong><br>
-    Full tax rebate available for total income up to ₹7,00,000 – meaning no tax payable.</p>
-    
-    <p><strong>Old Tax Regime (Optional – with deductions):</strong><br>
-    • Up to ₹2,50,000: No tax<br>
-    • ₹2,50,001 to ₹5,00,000: 5%<br>
-    • ₹5,00,001 to ₹10,00,000: 20%<br>
-    • Above ₹10,00,000: 30%</p>
-    
-    <p><strong>For Senior Citizens (60–80 years, Old Regime only):</strong><br>
-    • Up to ₹3,00,000: No tax<br>
-    • Same slabs as above for higher income</p>
-    
-    <p><strong>For Super Senior Citizens (Above 80 years, Old Regime only):</strong><br>
-    • Up to ₹5,00,000: No tax<br>
-    • Same slabs as above for higher income</p>
-    
-    <h3>Common Deductions (Old Regime)</h3>
-    <p><strong>Section 80C:</strong> Investments in PPF, ELSS, Life Insurance, NSC, etc. (Up to ₹1,50,000)<br>
-    <strong>Section 80D:</strong> Medical insurance premiums<br>
-    <strong>HRA:</strong> House Rent Allowance<br>
-    <strong>Section 24(b):</strong> Home loan interest (Up to ₹2,00,000 for self-occupied property)</p>
-    
-    <h3>Frequently Asked Questions (FY 2025–26)</h3>
-    <p><strong>What is the difference between Financial Year and Assessment Year?</strong><br>
-    Financial Year (FY) is when you earn income, while Assessment Year (AY) is when you file the return for that income. For FY 2025–26, the AY is 2026–27.</p>
-    
-    <p><strong>Is there any tax rebate available?</strong><br>
-    Yes, under Section 87A, individuals with total income up to ₹7,00,000 (new regime) get full rebate – no tax liability.</p>
-    
-    <p><strong>When is the last date to file ITR for FY 2025–26?</strong><br>
-    The due date to file your Income Tax Return is <strong>July 31, 2026</strong>, unless extended by the government.</p>
-</div>
+        <div class="tool-description">
+            <h3>Understanding Income Tax Calculation in India (FY 2025–26)</h3>
+            <p>Income tax in India is calculated based on the progressive tax slab system. Under the <strong>new tax regime (default)</strong>, different portions of your income are taxed at different rates, while certain deductions and exemptions are limited compared to the old regime.</p>
+            
+            <h3>Current Tax Slabs (FY 2025–26)</h3>
+            <p><strong>New Tax Regime (Default – for all Individuals):</strong><br>
+            • Up to ₹3,00,000: No tax<br>
+            • ₹3,00,001 to ₹6,00,000: 5%<br>
+            • ₹6,00,001 to ₹9,00,000: 10%<br>
+            • ₹9,00,001 to ₹12,00,000: 15%<br>
+            • ₹12,00,001 to ₹15,00,000: 20%<br>
+            • Above ₹15,00,000: 30%</p>
+            
+            <p><strong>Rebate under Section 87A (New Regime):</strong><br>
+            Full tax rebate available for total income up to ₹7,00,000 – meaning no tax payable.</p>
+            
+            <p><strong>Old Tax Regime (Optional – with deductions):</strong><br>
+            • Up to ₹2,50,000: No tax<br>
+            • ₹2,50,001 to ₹5,00,000: 5%<br>
+            • ₹5,00,001 to ₹10,00,000: 20%<br>
+            • Above ₹10,00,000: 30%</p>
+            
+            <p><strong>For Senior Citizens (60–80 years, Old Regime only):</strong><br>
+            • Up to ₹3,00,000: No tax<br>
+            • Same slabs as above for higher income</p>
+            
+            <p><strong>For Super Senior Citizens (Above 80 years, Old Regime only):</strong><br>
+            • Up to ₹5,00,000: No tax<br>
+            • Same slabs as above for higher income</p>
+            
+            <h3>Common Deductions (Old Regime)</h3>
+            <p><strong>Section 80C:</strong> Investments in PPF, ELSS, Life Insurance, NSC, etc. (Up to ₹1,50,000)<br>
+            <strong>Section 80D:</strong> Medical insurance premiums<br>
+            <strong>HRA:</strong> House Rent Allowance<br>
+            <strong>Section 24(b):</strong> Home loan interest (Up to ₹2,00,000 for self-occupied property)</p>
+            
+            <h3>Frequently Asked Questions (FY 2025–26)</h3>
+            <p><strong>What is the difference between Financial Year and Assessment Year?</strong><br>
+            Financial Year (FY) is when you earn income, while Assessment Year (AY) is when you file the return for that income. For FY 2025–26, the AY is 2026–27.</p>
+            
+            <p><strong>Is there any tax rebate available?</strong><br>
+            Yes, under Section 87A, individuals with total income up to ₹7,00,000 (new regime) get full rebate – no tax liability.</p>
+            
+            <p><strong>When is the last date to file ITR for FY 2025–26?</strong><br>
+            The due date to file your Income Tax Return is <strong>July 31, 2026</strong>, unless extended by the government.</p>
+        </div>
+    </section>
 
     <!-- Savings Goal Tracker -->
     <section id="savings-tracker" class="container">
