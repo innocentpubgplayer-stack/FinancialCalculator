@@ -15,37 +15,84 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How to Use a Financial Calculator: Complete Beginner's Guide | Financial Calculator</title>
-    <meta name="description" content="Learn how to use a financial calculator with our beginner-friendly guide. Master loan payments, investment growth, and financial planning.">
-    <meta name="keywords" content="financial calculator, how to use financial calculator, financial calculator guide, calculate loan payments, future value calculation">
+    <title>Financial Calculator</title>
+    <meta name="description" content="Free online financial calculators: EMI Calculator, SIP Calculator, Loan Eligibility Checker, GST Calculator, FD/RD Calculator, Income Tax Calculator, Savings Goal Tracker. Calculate loans, investments, taxes easily.">
+    <meta name="keywords" content="financial calculator, EMI calculator, SIP calculator, loan calculator, GST calculator, tax calculator, FD calculator, RD calculator, savings calculator, loan eligibility calculator, investment calculator">
     <meta name="author" content="FinancialCalculator">
     <meta name="robots" content="index, follow">
-    <link rel="icon" type="image/x-icon" href="../images/logo.jpg">
+    <link rel="icon" type="image/x-icon" href="images/logo.jpg">
     
     <!-- Structured Data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": "How to Use a Financial Calculator: Complete Beginner's Guide",
-      "description": "Learn how to use a financial calculator with our beginner-friendly guide. Master loan payments, investment growth, and financial planning.",
+      "@type": "WebApplication",
+      "name": "Financial Calculator",
+      "url": "https://financialcalculator.live/",
+      "description": "Free online financial calculators for EMI, SIP, loans, GST, taxes, FD/RD, and savings goals.",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any",
+      "permissions": "browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
       "author": {
         "@type": "Organization",
         "name": "FinancialCalculator"
       },
-      "publisher": {
-        "@type": "Organization",
-        "name": "FinancialCalculator",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://financialcalculator.live/images/logo.jpg"
-        }
+      "creator": {
+        "@type": "Organization", 
+        "name": "FinancialCalculator"
       },
-      "datePublished": "2025-26-10",
-      "dateModified": "2025-26-10",
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://financialcalculator.live/blog/how-to-use-financial-calculator.html"
+      "mainEntity": {
+        "@type": "ItemList",
+        "numberOfItems": 7,
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "EMI Calculator",
+            "description": "Calculate Equated Monthly Installment for loans"
+          },
+          {
+            "@type": "ListItem", 
+            "position": 2,
+            "name": "SIP Calculator",
+            "description": "Calculate Systematic Investment Plan returns"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3, 
+            "name": "Loan Eligibility Calculator",
+            "description": "Check loan eligibility based on income"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "name": "GST Calculator", 
+            "description": "Calculate Goods and Services Tax amounts"
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "name": "FD/RD Calculator",
+            "description": "Calculate Fixed Deposit and Recurring Deposit returns"
+          },
+          {
+            "@type": "ListItem",
+            "position": 6,
+            "name": "Income Tax Calculator",
+            "description": "Calculate income tax liability"
+          },
+          {
+            "@type": "ListItem",
+            "position": 7,
+            "name": "Savings Goal Tracker", 
+            "description": "Track savings goals and progress"
+          }
+        ]
       }
     }
     </script>
@@ -56,8 +103,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <!-- Preload critical resources -->
-    <link rel="preload" href="../css/style.css" as="style">
-    <link rel="preload" href="../js/script.js" as="script">
+    <link rel="preload" href="css/style.css" as="style">
+    <link rel="preload" href="js/script.js" as="script">
 
     <!-- DNS prefetch for external domains -->
     <link rel="dns-prefetch" href="https://www.googletagmanager.com">
@@ -65,24 +112,21 @@
     <!-- Sitemap Reference -->
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
     
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <!-- Header -->
     <header>
         <div class="container header-container">
-            <a href="../index.html" class="logo">Financial<span>Calculator</span></a>
+            <a href="index.html" class="logo">Financial<span>Calculator</span></a>
             <button class="mobile-menu-btn">☰</button>
             <nav>
                 <ul>
-                    <li><a href="../index.html">Home</a></li>
-                    <li><a href="../pages/about.html">About Us</a></li>
-                    <li><a href="../index.html#tools">Tools</a></li>
-                    <li><a href="../pages/contact.html">Contact Us</a></li>
-                    <li><a href="blog.html">Blog</a></li>
-                    <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
-                    <li><a href="../pages/disclaimer.html">Disclaimer</a></li>
-                    <li><a href="../pages/terms-conditions.html">Terms & Conditions</a></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#tools">Tools</a></li>
+                    <li><a href="blog/how-to-use-financial-calculator.html">Blog</a></li>
+                    <li><a href="#contact">Contact Us</a></li>
+                    <li><a href="#privacy">Privacy Policy</a></li>
                     <li class="theme-toggle">
                         <span class="theme-icon">☀️</span>
                         <label class="theme-switch">
@@ -95,155 +139,418 @@
         </div>
     </header>
 
-    <!-- Blog Article Content -->
-    <main class="blog-article">
-        <article>
-            <header class="article-header">
-                <div class="container">
-                    <h1 class="article-title">How to Use a Financial Calculator: A Beginner's Guide</h1>
-                    <div class="article-meta">
-                        <span>Published on December 1, 2023</span>
-                        <span>By Financial Calculator Team</span>
-                        <span>10 min read</span>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Financial Calculator - Free Online Money Management Tools</h1>
+            <p>Access our suite of free financial calculators to make informed decisions about loans, investments, taxes, and savings.</p>
+            <a href="#tools" class="cta-button">Explore Tools</a>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section class="tools-section" id="tools">
+        <div class="container">
+            <h2 class="section-title">Our Financial Tools</h2>
+            <div class="tools-grid">
+                <!-- EMI Calculator -->
+                <div class="tool-card">
+                    <div class="tool-icon">₹</div>
+                    <div class="tool-content">
+                        <h3>EMI Calculator</h3>
+                        <p>Calculate your Equated Monthly Installment for home loans, car loans, personal loans, and more.</p>
+                        <a href="#emi-calculator" class="tool-button">Use Tool</a>
                     </div>
                 </div>
-            </header>
-            
-            <div class="container">
-                <div class="article-content">
-                    <p>Learning <strong>how to use a financial calculator</strong> can seem intimidating at first, but it's an incredibly valuable skill for managing your money, planning for the future, and making smart financial decisions. Whether you're a student, a professional, or just someone who wants to take control of their finances, this guide will walk you through everything you need to know.</p>
-                    
-                    <div class="key-points">
-                        <h3>Key Takeaways</h3>
-                        <ul>
-                            <li>Financial calculators have dedicated keys for complex financial calculations</li>
-                            <li>Mastering just 5 essential keys unlocks most financial calculations</li>
-                            <li>Understanding cash flow direction (positive/negative values) is crucial</li>
-                            <li>Practice with real-world examples builds confidence quickly</li>
-                        </ul>
+                
+                <!-- Loan Eligibility Checker -->
+                <div class="tool-card">
+                    <div class="tool-icon">✓</div>
+                    <div class="tool-content">
+                        <h3>Loan Eligibility Checker</h3>
+                        <p>Determine how much loan you're eligible for based on your income, expenses, and credit profile.</p>
+                        <a href="#loan-eligibility" class="tool-button">Use Tool</a>
                     </div>
-                    
-                    <h2>What is a Financial Calculator and Why Do You Need One?</h2>
-                    <p>A <strong>financial calculator</strong> is a specialized electronic device designed to perform complex financial calculations quickly and accurately. Unlike a basic calculator, it has dedicated keys for financial functions like calculating loan payments, interest rates, and investment growth.</p>
-                    
-                    <p><strong>Common uses for a financial calculator include:</strong></p>
-                    <ul>
-                        <li>Calculating monthly loan or mortgage payments</li>
-                        <li>Determining how much to save for retirement</li>
-                        <li>Figuring out the future value of an investment</li>
-                        <li>Comparing different loan or investment options</li>
-                    </ul>
-                    
-                    <p>Popular models like the Texas Instruments BA II Plus or the Hewlett Packard HP 12C are industry standards. While smartphone apps exist, a dedicated device helps you focus and understand the process better.</p>
-                    
-                    <h2>The 5 Essential Keys to Master on Your Financial Calculator</h2>
-                    <p>Before we dive into calculations, you need to be familiar with the five most important keys. Think of these as the basic alphabet before you form words and sentences.</p>
-                    
-                    <div class="key-points">
-                        <h3>The 5 Essential Keys</h3>
-                        <p><strong>[N] - Number of Periods:</strong> Total number of payment periods</p>
-                        <p><strong>[I/Y] - Interest Rate per Year:</strong> Annual interest rate (enter as percentage)</p>
-                        <p><strong>[PV] - Present Value:</strong> Current value of money or investment</p>
-                        <p><strong>[PMT] - Payment:</strong> Regular payment amount</p>
-                        <p><strong>[FV] - Future Value:</strong> Value at a future point in time</p>
+                </div>
+                
+                <!-- SIP Calculator -->
+                <div class="tool-card">
+                    <div class="tool-icon">↗</div>
+                    <div class="tool-content">
+                        <h3>SIP Calculator</h3>
+                        <p>Plan your Systematic Investment Plan and see how small regular investments can grow over time.</p>
+                        <a href="#sip-calculator" class="tool-button">Use Tool</a>
                     </div>
-                    
-                    <div class="key-points">
-                        <h3>The Golden Rule of Cash Flow</h3>
-                        <p>Money going <em>out of your pocket</em> (like a loan you receive or a cost you pay) is entered as a <em>negative</em> number. Money coming <em>into your pocket</em> (like an investment's future value or income you receive) is a <em>positive</em> number. This is crucial for getting the correct answer!</p>
+                </div>
+                
+                <!-- GST Calculator -->
+                <div class="tool-card">
+                    <div class="tool-icon">%</div>
+                    <div class="tool-content">
+                        <h3>GST Calculator</h3>
+                        <p>Calculate GST amounts for your purchases and understand the tax components easily.</p>
+                        <a href="#gst-calculator" class="tool-button">Use Tool</a>
                     </div>
-                    
-                    <h2>Step-by-Step Guide: Common Financial Calculations</h2>
-                    <p>Let's put these keys into action with some real-world examples.</p>
-                    
-                    <div class="example-box">
-                        <p class="example-title">Example 1: Calculating a Loan Payment</p>
-                        <p>Imagine you want to take out a $20,000 car loan at 4% annual interest for 5 years. What will your monthly payment be?</p>
-                        <ol>
-                            <li>Clear all previous entries (often a <code>2nd</code> → <code>CLR TVM</code> button sequence).</li>
-                            <li>Enter the Number of Periods: <code>5</code> → <code>2nd</code> → <code>N</code> (This multiplies by 12 for monthly payments). You should see <code>N = 60</code>.</li>
-                            <li>Enter the Interest Rate: <code>4</code> → <code>I/Y</code>. You should see <code>I/Y = 4</code>.</li>
-                            <li>Enter the Present Value (the loan amount you receive <em>into your pocket</em>): <code>20000</code> → <code>PV</code>. You should see <code>PV = 20000</code>.</li>
-                            <li>Enter the Future Value (the loan will be paid off, so it's zero): <code>0</code> → <code>FV</code>. You should see <code>FV = 0</code>.</li>
-                            <li>Compute the Payment: Press <code>CPT</code> (Compute) → <code>PMT</code>.</li>
-                        </ol>
-                        <p>Your calculator should display <strong><code>PMT = -368.33</code></strong>. This means your monthly payment will be $368.33. The negative sign indicates it's money leaving your pocket.</p>
+                </div>
+                
+                <!-- FD/RD Calculator -->
+                <div class="tool-card">
+                    <div class="tool-icon">🏦</div>
+                    <div class="tool-content">
+                        <h3>FD/RD Calculator</h3>
+                        <p>Calculate returns on your Fixed Deposits and Recurring Deposits with different interest rates.</p>
+                        <a href="#fd-rd-calculator" class="tool-button">Use Tool</a>
                     </div>
-                    
-                    <div class="example-box">
-                        <p class="example-title">Example 2: Saving for a Goal (Future Value)</p>
-                        <p>You have $1,000 saved and can add $50 every month. Your investment earns 6% per year. How much will you have in 10 years?</p>
-                        <ol>
-                            <li>Clear all previous entries.</li>
-                            <li>Enter the Number of Periods: <code>10</code> → <code>2nd</code> → <code>N</code> for <code>N = 120</code>.</li>
-                            <li>Enter the Interest Rate: <code>6</code> → <code>I/Y</code> for <code>I/Y = 6</code>.</li>
-                            <li>Enter the Present Value (your initial savings): <code>1000</code> → <code>PV</code> for <code>PV = 1000</code>.</li>
-                            <li>Enter the Payment (your monthly contribution, which is money leaving your pocket): <code>50</code> → <code>+/-</code> → <code>PMT</code> for <code>PMT = -50</code>.</li>
-                            <li>Compute the Future Value: Press <code>CPT</code> → <code>FV</code>.</li>
-                        </ol>
-                        <p>Your calculator should display <strong><code>FV = 9,200.64</code></strong>. In 10 years, your investment will be worth about $9,200. The positive sign indicates it's money coming to you in the future.</p>
+                </div>
+                
+                <!-- Income Tax Calculator -->
+                <div class="tool-card">
+                    <div class="tool-icon">📊</div>
+                    <div class="tool-content">
+                        <h3>Income Tax Calculator</h3>
+                        <p>Estimate your income tax liability and plan your taxes efficiently with our calculator.</p>
+                        <a href="#income-tax-calculator" class="tool-button">Use Tool</a>
                     </div>
-                    
-                    <h2>Pro Tips and Common Mistakes to Avoid</h2>
-                    <ul>
-                        <li><strong>Clear Everything First:</strong> Always reset your calculator (<code>2nd</code> → <code>CLR TVM</code>) before a new calculation to avoid errors from old data.</li>
-                        <li><strong>Be Consistent with Timing:</strong> Ensure your periods (<code>N</code>), interest rate (<code>I/Y</code>), and payments (<code>PMT</code>) are all for the same timeframe (e.g., all monthly or all annual).</li>
-                        <li><strong>Master the Negative Sign:</strong> Remember the cash flow rule! Forgetting the <code>+/-</code> key is the #1 reason for incorrect answers.</li>
-                        <li><strong>P/Y (Payments per Year):</strong> Many calculators have a <code>P/Y</code> setting. You can set <code>P/Y = 12</code> (for monthly) and then just enter years for <code>N</code> and the annual rate for <code>I/Y</code>, and the calculator does the conversion for you.</li>
-                    </ul>
-                    
-                    <h2>Conclusion: You're Now a Financial Calculator Pro!</h2>
-                    <p>Learning <strong>how to operate a financial calculator</strong> is a powerful step towards financial literacy. By mastering the five basic keys and practicing these common scenarios, you can confidently <strong>calculate loan payments</strong>, plan for your retirement, and make informed decisions about your money. It might feel tricky at first, but with a little practice, <strong>using a financial calculator</strong> will become second nature. So grab your calculator and start exploring your financial future today!</p>
-                    
-                    <a href="blog.html" class="back-to-blog">← Back to All Articles</a>
+                </div>
+                
+                <!-- Savings Goal Tracker -->
+                <div class="tool-card">
+                    <div class="tool-icon">🎯</div>
+                    <div class="tool-content">
+                        <h3>Savings Goal Tracker</h3>
+                        <p>Set financial goals and track your progress towards achieving them with our savings tracker.</p>
+                        <a href="#savings-tracker" class="tool-button">Use Tool</a>
+                    </div>
                 </div>
             </div>
-        </article>
-    </main>
-    
+        </div>
+    </section>
+
+    <!-- EMI Calculator -->
+    <section id="emi-calculator" class="container">
+        <div class="calculator">
+            <h2>EMI Calculator</h2>
+            <div class="input-group">
+                <label for="loan-amount">Loan Amount (₹)</label>
+                <input type="number" id="loan-amount" placeholder="Enter loan amount">
+            </div>
+            <div class="input-group">
+                <label for="interest-rate">Interest Rate (% per annum)</label>
+                <input type="number" id="interest-rate" placeholder="Enter interest rate">
+            </div>
+            <div class="input-group">
+                <label for="loan-tenure">Loan Tenure (in months)</label>
+                <input type="number" id="loan-tenure" placeholder="Enter tenure in months">
+            </div>
+            <button class="calculate-btn" onclick="calculateEMI()">Calculate EMI</button>
+            <div class="result" id="emi-result">
+                <h3>Your EMI Calculation</h3>
+                <div class="result-item">
+                    <span>Monthly EMI:</span>
+                    <span id="monthly-emi">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Total Interest Payable:</span>
+                    <span id="total-interest">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Total Payment (Principal + Interest):</span>
+                    <span id="total-payment">₹0</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loan Eligibility Checker -->
+    <section id="loan-eligibility" class="container">
+        <div class="calculator">
+            <h2>Loan Eligibility Checker</h2>
+            <div class="input-group">
+                <label for="monthly-income">Monthly Income (₹)</label>
+                <input type="number" id="monthly-income" placeholder="Enter your monthly income">
+            </div>
+            <div class="input-group">
+                <label for="monthly-expenses">Monthly Expenses (₹)</label>
+                <input type="number" id="monthly-expenses" placeholder="Enter your monthly expenses">
+            </div>
+            <div class="input-group">
+                <label for="existing-emis">Existing EMIs (₹)</label>
+                <input type="number" id="existing-emis" placeholder="Enter existing EMIs if any">
+            </div>
+            <div class="input-group">
+                <label for="loan-type">Type of Loan</label>
+                <select id="loan-type">
+                    <option value="home">Home Loan</option>
+                    <option value="personal">Personal Loan</option>
+                    <option value="car">Car Loan</option>
+                    <option value="education">Education Loan</option>
+                </select>
+            </div>
+            <button class="calculate-btn" onclick="checkLoanEligibility()">Check Eligibility</button>
+            <div class="result" id="eligibility-result">
+                <h3>Your Loan Eligibility</h3>
+                <div class="result-item">
+                    <span>Eligible Loan Amount:</span>
+                    <span id="eligible-amount">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Eligibility Status:</span>
+                    <span id="eligibility-status">Not Eligible</span>
+                </div>
+                <div class="result-item">
+                    <span>Recommended Tenure:</span>
+                    <span id="recommended-tenure">0 years</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SIP Calculator -->
+    <section id="sip-calculator" class="container">
+        <div class="calculator">
+            <h2>SIP Calculator</h2>
+            <div class="input-group">
+                <label for="sip-amount">Monthly Investment (₹)</label>
+                <input type="number" id="sip-amount" placeholder="Enter monthly investment amount">
+            </div>
+            <div class="input-group">
+                <label for="sip-return">Expected Annual Return (%)</label>
+                <input type="number" id="sip-return" placeholder="Enter expected return rate">
+            </div>
+            <div class="input-group">
+                <label for="sip-years">Investment Period (years)</label>
+                <input type="number" id="sip-years" placeholder="Enter investment period">
+            </div>
+            <button class="calculate-btn" onclick="calculateSIP()">Calculate SIP</button>
+            <div class="result" id="sip-result">
+                <h3>Your SIP Calculation</h3>
+                <div class="result-item">
+                    <span>Future Value:</span>
+                    <span id="sip-future-value">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Total Investment:</span>
+                    <span id="sip-total-investment">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Total Returns:</span>
+                    <span id="sip-total-returns">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Return Percentage:</span>
+                    <span id="sip-return-percentage">0%</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GST Calculator -->
+    <section id="gst-calculator" class="container">
+        <div class="calculator">
+            <h2>GST Calculator</h2>
+            <div class="input-group">
+                <label for="gst-amount">Amount (₹)</label>
+                <input type="number" id="gst-amount" placeholder="Enter amount before GST">
+            </div>
+            <div class="input-group">
+                <label for="gst-rate">GST Rate (%)</label>
+                <select id="gst-rate">
+                    <option value="5">5%</option>
+                    <option value="12">12%</option>
+                    <option value="18">18%</option>
+                    <option value="28">28%</option>
+                </select>
+            </div>
+            <button class="calculate-btn" onclick="calculateGST()">Calculate GST</button>
+            <div class="result" id="gst-result">
+                <h3>GST Calculation</h3>
+                <div class="result-item">
+                    <span>GST Amount:</span>
+                    <span id="gst-tax-amount">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Total Amount (including GST):</span>
+                    <span id="gst-total-amount">₹0</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FD/RD Calculator -->
+    <section id="fd-rd-calculator" class="container">
+        <div class="calculator">
+            <h2>FD/RD Calculator</h2>
+            <div class="input-group">
+                <label for="deposit-type">Deposit Type</label>
+                <select id="deposit-type">
+                    <option value="fd">Fixed Deposit (FD)</option>
+                    <option value="rd">Recurring Deposit (RD)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="principal-amount">Principal Amount (₹)</label>
+                <input type="number" id="principal-amount" placeholder="Enter principal amount">
+            </div>
+            <div class="input-group">
+                <label for="interest-rate-fd">Interest Rate (% per annum)</label>
+                <input type="number" id="interest-rate-fd" placeholder="Enter interest rate" step="0.1">
+            </div>
+            <div class="input-group">
+                <label for="tenure-fd">Tenure (in years)</label>
+                <input type="number" id="tenure-fd" placeholder="Enter tenure in years">
+            </div>
+            <button class="calculate-btn" onclick="calculateFD()">Calculate Returns</button>
+            <div class="result" id="fd-result">
+                <h3>Your FD/RD Calculation</h3>
+                <div class="result-item">
+                    <span>Maturity Amount:</span>
+                    <span id="maturity-amount">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Total Interest Earned:</span>
+                    <span id="total-interest-fd">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Total Investment:</span>
+                    <span id="total-investment-fd">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Effective Annual Yield:</span>
+                    <span id="effective-rate">0%</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Income Tax Calculator -->
+    <section id="income-tax-calculator" class="container">
+        <div class="calculator">
+            <h2>Income Tax Calculator</h2>
+            <div class="input-group">
+                <label for="annual-income">Annual Income (₹)</label>
+                <input type="number" id="annual-income" placeholder="Enter annual income">
+            </div>
+            <div class="input-group">
+                <label for="age-group">Age Group</label>
+                <select id="age-group">
+                    <option value="below-60">Below 60 years</option>
+                    <option value="60-80">60-80 years (Senior Citizen)</option>
+                    <option value="above-80">Above 80 years (Super Senior Citizen)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="deductions">Deductions (₹) - 80C, HRA, etc.</label>
+                <input type="number" id="deductions" placeholder="Enter total deductions" value="0">
+            </div>
+            <button class="calculate-btn" onclick="calculateTax()">Calculate Tax</button>
+            <div class="result" id="tax-result">
+                <h3>Your Tax Calculation</h3>
+                <div class="result-item">
+                    <span>Taxable Income:</span>
+                    <span id="taxable-income">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Income Tax:</span>
+                    <span id="income-tax">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Health & Education Cess (4%):</span>
+                    <span id="cess-amount">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Total Tax Liability:</span>
+                    <span id="total-tax">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Effective Tax Rate:</span>
+                    <span id="effective-tax-rate">0%</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Savings Goal Tracker -->
+    <section id="savings-tracker" class="container">
+        <div class="calculator">
+            <h2>Savings Goal Tracker</h2>
+            <div class="input-group">
+                <label for="savings-goal">Savings Goal (₹)</label>
+                <input type="number" id="savings-goal" placeholder="Enter your savings target">
+            </div>
+            <div class="input-group">
+                <label for="current-savings">Current Savings (₹)</label>
+                <input type="number" id="current-savings" placeholder="Enter current savings">
+            </div>
+            <div class="input-group">
+                <label for="monthly-saving">Monthly Saving Amount (₹)</label>
+                <input type="number" id="monthly-saving" placeholder="Enter monthly saving">
+            </div>
+            <div class="input-group">
+                <label for="expected-return">Expected Annual Return (%)</label>
+                <input type="number" id="expected-return" placeholder="Enter expected return" step="0.1" value="6">
+            </div>
+            <button class="calculate-btn" onclick="calculateSavings()">Track Progress</button>
+            <div class="result" id="savings-result">
+                <h3>Your Savings Progress</h3>
+                <div class="result-item">
+                    <span>Amount Needed:</span>
+                    <span id="amount-needed">₹0</span>
+                </div>
+                <div class="result-item">
+                    <span>Progress Percentage:</span>
+                    <span id="progress-percent">0%</span>
+                </div>
+                <div class="result-item">
+                    <span>Time to Reach Goal:</span>
+                    <span id="time-to-goal">0 months</span>
+                </div>
+                <div class="result-item">
+                    <span>Future Value with Returns:</span>
+                    <span id="future-value">₹0</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-column">
-                    <h3>Financial Calculator</h3>
-                    <p>Free online financial calculators for EMI, SIP, loans, GST, taxes, FD/RD, and savings goals. Make informed financial decisions with our easy-to-use tools.</p>
+                    <h3>FinancialCalculator</h3>
+                    <p>Your trusted financial companion for all money management needs. We provide free tools and resources to help you make informed financial decisions.</p>
                 </div>
                 <div class="footer-column">
                     <h3>Quick Links</h3>
                     <ul>
-                        <li><a href="../index.html">Home</a></li>
-                        <li><a href="blog.html">Blog</a></li>
-                        <li><a href="../pages/about.html">About Us</a></li>
-                        <li><a href="../index.html#tools">Tools</a></li>
-                        <li><a href="../pages/contact.html">Contact Us</a></li>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="#tools">Tools</a></li>
+                        <li><a href="blog/how-to-use-financial-calculator.html">Blog</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h3>Legal</h3>
                     <ul>
-                        <li><a href="../pages/privacy-policy.html">Privacy Policy</a></li>
-                        <li><a href="../pages/disclaimer.html">Disclaimer</a></li>
-                        <li><a href="../pages/terms-conditions.html">Terms & Conditions</a></li>
+                        <li><a href="#privacy">Privacy Policy</a></li>
+                        <li><a href="#terms">Terms & Conditions</a></li>
+                        <li><a href="#disclaimer">Disclaimer</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
-                    <h3>Tools</h3>
+                    <h3>Contact Us</h3>
                     <ul>
-                        <li><a href="../index.html#emi-calculator">EMI Calculator</a></li>
-                        <li><a href="../index.html#sip-calculator">SIP Calculator</a></li>
-                        <li><a href="../index.html#loan-eligibility">Loan Eligibility</a></li>
-                        <li><a href="../index.html#gst-calculator">GST Calculator</a></li>
-                        <li><a href="../index.html#fd-rd-calculator">FD/RD Calculator</a></li>
+                        <li>Email: info@FinancialCalculator.com</li>
+                        <li>Address: New Delhi-110044, Delhi, India</li>
                     </ul>
                 </div>
             </div>
             <div class="copyright">
-                <p>© 2025 Financial Calculator. All rights reserved.</p>
+                <p>&copy; 2025 FinancialCalculator. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <script src="../js/script.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
