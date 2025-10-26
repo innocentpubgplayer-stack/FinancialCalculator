@@ -70,7 +70,7 @@ a {
     padding: 0 15px;
 }
 
-/* Theme Toggle Switch */
+/* Theme Toggle Switch - FIXED ICON VISIBILITY */
 .theme-toggle {
     display: flex;
     align-items: center;
@@ -125,6 +125,16 @@ input:checked + .slider:before {
 
 .theme-icon {
     font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+/* Fix for theme icon visibility */
+[data-theme="light"] .theme-icon::before {
+    content: "☀️";
+}
+
+[data-theme="dark"] .theme-icon::before {
+    content: "🌙";
 }
 
 /* Header Styles - FIXED CONSISTENCY */
@@ -254,6 +264,7 @@ nav ul li a:hover {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 30px;
+    margin-bottom: 80px; /* ADDED: More space after tools grid */
 }
 
 .tool-card {
@@ -418,14 +429,15 @@ nav ul li a:hover {
     font-weight: 700;
 }
 
-/* Tool Description Styles */
+/* Tool Description Styles - FIXED SPACING */
 .tool-description {
     background: var(--surface);
     border-radius: 16px;
     padding: 40px;
     box-shadow: var(--shadow);
     border: 1px solid var(--border);
-    margin-bottom: 60px;
+    margin-bottom: 80px; /* INCREASED: More space between sections */
+    margin-top: 40px; /* ADDED: Space above description */
 }
 
 .tool-description h3 {
@@ -449,6 +461,17 @@ nav ul li a:hover {
 .tool-description strong {
     color: var(--text-primary);
     font-weight: 600;
+}
+
+/* ADDED: Calculator section spacing */
+#emi-calculator,
+#loan-eligibility,
+#sip-calculator,
+#gst-calculator,
+#fd-rd-calculator,
+#income-tax-calculator,
+#savings-tracker {
+    padding: 60px 0 20px; /* ADDED: More padding for calculator sections */
 }
 
 /* Footer */
@@ -564,10 +587,27 @@ footer {
     
     .tool-description {
         padding: 30px 20px;
+        margin-bottom: 60px; /* Adjusted for mobile */
+        margin-top: 30px; /* Adjusted for mobile */
     }
     
     .section-title {
         font-size: 2rem;
+    }
+    
+    /* Adjusted spacing for mobile */
+    #emi-calculator,
+    #loan-eligibility,
+    #sip-calculator,
+    #gst-calculator,
+    #fd-rd-calculator,
+    #income-tax-calculator,
+    #savings-tracker {
+        padding: 40px 0 10px;
+    }
+    
+    .tools-grid {
+        margin-bottom: 60px; /* Adjusted for mobile */
     }
 }
 
@@ -584,6 +624,7 @@ footer {
 @media (max-width: 480px) {
     .tools-grid {
         grid-template-columns: 1fr;
+        margin-bottom: 50px; /* Adjusted for small mobile */
     }
     
     .calculator {
@@ -592,6 +633,8 @@ footer {
     
     .tool-description {
         padding: 20px 15px;
+        margin-bottom: 50px; /* Adjusted for small mobile */
+        margin-top: 25px; /* Adjusted for small mobile */
     }
     
     .hero h1 {
@@ -605,5 +648,16 @@ footer {
     nav ul li a {
         padding: 12px 15px;
         font-size: 0.9rem;
+    }
+    
+    /* Adjusted spacing for small mobile */
+    #emi-calculator,
+    #loan-eligibility,
+    #sip-calculator,
+    #gst-calculator,
+    #fd-rd-calculator,
+    #income-tax-calculator,
+    #savings-tracker {
+        padding: 30px 0 5px;
     }
 }
