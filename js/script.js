@@ -193,17 +193,36 @@ document.addEventListener('DOMContentLoaded', function() {
     const nav = document.querySelector('nav');
     const themeManager = new ThemeManager();
     
-    // Mobile menu functionality
+    // Mobile menu functionality - FIXED VERSION
     if (mobileMenuBtn && nav) {
-        mobileMenuBtn.addEventListener('click', function() {
+        mobileMenuBtn.addEventListener('click', function(e) {
+            e.stopPropagation(); // Prevent event bubbling
+            
             // Batch DOM updates
             requestAnimationFrame(() => {
                 const isActive = !nav.classList.contains('active');
                 nav.classList.toggle('active');
                 this.textContent = isActive ? '✕' : '☰';
                 
-                // Prevent body scroll when menu is open
-                document.body.style.overflow = isActive ? 'hidden' : '';
+                // FIX: Toggle body class to prevent scrolling and manage z-index
+                document.body.classList.toggle('menu-open', isActive);
+                
+                // FIX: Close menu when clicking outside
+                if (isActive) {
+                    const closeMenuHandler = (event) => {
+                        if (!nav.contains(event.target) && event.target !== mobileMenuBtn) {
+                            nav.classList.remove('active');
+                            mobileMenuBtn.textContent = '☰';
+                            document.body.classList.remove('menu-open');
+                            document.removeEventListener('click', closeMenuHandler);
+                        }
+                    };
+                    
+                    // Use setTimeout to avoid immediate trigger
+                    setTimeout(() => {
+                        document.addEventListener('click', closeMenuHandler);
+                    }, 10);
+                }
             });
         });
     }
@@ -217,25 +236,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (mobileMenuBtn) {
                         mobileMenuBtn.textContent = '☰';
                     }
-                    document.body.style.overflow = '';
+                    document.body.classList.remove('menu-open');
                 });
             }
         });
-    });
-
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', (e) => {
-        if (nav && nav.classList.contains('active') && 
-            !nav.contains(e.target) && 
-            e.target !== mobileMenuBtn) {
-            requestAnimationFrame(() => {
-                nav.classList.remove('active');
-                if (mobileMenuBtn) {
-                    mobileMenuBtn.textContent = '☰';
-                }
-                document.body.style.overflow = '';
-            });
-        }
     });
 
     // Initialize smooth scrolling
@@ -281,7 +285,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (mobileMenuBtn) {
                     mobileMenuBtn.textContent = '☰';
                 }
-                document.body.style.overflow = '';
+                document.body.classList.remove('menu-open');
             });
         }
     }, 250));
