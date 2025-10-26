@@ -320,7 +320,7 @@ nav ul li a:hover {
     border-radius: 16px;
     padding: 40px;
     box-shadow: var(--shadow);
-    margin-bottom: 60px;
+    margin-bottom: 40px;
     border: 1px solid var(--border);
 }
 
@@ -416,6 +416,39 @@ nav ul li a:hover {
 .result-item span:last-child {
     color: var(--secondary);
     font-weight: 700;
+}
+
+/* Tool Description Styles */
+.tool-description {
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    margin-bottom: 60px;
+}
+
+.tool-description h3 {
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 30px;
+}
+
+.tool-description h3:first-child {
+    margin-top: 0;
+}
+
+.tool-description p {
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    line-height: 1.7;
+}
+
+.tool-description strong {
+    color: var(--text-primary);
+    font-weight: 600;
 }
 
 /* Footer */
@@ -529,6 +562,10 @@ footer {
         padding: 30px 20px;
     }
     
+    .tool-description {
+        padding: 30px 20px;
+    }
+    
     .section-title {
         font-size: 2rem;
     }
@@ -550,6 +587,10 @@ footer {
     }
     
     .calculator {
+        padding: 20px 15px;
+    }
+    
+    .tool-description {
         padding: 20px 15px;
     }
     
