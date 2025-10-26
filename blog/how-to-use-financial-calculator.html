@@ -73,6 +73,7 @@
         header {
             position: relative !important;
             top: auto !important;
+            z-index: 1000;
         }
         
         .blog-article {
@@ -210,7 +211,59 @@
             background: var(--secondary);
             transform: translateX(-5px);
         }
-        
+
+        /* Mobile menu fixes */
+        @media (max-width: 968px) {
+            .header-container {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            
+            nav {
+                order: 3;
+                width: 100%;
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--surface);
+                box-shadow: var(--shadow-hover);
+                border: 1px solid var(--border);
+                border-top: none;
+            }
+            
+            nav.active {
+                display: block;
+                animation: slideIn 0.3s ease-out;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+                background: var(--surface);
+                padding: 20px;
+                border-radius: 12px;
+                margin-top: 15px;
+                border: 1px solid var(--border);
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                position: static;
+            }
+            
+            .header-container {
+                min-height: auto;
+                padding: 15px 0;
+            }
+            
+            .theme-toggle {
+                margin-left: auto;
+                margin-right: 15px;
+            }
+        }
+
         @media (max-width: 768px) {
             .article-title {
                 font-size: 2rem;
@@ -230,6 +283,17 @@
             
             .article-header {
                 padding: 40px 0 20px;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
     </style>
@@ -406,11 +470,117 @@
                 </div>
             </div>
             <div class="copyright">
-                <p>© 2025 Financial Calculator. All rights reserved.</p>
+                <p>© 2023 Financial Calculator. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <script src="../js/script.js"></script>
+    <script>
+        // Mobile menu functionality for blog pages
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const nav = document.querySelector('nav');
+            const themeToggle = document.getElementById('theme-toggle');
+            
+            // Mobile menu functionality
+            if (mobileMenuBtn && nav) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    const isActive = !nav.classList.contains('active');
+                    nav.classList.toggle('active');
+                    this.textContent = isActive ? '✕' : '☰';
+                    
+                    // Prevent body scroll when menu is open
+                    document.body.style.overflow = isActive ? 'hidden' : '';
+                });
+            }
+
+            // Close mobile menu when clicking on links
+            document.querySelectorAll('nav a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (nav && nav.classList.contains('active')) {
+                        nav.classList.remove('active');
+                        if (mobileMenuBtn) {
+                            mobileMenuBtn.textContent = '☰';
+                        }
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (nav && nav.classList.contains('active') && 
+                    !nav.contains(e.target) && 
+                    e.target !== mobileMenuBtn) {
+                    nav.classList.remove('active');
+                    if (mobileMenuBtn) {
+                        mobileMenuBtn.textContent = '☰';
+                    }
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // Theme management for blog pages
+            function initTheme() {
+                const currentTheme = localStorage.getItem('theme') || 'light';
+                document.documentElement.setAttribute('data-theme', currentTheme);
+                
+                if (themeToggle) {
+                    themeToggle.checked = currentTheme === 'dark';
+                    updateThemeIcon(currentTheme);
+                }
+            }
+
+            function updateThemeIcon(theme) {
+                const themeIcon = document.querySelector('.theme-icon');
+                if (themeIcon) {
+                    themeIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
+                }
+            }
+
+            function toggleTheme() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                if (themeToggle) {
+                    themeToggle.checked = newTheme === 'dark';
+                }
+                updateThemeIcon(newTheme);
+            }
+
+            // Initialize theme
+            initTheme();
+
+            // Theme toggle event
+            if (themeToggle) {
+                themeToggle.addEventListener('change', toggleTheme);
+            }
+
+            // Also allow clicking on the theme icon
+            const themeIcon = document.querySelector('.theme-icon');
+            if (themeIcon) {
+                themeIcon.addEventListener('click', () => {
+                    if (themeToggle) {
+                        themeToggle.checked = !themeToggle.checked;
+                        toggleTheme();
+                    }
+                });
+            }
+
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 968 && nav && nav.classList.contains('active')) {
+                    nav.classList.remove('active');
+                    if (mobileMenuBtn) {
+                        mobileMenuBtn.textContent = '☰';
+                    }
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
