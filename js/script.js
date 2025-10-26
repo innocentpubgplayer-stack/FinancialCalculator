@@ -1,14 +1,96 @@
+// Theme Management
+class ThemeManager {
+    constructor() {
+        this.currentTheme = localStorage.getItem('theme') || 'light';
+        this.init();
+    }
+
+    init() {
+        this.applyTheme(this.currentTheme);
+        this.setupEventListeners();
+    }
+
+    applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        this.updateToggleSwitch(theme);
+    }
+
+    toggleTheme() {
+        this.currentTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+        this.applyTheme(this.currentTheme);
+    }
+
+    updateToggleSwitch(theme) {
+        const toggle = document.getElementById('theme-toggle');
+        if (toggle) {
+            toggle.checked = theme === 'dark';
+        }
+        
+        // Update theme icon
+        const themeIcon = document.querySelector('.theme-icon');
+        if (themeIcon) {
+            themeIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
+        }
+    }
+
+    setupEventListeners() {
+        // Theme toggle switch
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                this.toggleTheme();
+            });
+        }
+
+        // Theme toggle button (alternative)
+        const themeButton = document.getElementById('theme-button');
+        if (themeButton) {
+            themeButton.addEventListener('click', () => {
+                this.toggleTheme();
+            });
+        }
+    }
+}
+
 // Mobile menu toggle
 document.addEventListener('DOMContentLoaded', function() {
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const nav = document.querySelector('nav');
+    const themeManager = new ThemeManager();
     
-    if (mobileMenuBtn) {
+    // Mobile menu functionality
+    if (mobileMenuBtn && nav) {
         mobileMenuBtn.addEventListener('click', function() {
             nav.classList.toggle('active');
+            this.textContent = nav.classList.contains('active') ? '✕' : '☰';
         });
     }
-    
+
+    // Close mobile menu when clicking on links
+    document.querySelectorAll('nav a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (nav && nav.classList.contains('active')) {
+                nav.classList.remove('active');
+                if (mobileMenuBtn) {
+                    mobileMenuBtn.textContent = '☰';
+                }
+            }
+        });
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (nav && nav.classList.contains('active') && 
+            !nav.contains(e.target) && 
+            e.target !== mobileMenuBtn) {
+            nav.classList.remove('active');
+            if (mobileMenuBtn) {
+                mobileMenuBtn.textContent = '☰';
+            }
+        }
+    });
+
     // Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -23,15 +105,32 @@ document.addEventListener('DOMContentLoaded', function() {
                     top: targetElement.offsetTop - 100,
                     behavior: 'smooth'
                 });
-                
-                // Close mobile menu if open
-                if (nav) {
-                    nav.classList.remove('active');
-                }
             }
         });
     });
+
+    // Add active class to current section in viewport
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.3
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('in-view');
+            }
+        });
+    }, observerOptions);
+
+    // Observe calculator sections
+    document.querySelectorAll('.calculator').forEach(section => {
+        observer.observe(section);
+    });
 });
+
+// Calculator Functions
 
 // EMI Calculator Function
 function calculateEMI() {
@@ -67,7 +166,7 @@ function checkLoanEligibility() {
         return;
     }
     
-    // Simple eligibility calculation (in real scenario, this would be more complex)
+    // Simple eligibility calculation
     const disposableIncome = income - expenses - existingEMIs;
     let eligibleAmount = 0;
     let eligibilityStatus = 'Not Eligible';
