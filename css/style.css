@@ -70,19 +70,19 @@ a {
     padding: 0 15px;
 }
 
-/* Theme Toggle Switch - FIXED ICON VISIBILITY */
+/* Theme Toggle Switch - FIXED DUAL ICONS */
 .theme-toggle {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
     margin-left: 20px;
 }
 
 .theme-switch {
     position: relative;
     display: inline-block;
-    width: 60px;
-    height: 30px;
+    width: 68px;
+    height: 34px;
 }
 
 .theme-switch input {
@@ -101,18 +101,39 @@ a {
     background-color: #ccc;
     transition: .4s;
     border-radius: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px;
 }
 
 .slider:before {
     position: absolute;
     content: "";
-    height: 22px;
-    width: 22px;
+    height: 26px;
+    width: 26px;
     left: 4px;
     bottom: 4px;
     background-color: white;
     transition: transform 0.4s ease;
     border-radius: 50%;
+    z-index: 2;
+}
+
+/* Sun and Moon icons positioned on the slider */
+.slider .sun-icon,
+.slider .moon-icon {
+    font-size: 1rem;
+    z-index: 1;
+    transition: opacity 0.3s ease;
+}
+
+.slider .sun-icon {
+    opacity: 1;
+}
+
+.slider .moon-icon {
+    opacity: 0.7;
 }
 
 input:checked + .slider {
@@ -120,21 +141,24 @@ input:checked + .slider {
 }
 
 input:checked + .slider:before {
-    transform: translateX(30px);
+    transform: translateX(34px);
 }
 
-.theme-icon {
-    font-size: 1.2rem;
-    transition: transform 0.3s ease;
+/* Adjust icon opacity based on theme */
+[data-theme="light"] .slider .sun-icon {
+    opacity: 1;
 }
 
-/* Fix for theme icon visibility */
-[data-theme="light"] .theme-icon::before {
-    content: "☀️";
+[data-theme="light"] .slider .moon-icon {
+    opacity: 0.5;
 }
 
-[data-theme="dark"] .theme-icon::before {
-    content: "🌙";
+[data-theme="dark"] .slider .sun-icon {
+    opacity: 0.5;
+}
+
+[data-theme="dark"] .slider .moon-icon {
+    opacity: 1;
 }
 
 /* Header Styles - FIXED CONSISTENCY */
