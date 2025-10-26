@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="google-site-verification" content="iW-QE8J4q8TbuiFIfRZ23xVMrR9Go6Z9osSXVpx0YoU" />
-    <meta name="google-adsense-account" content="ca-pub-5784733156045727">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5784733156045727"
-     crossorigin="anonymous"></script>
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CM48WSB7Y0"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-CM48WSB7Y0');
-    </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CM48WSB7Y0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CM48WSB7Y0');
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Financial Calculator</title>
@@ -125,15 +122,17 @@
                     <li><a href="index.html">Home</a></li>
                     <li><a href="pages/about.html">About Us</a></li>
                     <li><a href="#tools">Tools</a></li>
-                    <li><a href="blog/blog.html">Blog</a></li>
                     <li><a href="pages/contact.html">Contact Us</a></li>
-                    <li class="theme-toggle">
-                        <span class="theme-icon">☀️</span>
-                        <label class="theme-switch">
-                            <input type="checkbox" id="theme-toggle">
-                            <span class="slider"></span>
-                        </label>
-                    </li>
+                    <li><a href="pages/privacy-policy.html">Privacy Policy</a></li>
+                    <li><a href="pages/disclaimer.html">Disclaimer</a></li>
+                    <li><a href="pages/terms-conditions.html">Terms & Conditions</a></li>
+                            <li class="theme-toggle">
+            <span class="theme-icon"☀️</span>
+            <label class="theme-switch">
+                <input type="checkbox" id="theme-toggle">
+                <span class="slider"></span>
+            </label>
+        </li>
                 </ul>
             </nav>
         </div>
@@ -142,7 +141,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h1>Your Financial Companion for Smart Money Management</h1>
+            <h1>Financial Calculator - Free Online Money Management Tools</h1>
             <p>Access our suite of free financial calculators to make informed decisions about loans, investments, taxes, and savings.</p>
             <a href="#tools" class="cta-button">Explore Tools</a>
         </div>
@@ -368,10 +367,6 @@
                     <span>Total Returns:</span>
                     <span id="sip-total-returns">₹0</span>
                 </div>
-                <div class="result-item">
-                    <span>Return Percentage:</span>
-                    <span id="sip-return-percentage">0%</span>
-                </div>
             </div>
         </div>
         
@@ -476,29 +471,25 @@
                 </div>
                 <div class="result-item">
                     <span>Total Investment:</span>
-                    <span id="total-investment-fd">₹0</span>
-                </div>
-                <div class="result-item">
-                    <span>Effective Annual Yield:</span>
-                    <span id="effective-rate">0%</span>
+                    <span id="total-investment">₹0</span>
                 </div>
             </div>
         </div>
         
         <div class="tool-description">
-            <h3>Understanding Fixed Deposits and Recurring Deposits</h3>
-            <p>Fixed Deposits (FD) and Recurring Deposits (RD) are popular savings instruments in India that offer guaranteed returns with minimal risk. FDs involve depositing a lump sum amount for a fixed period, while RDs allow you to save smaller amounts regularly over time.</p>
+            <h3>Understanding FD and RD Calculators</h3>
+            <p>Fixed Deposits (FD) and Recurring Deposits (RD) are popular savings instruments in India that offer guaranteed returns with minimal risk. While FDs involve a lump sum investment for a fixed period, RDs allow you to invest fixed amounts regularly.</p>
             
-            <h3>Key Differences Between FD and RD</h3>
-            <p>Fixed Deposits require a one-time lump sum investment, whereas Recurring Deposits involve regular monthly investments. FDs typically offer slightly higher interest rates than RDs for the same tenure. FDs are ideal for those with a lump sum amount, while RDs are perfect for salaried individuals who want to save systematically.</p>
+            <h3>How FD Returns are Calculated</h3>
+            <p>FD interest is typically calculated using compound interest formula: A = P(1 + r/n)^(nt), where A = Maturity amount, P = Principal amount, r = Annual interest rate, n = Number of compounding periods per year, t = Time in years. Most banks in India compound interest quarterly.</p>
             
-            <h3>Tax Implications and Benefits</h3>
-            <p>Interest earned on both FDs and RDs is taxable as per your income tax slab. However, you can claim deduction under Section 80C for 5-year tax-saving fixed deposits. TDS (Tax Deducted at Source) is applicable if interest income exceeds ₹40,000 (₹50,000 for senior citizens) in a financial year.</p>
+            <h3>How RD Returns are Calculated</h3>
+            <p>RD calculation is more complex as each monthly installment compounds for different periods. The formula considers that each monthly installment earns interest for the remaining months of the tenure. The first installment compounds for the full tenure, while the last installment compounds for just one month.</p>
             
             <h3>Common Questions About FD/RD</h3>
-            <p><strong>What is the minimum tenure for FD/RD?</strong> Most banks offer FDs with minimum tenure of 7 days and RDs with minimum tenure of 6 months.</p>
-            <p><strong>Can I withdraw my FD/RD before maturity?</strong> Yes, but premature withdrawals usually attract penalty charges and may offer lower interest rates.</p>
-            <p><strong>Which is better - FD or RD?</strong> It depends on your financial situation. FD is better if you have a lump sum amount, while RD is better for systematic savings from monthly income.</p>
+            <p><strong>What is the difference between FD and RD?</strong> FD requires a lump sum investment, while RD allows monthly investments. FD typically offers slightly higher interest rates than RD for the same tenure.</p>
+            <p><strong>Are FD and RD returns taxable?</strong> Yes, interest earned from both FD and RD is taxable under Income Tax Act. TDS is deducted if interest exceeds ₹40,000 (₹50,000 for senior citizens) in a financial year.</p>
+            <p><strong>Can I withdraw FD/RD before maturity?</strong> Yes, but premature withdrawal attracts penalty and you'll get lower interest rates. Most banks charge 0.5-1% lower interest for premature withdrawals.</p>
         </div>
     </section>
 
@@ -541,29 +532,55 @@
                     <span>Total Tax Liability:</span>
                     <span id="total-tax">₹0</span>
                 </div>
-                <div class="result-item">
-                    <span>Effective Tax Rate:</span>
-                    <span id="effective-tax-rate">0%</span>
-                </div>
             </div>
         </div>
         
-        <div class="tool-description">
-            <h3>Understanding Income Tax in India</h3>
-            <p>Income tax is a direct tax levied by the Government of India on the income earned by individuals and entities during a financial year. The Indian income tax system follows a progressive tax structure, where tax rates increase as income levels rise.</p>
-            
-            <h3>Current Income Tax Slabs (FY 2024-25)</h3>
-            <p>For individuals below 60 years: No tax up to ₹3 lakh, 5% for ₹3-6 lakh, 10% for ₹6-9 lakh, 15% for ₹9-12 lakh, 20% for ₹12-15 lakh, and 30% above ₹15 lakh. Senior citizens (60-80 years) have a higher exemption limit of ₹3 lakh, and super senior citizens (above 80 years) have an exemption limit of ₹5 lakh.</p>
-            
-            <h3>Common Deductions and Exemptions</h3>
-            <p>Section 80C allows deduction up to ₹1.5 lakh for investments in PPF, ELSS, life insurance premiums, etc. Section 80D provides deduction for health insurance premiums. HRA (House Rent Allowance) and LTA (Leave Travel Allowance) are common exemptions for salaried individuals. Standard deduction of ₹50,000 is available for salaried individuals.</p>
-            
-            <h3>Common Questions About Income Tax</h3>
-            <p><strong>What is the difference between financial year and assessment year?</strong> Financial year (FY) is the year in which income is earned, while assessment year (AY) is the following year in which income is assessed and tax is filed.</p>
-            <p><strong>When is the due date for filing income tax return?</strong> For individuals, the due date is usually July 31st of the assessment year, unless extended by the government.</p>
-            <p><strong>What happens if I don't file my tax return?</strong> Non-filing can lead to penalties, interest on unpaid taxes, and loss of carry-forward benefits for losses.</p>
-        </div>
-    </section>
+<div class="tool-description">
+    <h3>Understanding Income Tax Calculation in India (FY 2025–26)</h3>
+    <p>Income tax in India is calculated based on the progressive tax slab system. Under the <strong>new tax regime (default)</strong>, different portions of your income are taxed at different rates, while certain deductions and exemptions are limited compared to the old regime.</p>
+    
+    <h3>Current Tax Slabs (FY 2025–26)</h3>
+    <p><strong>New Tax Regime (Default – for all Individuals):</strong><br>
+    • Up to ₹3,00,000: No tax<br>
+    • ₹3,00,001 to ₹6,00,000: 5%<br>
+    • ₹6,00,001 to ₹9,00,000: 10%<br>
+    • ₹9,00,001 to ₹12,00,000: 15%<br>
+    • ₹12,00,001 to ₹15,00,000: 20%<br>
+    • Above ₹15,00,000: 30%</p>
+    
+    <p><strong>Rebate under Section 87A (New Regime):</strong><br>
+    Full tax rebate available for total income up to ₹7,00,000 – meaning no tax payable.</p>
+    
+    <p><strong>Old Tax Regime (Optional – with deductions):</strong><br>
+    • Up to ₹2,50,000: No tax<br>
+    • ₹2,50,001 to ₹5,00,000: 5%<br>
+    • ₹5,00,001 to ₹10,00,000: 20%<br>
+    • Above ₹10,00,000: 30%</p>
+    
+    <p><strong>For Senior Citizens (60–80 years, Old Regime only):</strong><br>
+    • Up to ₹3,00,000: No tax<br>
+    • Same slabs as above for higher income</p>
+    
+    <p><strong>For Super Senior Citizens (Above 80 years, Old Regime only):</strong><br>
+    • Up to ₹5,00,000: No tax<br>
+    • Same slabs as above for higher income</p>
+    
+    <h3>Common Deductions (Old Regime)</h3>
+    <p><strong>Section 80C:</strong> Investments in PPF, ELSS, Life Insurance, NSC, etc. (Up to ₹1,50,000)<br>
+    <strong>Section 80D:</strong> Medical insurance premiums<br>
+    <strong>HRA:</strong> House Rent Allowance<br>
+    <strong>Section 24(b):</strong> Home loan interest (Up to ₹2,00,000 for self-occupied property)</p>
+    
+    <h3>Frequently Asked Questions (FY 2025–26)</h3>
+    <p><strong>What is the difference between Financial Year and Assessment Year?</strong><br>
+    Financial Year (FY) is when you earn income, while Assessment Year (AY) is when you file the return for that income. For FY 2025–26, the AY is 2026–27.</p>
+    
+    <p><strong>Is there any tax rebate available?</strong><br>
+    Yes, under Section 87A, individuals with total income up to ₹7,00,000 (new regime) get full rebate – no tax liability.</p>
+    
+    <p><strong>When is the last date to file ITR for FY 2025–26?</strong><br>
+    The due date to file your Income Tax Return is <strong>July 31, 2026</strong>, unless extended by the government.</p>
+</div>
 
     <!-- Savings Goal Tracker -->
     <section id="savings-tracker" class="container">
@@ -608,19 +625,21 @@
         </div>
         
         <div class="tool-description">
-            <h3>Mastering Savings: Your Path to Financial Goals</h3>
-            <p>Saving money is the foundation of financial security and achieving life goals. Whether you're saving for a down payment, education, retirement, or a dream vacation, having a clear savings plan is crucial for success.</p>
+            <h3>Understanding Savings Goal Tracking</h3>
+            <p>A savings goal tracker helps you plan and monitor your progress towards financial objectives like buying a house, car, education, retirement, or emergency fund. It considers your current savings, monthly contributions, and expected returns to project when you'll reach your target.</p>
             
-            <h3>Effective Savings Strategies</h3>
-            <p>The 50/30/20 rule is a popular budgeting method: 50% for needs, 30% for wants, and 20% for savings. Pay yourself first by automating savings transfers. Set SMART goals (Specific, Measurable, Achievable, Relevant, Time-bound). Regularly review and adjust your savings plan based on changing circumstances.</p>
+            <h3>How Savings Tracking Works</h3>
+            <p>The calculator uses compound interest formula to project your savings growth: FV = PV(1 + r)^n + PMT × [((1 + r)^n - 1) / r], where FV = Future Value, PV = Present Value, r = Monthly interest rate, n = Number of months, PMT = Monthly payment.</p>
             
-            <h3>Where to Park Your Savings</h3>
-            <p>For short-term goals (less than 3 years), consider savings accounts, liquid funds, or short-term FDs. For medium-term goals (3-7 years), balanced funds, debt funds, or FDs work well. For long-term goals (7+ years), equity mutual funds, PPF, or NPS can provide better returns.</p>
+            <h3>Setting Realistic Savings Goals</h3>
+            <p><strong>Short-term goals (1-2 years):</strong> Emergency fund, vacation, down payment<br>
+            <strong>Medium-term goals (3-7 years):</strong> Car purchase, home renovation<br>
+            <strong>Long-term goals (8+ years):</strong> Retirement, children's education, home purchase</p>
             
             <h3>Common Questions About Savings</h3>
-            <p><strong>How much should I save each month?</strong> Financial experts recommend saving at least 20% of your income, but the ideal amount depends on your goals, income, and expenses.</p>
-            <p><strong>Should I pay off debt or save first?</strong> Generally, prioritize high-interest debt repayment first, then build an emergency fund, followed by other savings goals.</p>
-            <p><strong>How can I increase my savings rate?</strong> Track your expenses, create a budget, reduce discretionary spending, increase your income, and automate your savings.</p>
+            <p><strong>How much should I save each month?</strong> Financial experts recommend saving at least 20% of your income, but this varies based on your goals and financial situation.</p>
+            <p><strong>Where should I keep my savings?</strong> For short-term goals, use savings accounts or liquid funds. For long-term goals, consider equity mutual funds, PPF, or other growth-oriented instruments.</p>
+            <p><strong>What if I can't save consistently?</strong> Set up automatic transfers, start small and increase gradually, and track your expenses to identify saving opportunities.</p>
         </div>
     </section>
 
@@ -638,7 +657,6 @@
                         <li><a href="index.html">Home</a></li>
                         <li><a href="pages/about.html">About Us</a></li>
                         <li><a href="#tools">Tools</a></li>
-                        <li><a href="blog/blog.html">Blog</a></li>
                         <li><a href="pages/contact.html">Contact Us</a></li>
                     </ul>
                 </div>
@@ -667,3 +685,5 @@
     <script src="js/script.js"></script>
 </body>
 </html>
+
+
