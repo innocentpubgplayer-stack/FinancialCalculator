@@ -7,22 +7,36 @@ document.addEventListener('DOMContentLoaded', function() {
     document.documentElement.setAttribute('data-theme', currentTheme);
     themeToggle.checked = currentTheme === 'dark';
     
+    // Update theme icon based on current theme
+    updateThemeIcon(currentTheme);
+    
     // Theme toggle event
     themeToggle.addEventListener('change', function() {
         const newTheme = this.checked ? 'dark' : 'light';
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
+        updateThemeIcon(newTheme);
     });
+    
+    // Function to update theme icon
+    function updateThemeIcon(theme) {
+        const themeIcon = document.querySelector('.theme-icon');
+        if (themeIcon) {
+            themeIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
+        }
+    }
     
     // Mobile Menu Toggle
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const nav = document.querySelector('nav');
     const body = document.body;
     
-    mobileMenuBtn.addEventListener('click', function() {
-        nav.classList.toggle('active');
-        body.classList.toggle('menu-open');
-    });
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', function() {
+            nav.classList.toggle('active');
+            body.classList.toggle('menu-open');
+        });
+    }
     
     // Close mobile menu when clicking on a link
     const navLinks = document.querySelectorAll('nav a');
