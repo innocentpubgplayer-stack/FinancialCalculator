@@ -41,8 +41,8 @@
           "url": "https://financialcalculator.live/images/logo.jpg"
         }
       },
-      "datePublished": "2023-12-01",
-      "dateModified": "2023-12-01",
+      "datePublished": "2025-26-10",
+      "dateModified": "2025-26-10",
       "mainEntityOfPage": {
         "@type": "WebPage",
         "@id": "https://financialcalculator.live/blog/how-to-use-financial-calculator.html"
@@ -69,17 +69,20 @@
     
     <!-- Blog Specific Styles -->
     <style>
-        /* Fix header to not be sticky */
+        /* Fix header positioning */
         header {
             position: relative !important;
             top: auto !important;
             z-index: 1000;
+            background: var(--surface) !important;
         }
         
         .blog-article {
             max-width: 800px;
             margin: 0 auto;
             padding: 40px 20px;
+            position: relative;
+            z-index: 1;
         }
         
         .article-header {
@@ -212,7 +215,7 @@
             transform: translateX(-5px);
         }
 
-        /* Mobile menu fixes */
+        /* Mobile menu fixes - Ensure header appears OVER content */
         @media (max-width: 968px) {
             .header-container {
                 flex-wrap: wrap;
@@ -231,6 +234,7 @@
                 box-shadow: var(--shadow-hover);
                 border: 1px solid var(--border);
                 border-top: none;
+                z-index: 1001; /* Higher than content */
             }
             
             nav.active {
@@ -243,9 +247,8 @@
                 gap: 10px;
                 background: var(--surface);
                 padding: 20px;
-                border-radius: 12px;
-                margin-top: 15px;
-                border: 1px solid var(--border);
+                margin-top: 0;
+                border: none;
             }
             
             .mobile-menu-btn {
@@ -261,6 +264,69 @@
             .theme-toggle {
                 margin-left: auto;
                 margin-right: 15px;
+            }
+
+            /* Ensure header stays on top of content */
+            header {
+                position: relative !important;
+                z-index: 1002 !important;
+            }
+
+            .blog-article {
+                margin-top: 0;
+                z-index: 1;
+            }
+        }
+
+        /* Desktop theme toggle fixes */
+        @media (min-width: 969px) {
+            .theme-toggle {
+                margin-left: 20px;
+            }
+            
+            .theme-switch {
+                position: relative;
+                display: inline-block;
+                width: 60px;
+                height: 30px;
+            }
+            
+            .theme-switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+            
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #ccc;
+                transition: .4s;
+                border-radius: 34px;
+            }
+            
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 22px;
+                width: 22px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                transition: transform 0.4s ease;
+                border-radius: 50%;
+            }
+            
+            input:checked + .slider {
+                background: linear-gradient(135deg, var(--secondary), var(--accent));
+            }
+            
+            input:checked + .slider:before {
+                transform: translateX(30px);
             }
         }
 
@@ -333,7 +399,7 @@
                 <div class="container">
                     <h1 class="article-title">How to Use a Financial Calculator: A Beginner's Guide</h1>
                     <div class="article-meta">
-                        <span>Published on December 1, 2023</span> | 
+                        <span>Published on December 1, 2025</span> | 
                         <span>By Financial Calculator Team</span> |
                         <span>10 min read</span>
                     </div>
@@ -476,15 +542,49 @@
     </footer>
 
     <script>
-        // Mobile menu functionality for blog pages
+        // Enhanced theme and mobile menu functionality
         document.addEventListener('DOMContentLoaded', function() {
             const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
             const nav = document.querySelector('nav');
             const themeToggle = document.getElementById('theme-toggle');
             
+            // Initialize theme from localStorage or system preference
+            function initTheme() {
+                const savedTheme = localStorage.getItem('theme');
+                const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const currentTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+                
+                applyTheme(currentTheme);
+            }
+
+            function applyTheme(theme) {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                
+                // Update toggle and icon
+                if (themeToggle) {
+                    themeToggle.checked = theme === 'dark';
+                }
+                updateThemeIcon(theme);
+            }
+
+            function updateThemeIcon(theme) {
+                const themeIcon = document.querySelector('.theme-icon');
+                if (themeIcon) {
+                    themeIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
+                }
+            }
+
+            function toggleTheme() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                applyTheme(newTheme);
+            }
+
             // Mobile menu functionality
             if (mobileMenuBtn && nav) {
-                mobileMenuBtn.addEventListener('click', function() {
+                mobileMenuBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
                     const isActive = !nav.classList.contains('active');
                     nav.classList.toggle('active');
                     this.textContent = isActive ? '✕' : '☰';
@@ -507,54 +607,23 @@
                 });
             });
 
-            // Close mobile menu when clicking outside
-            document.addEventListener('click', (e) => {
-                if (nav && nav.classList.contains('active') && 
-                    !nav.contains(e.target) && 
-                    e.target !== mobileMenuBtn) {
-                    nav.classList.remove('active');
-                    if (mobileMenuBtn) {
-                        mobileMenuBtn.textContent = '☰';
+            // Close mobile menu when clicking outside (improved)
+            document.addEventListener('click', function(e) {
+                if (nav && nav.classList.contains('active')) {
+                    const isClickInsideNav = nav.contains(e.target);
+                    const isClickOnMenuBtn = mobileMenuBtn && mobileMenuBtn.contains(e.target);
+                    
+                    if (!isClickInsideNav && !isClickOnMenuBtn) {
+                        nav.classList.remove('active');
+                        if (mobileMenuBtn) {
+                            mobileMenuBtn.textContent = '☰';
+                        }
+                        document.body.style.overflow = '';
                     }
-                    document.body.style.overflow = '';
                 }
             });
 
-            // Theme management for blog pages
-            function initTheme() {
-                const currentTheme = localStorage.getItem('theme') || 'light';
-                document.documentElement.setAttribute('data-theme', currentTheme);
-                
-                if (themeToggle) {
-                    themeToggle.checked = currentTheme === 'dark';
-                    updateThemeIcon(currentTheme);
-                }
-            }
-
-            function updateThemeIcon(theme) {
-                const themeIcon = document.querySelector('.theme-icon');
-                if (themeIcon) {
-                    themeIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
-                }
-            }
-
-            function toggleTheme() {
-                const currentTheme = document.documentElement.getAttribute('data-theme');
-                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-                
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                
-                if (themeToggle) {
-                    themeToggle.checked = newTheme === 'dark';
-                }
-                updateThemeIcon(newTheme);
-            }
-
-            // Initialize theme
-            initTheme();
-
-            // Theme toggle event
+            // Theme toggle events
             if (themeToggle) {
                 themeToggle.addEventListener('change', toggleTheme);
             }
@@ -562,7 +631,8 @@
             // Also allow clicking on the theme icon
             const themeIcon = document.querySelector('.theme-icon');
             if (themeIcon) {
-                themeIcon.addEventListener('click', () => {
+                themeIcon.addEventListener('click', function(e) {
+                    e.stopPropagation();
                     if (themeToggle) {
                         themeToggle.checked = !themeToggle.checked;
                         toggleTheme();
@@ -570,14 +640,43 @@
                 });
             }
 
-            // Handle window resize
+            // Handle window resize - close mobile menu on desktop
             window.addEventListener('resize', function() {
-                if (window.innerWidth > 968 && nav && nav.classList.contains('active')) {
-                    nav.classList.remove('active');
-                    if (mobileMenuBtn) {
-                        mobileMenuBtn.textContent = '☰';
+                if (window.innerWidth > 968) {
+                    if (nav && nav.classList.contains('active')) {
+                        nav.classList.remove('active');
+                        if (mobileMenuBtn) {
+                            mobileMenuBtn.textContent = '☰';
+                        }
+                        document.body.style.overflow = '';
                     }
-                    document.body.style.overflow = '';
+                }
+            });
+
+            // Prevent scrolling when mobile menu is open
+            document.addEventListener('touchmove', function(e) {
+                if (nav && nav.classList.contains('active')) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            // Initialize everything
+            initTheme();
+        });
+
+        // Add smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
                 }
             });
         });
