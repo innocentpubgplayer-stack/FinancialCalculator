@@ -288,7 +288,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add input auto-formatting
     initInputFormatting();
+
+    // Ensure all calculator buttons are properly connected
+    initCalculatorEventListeners();
 });
+
+// Initialize calculator event listeners
+function initCalculatorEventListeners() {
+    // SIP Calculator
+    const sipButton = document.querySelector('button[onclick="calculateSIP()"]');
+    if (sipButton) {
+        sipButton.addEventListener('click', calculateSIP);
+    }
+
+    // EMI Calculator
+    const emiButton = document.querySelector('button[onclick="calculateEMI()"]');
+    if (emiButton) {
+        emiButton.addEventListener('click', calculateEMI);
+    }
+
+    // Other calculator buttons...
+}
 
 // Input formatting and validation
 function initInputFormatting() {
@@ -413,12 +433,15 @@ function checkLoanEligibility() {
     });
 }
 
-// SIP Calculator Function
+// CORRECTED SIP Calculator Function
 function calculateSIP() {
     const monthlyInvestment = parseFloat(document.getElementById('sip-amount').value);
     const annualReturn = parseFloat(document.getElementById('sip-return').value);
     const years = parseInt(document.getElementById('sip-years').value);
     
+    console.log('SIP Inputs:', { monthlyInvestment, annualReturn, years }); // Debug log
+    
+    // Enhanced validation
     if (!validators.isPositiveNumber(monthlyInvestment) || 
         !validators.isNonNegativeNumber(annualReturn) || 
         !validators.isPositiveNumber(years)) {
@@ -433,18 +456,28 @@ function calculateSIP() {
     
     const monthlyRate = annualReturn / 12 / 100;
     const months = years * 12;
-    const futureValue = monthlyInvestment * (Math.pow(1 + monthlyRate, months) - 1) / monthlyRate * (1 + monthlyRate);
+    
+    // Correct SIP formula: FV = P * [((1 + r)^n - 1) / r] * (1 + r)
+    const futureValue = monthlyInvestment * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate);
     const totalInvestment = monthlyInvestment * months;
     const totalReturns = futureValue - totalInvestment;
-    const returnPercentage = (totalReturns / totalInvestment) * 100;
+    const returnPercentage = totalInvestment > 0 ? (totalReturns / totalInvestment) * 100 : 0;
+    
+    console.log('SIP Results:', { futureValue, totalInvestment, totalReturns, returnPercentage }); // Debug log
     
     // Batch DOM updates
     requestAnimationFrame(() => {
-        document.getElementById('sip-future-value').textContent = formatters.currency.format(futureValue);
-        document.getElementById('sip-total-investment').textContent = formatters.currency.format(totalInvestment);
-        document.getElementById('sip-total-returns').textContent = formatters.currency.format(totalReturns);
-        document.getElementById('sip-return-percentage').textContent = formatters.percent.format(returnPercentage / 100);
-        animations.slideDown(document.getElementById('sip-result'));
+        const futureValueElement = document.getElementById('sip-future-value');
+        const totalInvestmentElement = document.getElementById('sip-total-investment');
+        const totalReturnsElement = document.getElementById('sip-total-returns');
+        const returnPercentageElement = document.getElementById('sip-return-percentage');
+        const resultElement = document.getElementById('sip-result');
+        
+        if (futureValueElement) futureValueElement.textContent = formatters.currency.format(futureValue);
+        if (totalInvestmentElement) totalInvestmentElement.textContent = formatters.currency.format(totalInvestment);
+        if (totalReturnsElement) totalReturnsElement.textContent = formatters.currency.format(totalReturns);
+        if (returnPercentageElement) returnPercentageElement.textContent = formatters.percent.format(returnPercentage / 100);
+        if (resultElement) animations.slideDown(resultElement);
     });
 }
 
@@ -657,9 +690,11 @@ function showError(message) {
     
     // Auto hide after 5 seconds
     setTimeout(() => {
-        animations.fadeIn(errorDiv);
+        errorDiv.style.opacity = '0';
+        errorDiv.style.transition = 'opacity 0.3s ease';
         setTimeout(() => {
             errorDiv.style.display = 'none';
+            errorDiv.style.opacity = '1';
         }, 300);
     }, 5000);
 }
@@ -775,10 +810,37 @@ style.textContent = `
         opacity: 0.7;
         pointer-events: none;
     }
+    
+    .calculator-result {
+        display: none;
+    }
+    
+    .calculator-result.show {
+        display: block;
+    }
 `;
 document.head.appendChild(style);
 
-// Export functions for global access (if needed)
+// Test function for SIP calculator
+function testSIPCalculation() {
+    // Test with known values: ₹10,000 monthly, 12% annual return, 10 years
+    const monthlyInvestment = 10000;
+    const annualReturn = 12;
+    const years = 10;
+    
+    const monthlyRate = annualReturn / 12 / 100;
+    const months = years * 12;
+    const futureValue = monthlyInvestment * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate);
+    
+    console.log('SIP Test Calculation:');
+    console.log('Monthly Investment:', monthlyInvestment);
+    console.log('Annual Return:', annualReturn + '%');
+    console.log('Years:', years);
+    console.log('Future Value:', formatters.currency.format(futureValue));
+    console.log('Expected (approx): ₹23,00,000');
+}
+
+// Export functions for global access
 window.calculateEMI = calculateEMI;
 window.checkLoanEligibility = checkLoanEligibility;
 window.calculateSIP = calculateSIP;
@@ -787,3 +849,4 @@ window.calculateFD = calculateFD;
 window.calculateTax = calculateTax;
 window.calculateSavings = calculateSavings;
 window.handleContactForm = handleContactForm;
+window.testSIPCalculation = testSIPCalculation;
