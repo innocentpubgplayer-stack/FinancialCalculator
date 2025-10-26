@@ -1,949 +1,896 @@
-/* Reset and Base Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+// Theme Management
+class ThemeManager {
+    constructor() {
+        this.currentTheme = localStorage.getItem('theme') || 'light';
+        this.init();
+    }
+
+    init() {
+        this.applyTheme(this.currentTheme);
+        this.setupEventListeners();
+    }
+
+    applyTheme(theme) {
+        // Batch DOM updates
+        requestAnimationFrame(() => {
+            document.documentElement.setAttribute('data-theme', theme);
+            this.updateToggleSwitch(theme);
+        });
+        localStorage.setItem('theme', theme);
+        this.currentTheme = theme;
+    }
+
+    toggleTheme() {
+        const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+        this.applyTheme(newTheme);
+    }
+
+    updateToggleSwitch(theme) {
+        const toggle = document.getElementById('theme-toggle');
+        const themeIcon = document.querySelector('.theme-icon');
+        
+        // Batch DOM updates
+        if (toggle) {
+            toggle.checked = theme === 'dark';
+        }
+        
+        if (themeIcon) {
+            themeIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
+        }
+    }
+
+    setupEventListeners() {
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeButton = document.getElementById('theme-button');
+
+        if (themeToggle) {
+            themeToggle.addEventListener('change', () => {
+                this.toggleTheme();
+            });
+        }
+
+        if (themeButton) {
+            themeButton.addEventListener('click', () => {
+                this.toggleTheme();
+            });
+        }
+    }
 }
 
-:root {
-    /* Light Theme Colors */
-    --primary: #1a1a1a;
-    --secondary: #2563eb;
-    --accent: #3b82f6;
-    --light: #f8fafc;
-    --dark: #0f172a;
-    --success: #10b981;
-    --warning: #f59e0b;
-    --background: #ffffff;
-    --surface: #ffffff;
-    --text-primary: #1a1a1a;
-    --text-secondary: #6b7280;
-    --border: #e5e7eb;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+// Enhanced Smooth Scrolling
+function initSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                smoothScrollTo(targetElement);
+            }
+        });
+    });
 }
 
-[data-theme="dark"] {
-    /* Dark Theme Colors */
-    --primary: #f8fafc;
-    --secondary: #60a5fa;
-    --accent: #3b82f6;
-    --light: #1e293b;
-    --dark: #0f172a;
-    --background: #0f172a;
-    --surface: #1e293b;
-    --text-primary: #f8fafc;
-    --text-secondary: #cbd5e1;
-    --border: #334155;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-    --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+function smoothScrollTo(targetElement) {
+    // More reliable position calculation without forced reflow
+    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - 100;
+    
+    // Use native smooth scroll if available
+    if ('scrollBehavior' in document.documentElement.style) {
+        window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+        });
+    } else {
+        // Fallback for older browsers
+        const startPosition = window.pageYOffset;
+        const distance = targetPosition - startPosition;
+        const duration = 800;
+        let startTime = null;
+
+        function animation(currentTime) {
+            if (startTime === null) startTime = currentTime;
+            const timeElapsed = currentTime - startTime;
+            const run = easeInOutQuad(timeElapsed, startPosition, distance, duration);
+            window.scrollTo(0, run);
+            if (timeElapsed < duration) {
+                requestAnimationFrame(animation);
+            }
+        }
+
+        // Easing function for smooth animation
+        function easeInOutQuad(t, b, c, d) {
+            t /= d / 2;
+            if (t < 1) return c / 2 * t * t + b;
+            t--;
+            return -c / 2 * (t * (t - 2) - 1) + b;
+        }
+
+        requestAnimationFrame(animation);
+    }
 }
 
-/* Smooth scrolling for modern browsers */
-html {
-    scroll-behavior: smooth;
+// Debounce utility for performance
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
 }
 
-/* Respect user's motion preferences */
-@media (prefers-reduced-motion: reduce) {
-    html {
-        scroll-behavior: auto;
+// Formatters for numbers
+const formatters = {
+    currency: new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+    }),
+    
+    number: new Intl.NumberFormat('en-IN', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+    }),
+    
+    percent: new Intl.NumberFormat('en-IN', {
+        style: 'percent',
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 2
+    })
+};
+
+// Input validation utilities
+const validators = {
+    isPositiveNumber: (value) => {
+        const num = parseFloat(value);
+        return !isNaN(num) && num > 0;
+    },
+    
+    isNonNegativeNumber: (value) => {
+        const num = parseFloat(value);
+        return !isNaN(num) && num >= 0;
+    },
+    
+    isValidPercentage: (value) => {
+        const num = parseFloat(value);
+        return !isNaN(num) && num >= 0 && num <= 100;
+    }
+};
+
+// Animation utilities
+const animations = {
+    fadeIn: (element) => {
+        requestAnimationFrame(() => {
+            element.style.opacity = '0';
+            element.style.display = 'block';
+            
+            requestAnimationFrame(() => {
+                element.style.transition = 'opacity 0.3s ease';
+                element.style.opacity = '1';
+            });
+        });
+    },
+    
+    slideDown: (element) => {
+        requestAnimationFrame(() => {
+            element.style.display = 'block';
+            element.classList.add('show');
+        });
+    }
+};
+
+// Mobile menu toggle and main initialization
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const nav = document.querySelector('nav');
+    const themeManager = new ThemeManager();
+    
+    // Mobile menu functionality
+    if (mobileMenuBtn && nav) {
+        mobileMenuBtn.addEventListener('click', function() {
+            // Batch DOM updates
+            requestAnimationFrame(() => {
+                const isActive = !nav.classList.contains('active');
+                nav.classList.toggle('active');
+                this.textContent = isActive ? '✕' : '☰';
+                
+                // Prevent body scroll when menu is open
+                document.body.style.overflow = isActive ? 'hidden' : '';
+            });
+        });
+    }
+
+    // Close mobile menu when clicking on links
+    document.querySelectorAll('nav a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (nav && nav.classList.contains('active')) {
+                requestAnimationFrame(() => {
+                    nav.classList.remove('active');
+                    if (mobileMenuBtn) {
+                        mobileMenuBtn.textContent = '☰';
+                    }
+                    document.body.style.overflow = '';
+                });
+            }
+        });
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (nav && nav.classList.contains('active') && 
+            !nav.contains(e.target) && 
+            e.target !== mobileMenuBtn) {
+            requestAnimationFrame(() => {
+                nav.classList.remove('active');
+                if (mobileMenuBtn) {
+                    mobileMenuBtn.textContent = '☰';
+                }
+                document.body.style.overflow = '';
+            });
+        }
+    });
+
+    // Initialize smooth scrolling
+    initSmoothScroll();
+
+    // Add active class to current section in viewport
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                requestAnimationFrame(() => {
+                    entry.target.classList.add('in-view');
+                });
+            }
+        });
+    }, observerOptions);
+
+    // Observe calculator sections and other elements
+    document.querySelectorAll('.calculator, .tool-card, .tool-description').forEach(section => {
+        observer.observe(section);
+    });
+
+    // Add loading animation to tools grid
+    const toolsGrid = document.querySelector('.tools-grid');
+    if (toolsGrid) {
+        const toolCards = toolsGrid.querySelectorAll('.tool-card');
+        toolCards.forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+        });
+    }
+
+    // Debounced resize handler
+    window.addEventListener('resize', debounce(() => {
+        // Handle resize events efficiently
+        if (nav && nav.classList.contains('active')) {
+            requestAnimationFrame(() => {
+                nav.classList.remove('active');
+                if (mobileMenuBtn) {
+                    mobileMenuBtn.textContent = '☰';
+                }
+                document.body.style.overflow = '';
+            });
+        }
+    }, 250));
+
+    // Add input auto-formatting
+    initInputFormatting();
+
+    // Ensure all calculator buttons are properly connected
+    initCalculatorEventListeners();
+});
+
+// Initialize calculator event listeners
+function initCalculatorEventListeners() {
+    // SIP Calculator
+    const sipButton = document.querySelector('button[onclick="calculateSIP()"]');
+    if (sipButton) {
+        sipButton.addEventListener('click', calculateSIP);
+    }
+
+    // EMI Calculator
+    const emiButton = document.querySelector('button[onclick="calculateEMI()"]');
+    if (emiButton) {
+        emiButton.addEventListener('click', calculateEMI);
+    }
+
+    // Loan Eligibility Calculator
+    const loanEligibilityButton = document.querySelector('button[onclick="checkLoanEligibility()"]');
+    if (loanEligibilityButton) {
+        loanEligibilityButton.addEventListener('click', checkLoanEligibility);
+    }
+
+    // GST Calculator
+    const gstButton = document.querySelector('button[onclick="calculateGST()"]');
+    if (gstButton) {
+        gstButton.addEventListener('click', calculateGST);
+    }
+
+    // FD/RD Calculator
+    const fdButton = document.querySelector('button[onclick="calculateFD()"]');
+    if (fdButton) {
+        fdButton.addEventListener('click', calculateFD);
+    }
+
+    // Tax Calculator
+    const taxButton = document.querySelector('button[onclick="calculateTax()"]');
+    if (taxButton) {
+        taxButton.addEventListener('click', calculateTax);
+    }
+
+    // Savings Calculator
+    const savingsButton = document.querySelector('button[onclick="calculateSavings()"]');
+    if (savingsButton) {
+        savingsButton.addEventListener('click', calculateSavings);
+    }
+}
+
+// Input formatting and validation
+function initInputFormatting() {
+    // Format currency inputs on blur
+    document.querySelectorAll('input[data-type="currency"]').forEach(input => {
+        input.addEventListener('blur', function() {
+            if (this.value && validators.isPositiveNumber(this.value)) {
+                this.value = formatters.number.format(parseFloat(this.value));
+            }
+        });
+        
+        input.addEventListener('focus', function() {
+            this.value = this.value.replace(/[^\d.]/g, '');
+        });
+    });
+
+    // Format percentage inputs
+    document.querySelectorAll('input[data-type="percentage"]').forEach(input => {
+        input.addEventListener('blur', function() {
+            if (this.value && validators.isValidPercentage(this.value)) {
+                this.value = parseFloat(this.value).toFixed(1);
+            }
+        });
+    });
+}
+
+// Calculator Functions with enhanced validation and formatting
+
+// EMI Calculator Function
+function calculateEMI() {
+    const principal = parseFloat(document.getElementById('loan-amount').value);
+    const annualRate = parseFloat(document.getElementById('interest-rate').value);
+    const months = parseInt(document.getElementById('loan-tenure').value);
+    
+    // Enhanced validation
+    if (!validators.isPositiveNumber(principal) || 
+        !validators.isPositiveNumber(annualRate) || 
+        !validators.isPositiveNumber(months)) {
+        showError('Please enter valid positive numbers for all fields');
+        return;
     }
     
-    * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-}
-
-body {
-    background-color: var(--background);
-    color: var(--text-primary);
-    line-height: 1.6;
-    font-weight: 400;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    /* Prevent horizontal scroll */
-    overflow-x: hidden;
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 15px;
-}
-
-/* Theme Toggle Switch */
-.theme-toggle {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-left: 20px;
-}
-
-.theme-switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 30px;
-}
-
-.theme-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: .4s;
-    border-radius: 34px;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 22px;
-    width: 22px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: transform 0.4s ease;
-    border-radius: 50%;
-}
-
-input:checked + .slider {
-    background: linear-gradient(135deg, var(--secondary), var(--accent));
-}
-
-input:checked + .slider:before {
-    transform: translateX(30px);
-}
-
-.theme-icon {
-    font-size: 1.2rem;
-    transition: transform 0.3s ease;
-}
-
-.theme-icon:hover {
-    transform: scale(1.1);
-}
-
-/* Header Styles */
-header {
-    background: var(--surface);
-    color: var(--text-primary);
-    box-shadow: var(--shadow);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border);
-    transition: all 0.3s ease;
-    /* Improve performance */
-    will-change: transform;
-}
-
-.header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 0;
-    min-height: 70px;
-}
-
-.logo {
-    font-size: 1.8rem;
-    font-weight: 800;
-    color: var(--text-primary);
-    letter-spacing: -0.5px;
-    white-space: nowrap;
-    transition: color 0.3s ease;
-}
-
-.logo span {
-    color: var(--secondary);
-    background: linear-gradient(135deg, var(--secondary), var(--accent));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-nav ul {
-    display: flex;
-    list-style: none;
-    gap: 15px;
-    align-items: center;
-    flex-wrap: nowrap;
-    margin: 0;
-    padding: 0;
-}
-
-nav ul li a {
-    font-weight: 500;
-    transition: all 0.3s ease;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    white-space: nowrap;
-    color: var(--text-primary);
-    position: relative;
-}
-
-nav ul li a:hover {
-    color: var(--secondary);
-    background-color: rgba(37, 99, 235, 0.1);
-    transform: translateY(-1px);
-}
-
-nav ul li a::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 50%;
-    width: 0;
-    height: 2px;
-    background: var(--secondary);
-    transition: all 0.3s ease;
-    transform: translateX(-50%);
-}
-
-nav ul li a:hover::after {
-    width: 80%;
-}
-
-.mobile-menu-btn {
-    display: none;
-    background: none;
-    border: none;
-    color: var(--text-primary);
-    font-size: 1.5rem;
-    cursor: pointer;
-    padding: 5px;
-    border-radius: 6px;
-    transition: all 0.3s ease;
-    z-index: 1001;
-}
-
-.mobile-menu-btn:hover {
-    background-color: var(--border);
-    transform: scale(1.1);
-}
-
-/* Hero Section */
-.hero {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 50%, var(--secondary) 100%);
-    color: white;
-    padding: 100px 0;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-}
-
-.hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="rgba(255,255,255,0.05)" points="0,1000 1000,0 1000,1000"/></svg>');
-    background-size: cover;
-    /* Improve performance */
-    will-change: transform;
-}
-
-.hero h1 {
-    font-size: 3rem;
-    margin-bottom: 20px;
-    font-weight: 800;
-    line-height: 1.2;
-    position: relative;
-    animation: fadeInUp 0.8s ease-out;
-}
-
-.hero p {
-    font-size: 1.3rem;
-    max-width: 600px;
-    margin: 0 auto 40px;
-    opacity: 0.9;
-    font-weight: 400;
-    position: relative;
-    animation: fadeInUp 0.8s ease-out 0.2s both;
-}
-
-.cta-button {
-    display: inline-block;
-    background: linear-gradient(135deg, var(--secondary), var(--accent));
-    color: white;
-    padding: 16px 40px;
-    border-radius: 12px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: var(--shadow);
-    position: relative;
-    border: none;
-    font-size: 1.1rem;
-    letter-spacing: 0.5px;
-    animation: fadeInUp 0.8s ease-out 0.4s both;
-    overflow: hidden;
-}
-
-.cta-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.5s;
-}
-
-.cta-button:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-hover);
-    background: linear-gradient(135deg, var(--accent), var(--secondary));
-}
-
-.cta-button:hover::before {
-    left: 100%;
-}
-
-/* Tools Section */
-.tools-section {
-    padding: 100px 0;
-    background-color: var(--light);
-    transition: background-color 0.3s ease;
-}
-
-.section-title {
-    text-align: center;
-    margin-bottom: 60px;
-    color: var(--text-primary);
-    position: relative;
-    font-size: 2.5rem;
-    font-weight: 800;
-    transition: color 0.3s ease;
-    animation: fadeInUp 0.8s ease-out;
-}
-
-.section-title::after {
-    content: '';
-    display: block;
-    width: 80px;
-    height: 5px;
-    background: linear-gradient(90deg, var(--secondary), var(--accent));
-    margin: 20px auto;
-    border-radius: 3px;
-    animation: slideIn 0.8s ease-out 0.3s both;
-}
-
-.tools-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 30px;
-}
-
-.tool-card {
-    background: var(--surface);
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: var(--shadow);
-    transition: all 0.3s ease;
-    border: 1px solid var(--border);
-    position: relative;
-    animation: fadeInUp 0.6s ease-out;
-    /* Improve performance */
-    will-change: transform;
-}
-
-.tool-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--secondary), var(--accent));
-}
-
-.tool-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-hover);
-}
-
-.tool-icon {
-    background: linear-gradient(135deg, var(--secondary), var(--accent));
-    color: white;
-    height: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2.5rem;
-    position: relative;
-    transition: all 0.3s ease;
-}
-
-.tool-card:hover .tool-icon {
-    transform: scale(1.05);
-}
-
-.tool-content {
-    padding: 30px;
-}
-
-.tool-content h3 {
-    margin-bottom: 15px;
-    color: var(--text-primary);
-    font-size: 1.4rem;
-    font-weight: 700;
-    transition: color 0.3s ease;
-}
-
-.tool-content p {
-    color: var(--text-secondary);
-    margin-bottom: 25px;
-    line-height: 1.6;
-    font-size: 0.95rem;
-    transition: color 0.3s ease;
-}
-
-.tool-button {
-    display: inline-block;
-    background-color: var(--primary);
-    color: var(--background);
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    border: 2px solid var(--primary);
-    font-size: 0.9rem;
-    position: relative;
-    overflow: hidden;
-}
-
-.tool-button:hover {
-    background-color: transparent;
-    color: var(--primary);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-/* Calculator Styles */
-.calculator {
-    background: var(--surface);
-    border-radius: 16px;
-    padding: 40px;
-    box-shadow: var(--shadow);
-    margin-bottom: 60px;
-    border: 1px solid var(--border);
-    transition: all 0.3s ease;
-    animation: fadeInUp 0.6s ease-out;
-}
-
-.calculator h2 {
-    color: var(--text-primary);
-    margin-bottom: 30px;
-    text-align: center;
-    font-size: 2rem;
-    font-weight: 700;
-    transition: color 0.3s ease;
-}
-
-.input-group {
-    margin-bottom: 25px;
-}
-
-.input-group label {
-    display: block;
-    margin-bottom: 10px;
-    font-weight: 600;
-    color: var(--text-primary);
-    font-size: 0.95rem;
-    transition: color 0.3s ease;
-}
-
-.input-group input, .input-group select {
-    width: 100%;
-    padding: 14px 16px;
-    border: 2px solid var(--border);
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    background: var(--surface);
-    color: var(--text-primary);
-}
-
-.input-group input:focus, .input-group select:focus {
-    border-color: var(--secondary);
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-    transform: translateY(-1px);
-}
-
-.calculate-btn {
-    background: linear-gradient(135deg, var(--secondary), var(--accent));
-    color: white;
-    border: none;
-    padding: 16px 32px;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    width: 100%;
-    margin-top: 10px;
-    letter-spacing: 0.5px;
-    position: relative;
-    overflow: hidden;
-}
-
-.calculate-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-hover);
-}
-
-.calculate-btn:active {
-    transform: translateY(0);
-}
-
-.result {
-    margin-top: 30px;
-    padding: 25px;
-    background: linear-gradient(135deg, var(--light), color-mix(in srgb, var(--light) 80%, transparent 20%));
-    border-radius: 12px;
-    display: none;
-    border-left: 4px solid var(--secondary);
-    transition: all 0.3s ease;
-    animation: slideIn 0.5s ease-out;
-}
-
-.result.show {
-    display: block;
-}
-
-.result h3 {
-    color: var(--text-primary);
-    margin-bottom: 20px;
-    font-size: 1.3rem;
-    font-weight: 700;
-    transition: color 0.3s ease;
-}
-
-.result-item {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 12px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--border);
-    font-weight: 500;
-    color: var(--text-primary);
-    transition: all 0.3s ease;
-}
-
-.result-item:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-}
-
-.result-item span:last-child {
-    color: var(--secondary);
-    font-weight: 700;
-}
-
-/* Tool Description */
-.tool-description {
-    margin-bottom: 60px;
-    padding: 40px;
-    background: var(--surface);
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-    transition: all 0.3s ease;
-    animation: fadeInUp 0.6s ease-out 0.2s both;
-}
-
-.tool-description h3 {
-    color: var(--text-primary);
-    margin-bottom: 20px;
-    font-size: 1.5rem;
-    font-weight: 700;
-    transition: color 0.3s ease;
-}
-
-.tool-description p {
-    margin-bottom: 20px;
-    line-height: 1.7;
-    color: var(--text-secondary);
-    transition: color 0.3s ease;
-}
-
-.tool-description strong {
-    color: var(--text-primary);
-    font-weight: 600;
-}
-
-/* Footer */
-footer {
-    background: var(--surface);
-    color: var(--text-primary);
-    padding: 80px 0 30px;
-    border-top: 1px solid var(--border);
-    transition: all 0.3s ease;
-}
-
-.footer-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 40px;
-    margin-bottom: 50px;
-}
-
-.footer-column h3 {
-    margin-bottom: 25px;
-    font-size: 1.3rem;
-    position: relative;
-    padding-bottom: 15px;
-    font-weight: 700;
-    color: var(--text-primary);
-    transition: color 0.3s ease;
-}
-
-.footer-column h3::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 40px;
-    height: 3px;
-    background: var(--secondary);
-    border-radius: 2px;
-}
-
-.footer-column p {
-    color: var(--text-secondary);
-    line-height: 1.6;
-    margin-bottom: 20px;
-    transition: color 0.3s ease;
-}
-
-.footer-column ul {
-    list-style: none;
-}
-
-.footer-column ul li {
-    margin-bottom: 12px;
-}
-
-.footer-column ul li a {
-    transition: all 0.3s ease;
-    color: var(--text-secondary);
-    padding: 5px 0;
-    display: block;
-    position: relative;
-    padding-left: 15px;
-}
-
-.footer-column ul li a::before {
-    content: '▸';
-    position: absolute;
-    left: 0;
-    color: var(--secondary);
-    transition: transform 0.3s ease;
-}
-
-.footer-column ul li a:hover {
-    color: var(--secondary);
-    transform: translateX(5px);
-}
-
-.footer-column ul li a:hover::before {
-    transform: translateX(3px);
-}
-
-.copyright {
-    text-align: center;
-    padding-top: 30px;
-    border-top: 1px solid var(--border);
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    transition: color 0.3s ease;
-}
-
-/* Animation Keyframes */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateX(-30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-/* Viewport animation classes */
-.in-view {
-    animation: fadeInUp 0.6s ease-out both;
-}
-
-/* Performance Optimizations */
-* {
-    box-sizing: border-box;
-}
-
-img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-}
-
-/* Reduce motion for users who prefer it */
-@media (prefers-reduced-motion: reduce) {
-    .tool-card,
-    .calculator,
-    .tool-description,
-    .section-title,
-    .hero h1,
-    .hero p,
-    .cta-button {
-        animation: none;
+    if (months > 360) {
+        showError('Loan tenure cannot exceed 30 years (360 months)');
+        return;
     }
     
-    .tool-card:hover,
-    .cta-button:hover,
-    .calculate-btn:hover,
-    .tool-button:hover {
-        transform: none;
-    }
+    const monthlyRate = annualRate / 12 / 100;
+    const emi = principal * monthlyRate * Math.pow(1 + monthlyRate, months) / (Math.pow(1 + monthlyRate, months) - 1);
+    const totalPayment = emi * months;
+    const totalInterest = totalPayment - principal;
+    
+    // Batch DOM updates with animation
+    requestAnimationFrame(() => {
+        document.getElementById('monthly-emi').textContent = formatters.currency.format(emi);
+        document.getElementById('total-interest').textContent = formatters.currency.format(totalInterest);
+        document.getElementById('total-payment').textContent = formatters.currency.format(totalPayment);
+        animations.slideDown(document.getElementById('emi-result'));
+    });
 }
 
-/* Responsive Design */
-@media (max-width: 1200px) {
-    nav ul {
-        gap: 12px;
+// Loan Eligibility Checker Function
+function checkLoanEligibility() {
+    const income = parseFloat(document.getElementById('monthly-income').value);
+    const expenses = parseFloat(document.getElementById('monthly-expenses').value);
+    const existingEMIs = parseFloat(document.getElementById('existing-emis').value) || 0;
+    const loanType = document.getElementById('loan-type').value;
+    
+    if (!validators.isPositiveNumber(income) || !validators.isNonNegativeNumber(expenses)) {
+        showError('Please enter valid numbers for income and expenses');
+        return;
     }
     
-    nav ul li a {
-        padding: 8px 14px;
-        font-size: 0.88rem;
+    if (expenses >= income) {
+        showError('Expenses cannot be greater than or equal to income');
+        return;
     }
+    
+    // Simple eligibility calculation
+    const disposableIncome = income - expenses - existingEMIs;
+    let eligibleAmount = 0;
+    let eligibilityStatus = 'Not Eligible';
+    let recommendedTenure = '0 years';
+    
+    if (disposableIncome > 0) {
+        // Assume maximum EMI is 50% of disposable income
+        const maxEMI = disposableIncome * 0.5;
+        
+        // Calculate eligible loan amount based on loan type and assumed interest rate
+        let interestRate;
+        switch(loanType) {
+            case 'home': interestRate = 8.5; break;
+            case 'personal': interestRate = 12; break;
+            case 'car': interestRate = 9.5; break;
+            case 'education': interestRate = 10; break;
+            default: interestRate = 10;
+        }
+        
+        const monthlyRate = interestRate / 12 / 100;
+        // Assuming 5 years (60 months) tenure for calculation
+        const tenure = 60;
+        eligibleAmount = maxEMI * (Math.pow(1 + monthlyRate, tenure) - 1) / (monthlyRate * Math.pow(1 + monthlyRate, tenure));
+        
+        if (eligibleAmount > 0) {
+            eligibilityStatus = 'Eligible';
+            recommendedTenure = '5 years';
+            
+            // Cap eligible amount at reasonable limit
+            if (eligibleAmount > 5000000) {
+                eligibleAmount = 5000000;
+            }
+        }
+    }
+    
+    // Batch DOM updates
+    requestAnimationFrame(() => {
+        document.getElementById('eligible-amount').textContent = formatters.currency.format(eligibleAmount);
+        document.getElementById('eligibility-status').textContent = eligibilityStatus;
+        document.getElementById('eligibility-status').className = eligibilityStatus === 'Eligible' ? 'status-eligible' : 'status-not-eligible';
+        document.getElementById('recommended-tenure').textContent = recommendedTenure;
+        animations.slideDown(document.getElementById('eligibility-result'));
+    });
 }
 
-@media (max-width: 1024px) {
-    nav ul {
-        gap: 10px;
+// CORRECTED SIP Calculator Function
+function calculateSIP() {
+    const monthlyInvestment = parseFloat(document.getElementById('sip-amount').value);
+    const annualReturn = parseFloat(document.getElementById('sip-return').value);
+    const years = parseInt(document.getElementById('sip-years').value);
+    
+    console.log('SIP Inputs:', { monthlyInvestment, annualReturn, years }); // Debug log
+    
+    // Enhanced validation
+    if (!validators.isPositiveNumber(monthlyInvestment) || 
+        !validators.isNonNegativeNumber(annualReturn) || 
+        !validators.isPositiveNumber(years)) {
+        showError('Please enter valid numbers for all fields');
+        return;
     }
     
-    nav ul li a {
-        padding: 8px 12px;
-        font-size: 0.85rem;
+    if (years > 50) {
+        showError('Investment period cannot exceed 50 years');
+        return;
     }
     
-    .logo {
-        font-size: 1.6rem;
-    }
+    const monthlyRate = annualReturn / 12 / 100;
+    const months = years * 12;
     
-    .hero h1 {
-        font-size: 2.5rem;
-    }
+    // Correct SIP formula: FV = P * [((1 + r)^n - 1) / r] * (1 + r)
+    const futureValue = monthlyInvestment * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate);
+    const totalInvestment = monthlyInvestment * months;
+    const totalReturns = futureValue - totalInvestment;
+    const returnPercentage = totalInvestment > 0 ? (totalReturns / totalInvestment) * 100 : 0;
+    
+    console.log('SIP Results:', { futureValue, totalInvestment, totalReturns, returnPercentage }); // Debug log
+    
+    // Batch DOM updates
+    requestAnimationFrame(() => {
+        const futureValueElement = document.getElementById('sip-future-value');
+        const totalInvestmentElement = document.getElementById('sip-total-investment');
+        const totalReturnsElement = document.getElementById('sip-total-returns');
+        const returnPercentageElement = document.getElementById('sip-return-percentage');
+        const resultElement = document.getElementById('sip-result');
+        
+        if (futureValueElement) futureValueElement.textContent = formatters.currency.format(futureValue);
+        if (totalInvestmentElement) totalInvestmentElement.textContent = formatters.currency.format(totalInvestment);
+        if (totalReturnsElement) totalReturnsElement.textContent = formatters.currency.format(totalReturns);
+        if (returnPercentageElement) returnPercentageElement.textContent = formatters.percent.format(returnPercentage / 100);
+        if (resultElement) animations.slideDown(resultElement);
+    });
 }
 
-@media (max-width: 968px) {
-    .header-container {
-        flex-wrap: wrap;
-        gap: 15px;
+// GST Calculator Function
+function calculateGST() {
+    const amount = parseFloat(document.getElementById('gst-amount').value);
+    const gstRate = parseFloat(document.getElementById('gst-rate').value);
+    
+    if (!validators.isPositiveNumber(amount) || !validators.isNonNegativeNumber(gstRate)) {
+        showError('Please enter valid numbers for all fields');
+        return;
     }
     
-    nav {
-        order: 3;
+    const gstAmount = (amount * gstRate) / 100;
+    const totalAmount = amount + gstAmount;
+    
+    // Batch DOM updates
+    requestAnimationFrame(() => {
+        document.getElementById('gst-tax-amount').textContent = formatters.currency.format(gstAmount);
+        document.getElementById('gst-total-amount').textContent = formatters.currency.format(totalAmount);
+        animations.slideDown(document.getElementById('gst-result'));
+    });
+}
+
+// CORRECTED FD/RD Calculator Function
+function calculateFD() {
+    const depositType = document.getElementById('deposit-type').value;
+    const principal = parseFloat(document.getElementById('principal-amount').value);
+    const annualRate = parseFloat(document.getElementById('interest-rate-fd').value);
+    const years = parseFloat(document.getElementById('tenure-fd').value);
+    
+    if (!validators.isPositiveNumber(principal) || 
+        !validators.isPositiveNumber(annualRate) || 
+        !validators.isPositiveNumber(years)) {
+        showError('Please enter valid numbers for all fields');
+        return;
+    }
+    
+    if (years > 30) {
+        showError('Tenure cannot exceed 30 years');
+        return;
+    }
+    
+    let maturityAmount = 0;
+    let totalInvestment = 0;
+    
+    if (depositType === 'fd') {
+        // FD calculation (compound interest quarterly)
+        const quarterlyRate = annualRate / 100 / 4;
+        const quarters = years * 4;
+        maturityAmount = principal * Math.pow(1 + quarterlyRate, quarters);
+        totalInvestment = principal;
+    } else {
+        // RD calculation (monthly compounding)
+        const monthlyRate = annualRate / 100 / 12;
+        const months = years * 12;
+        totalInvestment = principal * months;
+        // RD formula: M = R * [(1+i)^n - 1] / (1 - (1+i)^(-1/3))
+        maturityAmount = principal * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate);
+    }
+    
+    const totalInterest = maturityAmount - totalInvestment;
+    const effectiveRate = (Math.pow(maturityAmount / totalInvestment, 1/years) - 1) * 100;
+    
+    // Batch DOM updates
+    requestAnimationFrame(() => {
+        document.getElementById('maturity-amount').textContent = formatters.currency.format(maturityAmount);
+        document.getElementById('total-interest-fd').textContent = formatters.currency.format(totalInterest);
+        document.getElementById('total-investment-fd').textContent = formatters.currency.format(totalInvestment);
+        document.getElementById('effective-rate').textContent = formatters.percent.format(effectiveRate / 100);
+        animations.slideDown(document.getElementById('fd-result'));
+    });
+}
+
+// CORRECTED Income Tax Calculator Function (New Regime FY 2025–26)
+function calculateTax() {
+    const income = parseFloat(document.getElementById('annual-income').value);
+    const ageGroup = document.getElementById('age-group').value;
+    const deductions = parseFloat(document.getElementById('deductions').value) || 0;
+
+    if (!validators.isNonNegativeNumber(income)) {
+        showError('Please enter a valid annual income');
+        return;
+    }
+
+    // Using New Regime (default for FY 2025-26)
+    const taxableIncome = Math.max(0, income - deductions);
+
+    let tax = 0;
+
+    // New Regime Slabs (FY 2025–26)
+    if (taxableIncome <= 300000) {
+        tax = 0;
+    } else if (taxableIncome <= 600000) {
+        tax = (taxableIncome - 300000) * 0.05;
+    } else if (taxableIncome <= 900000) {
+        tax = (300000 * 0.05) + (taxableIncome - 600000) * 0.10;
+    } else if (taxableIncome <= 1200000) {
+        tax = (300000 * 0.05) + (300000 * 0.10) + (taxableIncome - 900000) * 0.15;
+    } else if (taxableIncome <= 1500000) {
+        tax = (300000 * 0.05) + (300000 * 0.10) + (300000 * 0.15) + (taxableIncome - 1200000) * 0.20;
+    } else {
+        tax = (300000 * 0.05) + (300000 * 0.10) + (300000 * 0.15) + (300000 * 0.20) + (taxableIncome - 1500000) * 0.30;
+    }
+
+    // Rebate under Section 87A — full rebate if income ≤ ₹7,00,000
+    if (taxableIncome <= 700000) {
+        tax = 0;
+    }
+
+    // Health & Education Cess (4%)
+    const cess = tax * 0.04;
+    const totalTax = tax + cess;
+    const effectiveTaxRate = taxableIncome > 0 ? (totalTax / taxableIncome) * 100 : 0;
+
+    // Display Results
+    requestAnimationFrame(() => {
+        document.getElementById('taxable-income').textContent = formatters.currency.format(taxableIncome);
+        document.getElementById('income-tax').textContent = formatters.currency.format(tax);
+        document.getElementById('cess-amount').textContent = formatters.currency.format(cess);
+        document.getElementById('total-tax').textContent = formatters.currency.format(totalTax);
+        document.getElementById('effective-tax-rate').textContent = formatters.percent.format(effectiveTaxRate / 100);
+        animations.slideDown(document.getElementById('tax-result'));
+    });
+}
+
+// Savings Goal Tracker Function
+function calculateSavings() {
+    const goal = parseFloat(document.getElementById('savings-goal').value);
+    const current = parseFloat(document.getElementById('current-savings').value) || 0;
+    const monthly = parseFloat(document.getElementById('monthly-saving').value);
+    const annualReturn = parseFloat(document.getElementById('expected-return').value) || 6;
+    
+    if (!validators.isPositiveNumber(goal) || !validators.isNonNegativeNumber(monthly)) {
+        showError('Please enter valid savings goal and monthly saving amount');
+        return;
+    }
+    
+    if (current > goal) {
+        showError('Current savings already exceed your goal!');
+        return;
+    }
+    
+    const needed = Math.max(0, goal - current);
+    const progressPercent = current > 0 ? Math.min(100, (current / goal) * 100) : 0;
+    
+    // Calculate time to reach goal with compound interest
+    const monthlyRate = annualReturn / 100 / 12;
+    let months = 0;
+    let futureValue = current;
+    
+    if (monthly > 0) {
+        // Using formula for future value of series with compound interest
+        while (futureValue < goal && months < 600) { // Max 50 years
+            months++;
+            futureValue = futureValue * (1 + monthlyRate) + monthly;
+        }
+    } else {
+        // Without monthly contributions
+        if (current > 0 && annualReturn > 0) {
+            months = Math.log(goal / current) / Math.log(1 + monthlyRate);
+        } else {
+            months = needed > 0 ? Infinity : 0;
+        }
+    }
+    
+    const years = Math.ceil(months / 12);
+    
+    // Update progress bar if exists
+    const progressBar = document.getElementById('savings-progress-bar');
+    if (progressBar) {
+        progressBar.style.width = progressPercent + '%';
+    }
+    
+    // Batch DOM updates
+    requestAnimationFrame(() => {
+        document.getElementById('amount-needed').textContent = formatters.currency.format(needed);
+        document.getElementById('progress-percent').textContent = formatters.number.format(progressPercent) + '%';
+        document.getElementById('time-to-goal').textContent = months < 600 ? 
+            `${Math.ceil(months)} months (${years} years)` : 'More than 50 years';
+        document.getElementById('future-value').textContent = formatters.currency.format(futureValue);
+        animations.slideDown(document.getElementById('savings-result'));
+    });
+}
+
+// Error handling utility
+function showError(message) {
+    // Create or show error message
+    let errorDiv = document.getElementById('calculator-error');
+    if (!errorDiv) {
+        errorDiv = document.createElement('div');
+        errorDiv.id = 'calculator-error';
+        errorDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ef4444;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 10000;
+            max-width: 300px;
+            animation: slideInRight 0.3s ease;
+        `;
+        document.body.appendChild(errorDiv);
+    }
+    
+    errorDiv.textContent = message;
+    errorDiv.style.display = 'block';
+    
+    // Auto hide after 5 seconds
+    setTimeout(() => {
+        errorDiv.style.opacity = '0';
+        errorDiv.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => {
+            errorDiv.style.display = 'none';
+            errorDiv.style.opacity = '1';
+        }, 300);
+    }, 5000);
+}
+
+// Contact Form Handler with validation
+function handleContactForm(event) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const formData = new FormData(form);
+    const name = formData.get('name');
+    const email = formData.get('email');
+    const message = formData.get('message');
+    
+    // Simple validation
+    if (!name || !email || !message) {
+        showError('Please fill in all fields');
+        return;
+    }
+    
+    if (!isValidEmail(email)) {
+        showError('Please enter a valid email address');
+        return;
+    }
+    
+    // Show success message
+    showSuccess('Thank you for your message! We will get back to you soon.');
+    form.reset();
+}
+
+// Email validation
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+// Success message
+function showSuccess(message) {
+    let successDiv = document.getElementById('calculator-success');
+    if (!successDiv) {
+        successDiv = document.createElement('div');
+        successDiv.id = 'calculator-success';
+        successDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 10000;
+            max-width: 300px;
+            animation: slideInRight 0.3s ease;
+        `;
+        document.body.appendChild(successDiv);
+    }
+    
+    successDiv.textContent = message;
+    successDiv.style.display = 'block';
+    
+    // Auto hide after 5 seconds
+    setTimeout(() => {
+        successDiv.style.opacity = '0';
+        successDiv.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => {
+            successDiv.style.display = 'none';
+            successDiv.style.opacity = '1';
+        }, 300);
+    }, 5000);
+}
+
+// Add CSS for animations
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideInRight {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    .status-eligible {
+        color: #10b981;
+        font-weight: bold;
+    }
+    
+    .status-not-eligible {
+        color: #ef4444;
+        font-weight: bold;
+    }
+    
+    .progress-bar {
         width: 100%;
+        height: 8px;
+        background-color: #e5e7eb;
+        border-radius: 4px;
+        overflow: hidden;
+        margin: 10px 0;
+    }
+    
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--secondary), var(--accent));
+        transition: width 0.3s ease;
+    }
+    
+    .calculator-loading {
+        opacity: 0.7;
+        pointer-events: none;
+    }
+    
+    .calculator-result {
         display: none;
     }
     
-    nav.active {
+    .calculator-result.show {
         display: block;
-        animation: slideIn 0.3s ease-out;
     }
+`;
+document.head.appendChild(style);
+
+// Test function for calculators
+function testCalculators() {
+    console.log('Testing all calculators...');
     
-    nav ul {
-        flex-direction: column;
-        gap: 10px;
-        background: var(--surface);
-        padding: 20px;
-        border-radius: 12px;
-        margin-top: 15px;
-        border: 1px solid var(--border);
-    }
+    // Test SIP
+    console.log('SIP Test - ₹10,000 monthly, 12% return, 10 years:');
+    const monthlyInvestment = 10000;
+    const annualReturn = 12;
+    const years = 10;
+    const monthlyRate = annualReturn / 12 / 100;
+    const months = years * 12;
+    const futureValue = monthlyInvestment * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate);
+    console.log('Future Value:', formatters.currency.format(futureValue));
     
-    .mobile-menu-btn {
-        display: block;
-        position: static;
-    }
+    // Test FD
+    console.log('FD Test - ₹1,00,000 principal, 7% interest, 5 years:');
+    const principal = 100000;
+    const fdRate = 7;
+    const fdYears = 5;
+    const quarterlyRate = fdRate / 100 / 4;
+    const quarters = fdYears * 4;
+    const fdMaturity = principal * Math.pow(1 + quarterlyRate, quarters);
+    console.log('Maturity Amount:', formatters.currency.format(fdMaturity));
     
-    .header-container {
-        min-height: auto;
-        padding: 15px 0;
-    }
-    
-    .theme-toggle {
-        margin-left: auto;
-        margin-right: 15px;
-    }
-    
-    .tools-grid {
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 20px;
-    }
+    // Test Tax
+    console.log('Tax Test - ₹8,00,000 income:');
+    const income = 800000;
+    let tax = 0;
+    if (income <= 300000) tax = 0;
+    else if (income <= 600000) tax = (income - 300000) * 0.05;
+    else if (income <= 900000) tax = (300000 * 0.05) + (income - 600000) * 0.10;
+    console.log('Tax Amount:', formatters.currency.format(tax));
 }
 
-@media (max-width: 768px) {
-    .header-container {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
-    .logo {
-        font-size: 1.5rem;
-    }
-    
-    .mobile-menu-btn {
-        display: block;
-    }
-    
-    nav {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background: var(--surface);
-        box-shadow: var(--shadow-hover);
-        display: none;
-        border: 1px solid var(--border);
-        border-top: none;
-    }
-    
-    nav.active {
-        display: block;
-    }
-    
-    nav ul {
-        flex-direction: column;
-        padding: 20px;
-        gap: 15px;
-    }
-    
-    nav ul li a {
-        padding: 12px 20px;
-        font-size: 1rem;
-        display: block;
-        text-align: center;
-        border: 1px solid var(--border);
-    }
-    
-    .theme-toggle {
-        margin: 10px auto;
-        justify-content: center;
-    }
-    
-    .hero {
-        padding: 80px 0;
-    }
-    
-    .hero h1 {
-        font-size: 2.2rem;
-    }
-    
-    .hero p {
-        font-size: 1.1rem;
-    }
-    
-    .calculator {
-        padding: 30px 20px;
-    }
-    
-    .section-title {
-        font-size: 2rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .header-container {
-        padding: 12px 0;
-    }
-    
-    .logo {
-        font-size: 1.4rem;
-    }
-    
-    nav ul {
-        padding: 15px;
-    }
-    
-    nav ul li a {
-        padding: 10px 15px;
-        font-size: 0.9rem;
-    }
-    
-    .hero h1 {
-        font-size: 2rem;
-    }
-    
-    .hero p {
-        font-size: 1rem;
-    }
-    
-    .cta-button {
-        padding: 14px 30px;
-        font-size: 1rem;
-    }
-    
-    .tools-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .calculator {
-        padding: 20px 15px;
-        margin-bottom: 40px;
-    }
-    
-    .tool-description {
-        padding: 30px 20px;
-    }
-}
+// Export functions for global access
+window.calculateEMI = calculateEMI;
+window.checkLoanEligibility = checkLoanEligibility;
+window.calculateSIP = calculateSIP;
+window.calculateGST = calculateGST;
+window.calculateFD = calculateFD;
+window.calculateTax = calculateTax;
+window.calculateSavings = calculateSavings;
+window.handleContactForm = handleContactForm;
+window.testCalculators = testCalculators;
