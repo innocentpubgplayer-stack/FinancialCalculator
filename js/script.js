@@ -1,324 +1,949 @@
-// Theme Toggle Functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const themeToggle = document.getElementById('theme-toggle');
-    const currentTheme = localStorage.getItem('theme') || 'light';
-    
-    // Apply saved theme
-    document.documentElement.setAttribute('data-theme', currentTheme);
-    themeToggle.checked = currentTheme === 'dark';
-    
-    // Update theme icon based on current theme
-    updateThemeIcon(currentTheme);
-    
-    // Theme toggle event
-    themeToggle.addEventListener('change', function() {
-        const newTheme = this.checked ? 'dark' : 'light';
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        updateThemeIcon(newTheme);
-    });
-    
-    // Function to update theme icon
-    function updateThemeIcon(theme) {
-        const themeIcon = document.querySelector('.theme-icon');
-        if (themeIcon) {
-            themeIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
-        }
-    }
-    
-    // Mobile Menu Toggle
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    const nav = document.querySelector('nav');
-    const body = document.body;
-    
-    if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', function() {
-            nav.classList.toggle('active');
-            body.classList.toggle('menu-open');
-        });
-    }
-    
-    // Close mobile menu when clicking on a link
-    const navLinks = document.querySelectorAll('nav a');
-    navLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            nav.classList.remove('active');
-            body.classList.remove('menu-open');
-        });
-    });
-    
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', function(event) {
-        if (!event.target.closest('nav') && !event.target.closest('.mobile-menu-btn')) {
-            nav.classList.remove('active');
-            body.classList.remove('menu-open');
-        }
-    });
-});
-
-// EMI Calculator
-function calculateEMI() {
-    const loanAmount = parseFloat(document.getElementById('loan-amount').value);
-    const interestRate = parseFloat(document.getElementById('interest-rate').value);
-    const loanTenure = parseFloat(document.getElementById('loan-tenure').value);
-    
-    if (isNaN(loanAmount) || isNaN(interestRate) || isNaN(loanTenure)) {
-        alert('Please enter valid numbers for all fields');
-        return;
-    }
-    
-    const monthlyInterestRate = interestRate / 12 / 100;
-    const emi = loanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, loanTenure) / 
-                (Math.pow(1 + monthlyInterestRate, loanTenure) - 1);
-    const totalPayment = emi * loanTenure;
-    const totalInterest = totalPayment - loanAmount;
-    
-    document.getElementById('monthly-emi').textContent = '₹' + emi.toFixed(2);
-    document.getElementById('total-interest').textContent = '₹' + totalInterest.toFixed(2);
-    document.getElementById('total-payment').textContent = '₹' + totalPayment.toFixed(2);
-    
-    document.getElementById('emi-result').classList.add('show');
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-// Loan Eligibility Checker
-function checkLoanEligibility() {
-    const monthlyIncome = parseFloat(document.getElementById('monthly-income').value);
-    const monthlyExpenses = parseFloat(document.getElementById('monthly-expenses').value);
-    const existingEMIs = parseFloat(document.getElementById('existing-emis').value) || 0;
-    const loanType = document.getElementById('loan-type').value;
-    
-    if (isNaN(monthlyIncome) || isNaN(monthlyExpenses)) {
-        alert('Please enter valid numbers for income and expenses');
-        return;
-    }
-    
-    const disposableIncome = monthlyIncome - monthlyExpenses - existingEMIs;
-    let eligibleAmount = 0;
-    let eligibilityStatus = 'Not Eligible';
-    let recommendedTenure = '0 years';
-    
-    if (disposableIncome > 0) {
-        const maxEMI = disposableIncome * 0.5; // 50% of disposable income
-        let interestRate;
-        
-        switch(loanType) {
-            case 'home':
-                interestRate = 8.5;
-                recommendedTenure = '20 years';
-                break;
-            case 'personal':
-                interestRate = 12;
-                recommendedTenure = '5 years';
-                break;
-            case 'car':
-                interestRate = 9;
-                recommendedTenure = '7 years';
-                break;
-            case 'education':
-                interestRate = 10;
-                recommendedTenure = '10 years';
-                break;
-            default:
-                interestRate = 10;
-        }
-        
-        const monthlyRate = interestRate / 12 / 100;
-        const tenureMonths = parseInt(recommendedTenure) * 12;
-        
-        eligibleAmount = maxEMI * (Math.pow(1 + monthlyRate, tenureMonths) - 1) / 
-                        (monthlyRate * Math.pow(1 + monthlyRate, tenureMonths));
-        
-        if (eligibleAmount > 0) {
-            eligibilityStatus = 'Eligible';
-        }
-    }
-    
-    document.getElementById('eligible-amount').textContent = '₹' + eligibleAmount.toFixed(2);
-    document.getElementById('eligibility-status').textContent = eligibilityStatus;
-    document.getElementById('recommended-tenure').textContent = recommendedTenure;
-    
-    document.getElementById('eligibility-result').classList.add('show');
+:root {
+    /* Light Theme Colors */
+    --primary: #1a1a1a;
+    --secondary: #2563eb;
+    --accent: #3b82f6;
+    --light: #f8fafc;
+    --dark: #0f172a;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --background: #ffffff;
+    --surface: #ffffff;
+    --text-primary: #1a1a1a;
+    --text-secondary: #6b7280;
+    --border: #e5e7eb;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
-// SIP Calculator
-function calculateSIP() {
-    const sipAmount = parseFloat(document.getElementById('sip-amount').value);
-    const expectedReturn = parseFloat(document.getElementById('sip-return').value);
-    const years = parseFloat(document.getElementById('sip-years').value);
-    
-    if (isNaN(sipAmount) || isNaN(expectedReturn) || isNaN(years)) {
-        alert('Please enter valid numbers for all fields');
-        return;
-    }
-    
-    const monthlyRate = expectedReturn / 12 / 100;
-    const months = years * 12;
-    const futureValue = sipAmount * (Math.pow(1 + monthlyRate, months) - 1) / monthlyRate * (1 + monthlyRate);
-    const totalInvestment = sipAmount * months;
-    const totalReturns = futureValue - totalInvestment;
-    const returnPercentage = (totalReturns / totalInvestment) * 100;
-    
-    document.getElementById('sip-future-value').textContent = '₹' + futureValue.toFixed(2);
-    document.getElementById('sip-total-investment').textContent = '₹' + totalInvestment.toFixed(2);
-    document.getElementById('sip-total-returns').textContent = '₹' + totalReturns.toFixed(2);
-    document.getElementById('sip-return-percentage').textContent = returnPercentage.toFixed(2) + '%';
-    
-    document.getElementById('sip-result').classList.add('show');
+[data-theme="dark"] {
+    /* Dark Theme Colors */
+    --primary: #f8fafc;
+    --secondary: #60a5fa;
+    --accent: #3b82f6;
+    --light: #1e293b;
+    --dark: #0f172a;
+    --background: #0f172a;
+    --surface: #1e293b;
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --border: #334155;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
 }
 
-// GST Calculator
-function calculateGST() {
-    const amount = parseFloat(document.getElementById('gst-amount').value);
-    const gstRate = parseFloat(document.getElementById('gst-rate').value);
-    
-    if (isNaN(amount)) {
-        alert('Please enter a valid amount');
-        return;
-    }
-    
-    const gstAmount = (amount * gstRate) / 100;
-    const totalAmount = amount + gstAmount;
-    
-    document.getElementById('gst-tax-amount').textContent = '₹' + gstAmount.toFixed(2);
-    document.getElementById('gst-total-amount').textContent = '₹' + totalAmount.toFixed(2);
-    
-    document.getElementById('gst-result').classList.add('show');
+/* Smooth scrolling for modern browsers */
+html {
+    scroll-behavior: smooth;
 }
 
-// FD/RD Calculator
-function calculateFD() {
-    const depositType = document.getElementById('deposit-type').value;
-    const principalAmount = parseFloat(document.getElementById('principal-amount').value);
-    const interestRate = parseFloat(document.getElementById('interest-rate-fd').value);
-    const tenureYears = parseFloat(document.getElementById('tenure-fd').value);
-    
-    if (isNaN(principalAmount) || isNaN(interestRate) || isNaN(tenureYears)) {
-        alert('Please enter valid numbers for all fields');
-        return;
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
     }
     
-    let maturityAmount, totalInterest, totalInvestment;
-    
-    if (depositType === 'fd') {
-        // Fixed Deposit calculation
-        totalInvestment = principalAmount;
-        const interest = principalAmount * Math.pow(1 + interestRate/100, tenureYears) - principalAmount;
-        maturityAmount = principalAmount + interest;
-        totalInterest = interest;
-    } else {
-        // Recurring Deposit calculation
-        const months = tenureYears * 12;
-        const monthlyRate = interestRate / 12 / 100;
-        totalInvestment = principalAmount * months;
-        maturityAmount = principalAmount * (Math.pow(1 + monthlyRate, months) - 1) / monthlyRate;
-        totalInterest = maturityAmount - totalInvestment;
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
-    
-    const effectiveRate = (Math.pow(maturityAmount / totalInvestment, 1/tenureYears) - 1) * 100;
-    
-    document.getElementById('maturity-amount').textContent = '₹' + maturityAmount.toFixed(2);
-    document.getElementById('total-interest-fd').textContent = '₹' + totalInterest.toFixed(2);
-    document.getElementById('total-investment-fd').textContent = '₹' + totalInvestment.toFixed(2);
-    document.getElementById('effective-rate').textContent = effectiveRate.toFixed(2) + '%';
-    
-    document.getElementById('fd-result').classList.add('show');
 }
 
-// Income Tax Calculator
-function calculateTax() {
-    const annualIncome = parseFloat(document.getElementById('annual-income').value);
-    const ageGroup = document.getElementById('age-group').value;
-    const deductions = parseFloat(document.getElementById('deductions').value) || 0;
-    
-    if (isNaN(annualIncome)) {
-        alert('Please enter a valid annual income');
-        return;
-    }
-    
-    const taxableIncome = Math.max(0, annualIncome - deductions);
-    let tax = 0;
-    
-    // Indian tax slabs for FY 2024-25
-    if (taxableIncome <= 300000) {
-        tax = 0;
-    } else if (taxableIncome <= 600000) {
-        tax = (taxableIncome - 300000) * 0.05;
-    } else if (taxableIncome <= 900000) {
-        tax = 15000 + (taxableIncome - 600000) * 0.10;
-    } else if (taxableIncome <= 1200000) {
-        tax = 45000 + (taxableIncome - 900000) * 0.15;
-    } else if (taxableIncome <= 1500000) {
-        tax = 90000 + (taxableIncome - 1200000) * 0.20;
-    } else {
-        tax = 150000 + (taxableIncome - 1500000) * 0.30;
-    }
-    
-    // Senior citizen rebate
-    if (ageGroup === '60-80' && taxableIncome <= 500000) {
-        tax = 0;
-    } else if (ageGroup === 'above-80' && taxableIncome <= 500000) {
-        tax = 0;
-    }
-    
-    const cess = tax * 0.04; // Health and Education Cess
-    const totalTax = tax + cess;
-    const effectiveTaxRate = (totalTax / annualIncome) * 100;
-    
-    document.getElementById('taxable-income').textContent = '₹' + taxableIncome.toFixed(2);
-    document.getElementById('income-tax').textContent = '₹' + tax.toFixed(2);
-    document.getElementById('cess-amount').textContent = '₹' + cess.toFixed(2);
-    document.getElementById('total-tax').textContent = '₹' + totalTax.toFixed(2);
-    document.getElementById('effective-tax-rate').textContent = effectiveTaxRate.toFixed(2) + '%';
-    
-    document.getElementById('tax-result').classList.add('show');
+body {
+    background-color: var(--background);
+    color: var(--text-primary);
+    line-height: 1.6;
+    font-weight: 400;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    /* Prevent horizontal scroll */
+    overflow-x: hidden;
 }
 
-// Savings Goal Tracker
-function calculateSavings() {
-    const savingsGoal = parseFloat(document.getElementById('savings-goal').value);
-    const currentSavings = parseFloat(document.getElementById('current-savings').value) || 0;
-    const monthlySaving = parseFloat(document.getElementById('monthly-saving').value);
-    const expectedReturn = parseFloat(document.getElementById('expected-return').value) || 6;
-    
-    if (isNaN(savingsGoal) || isNaN(monthlySaving)) {
-        alert('Please enter valid numbers for savings goal and monthly saving');
-        return;
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Theme Toggle Switch */
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 20px;
+}
+
+.theme-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+}
+
+.theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: transform 0.4s ease;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background: linear-gradient(135deg, var(--secondary), var(--accent));
+}
+
+input:checked + .slider:before {
+    transform: translateX(30px);
+}
+
+.theme-icon {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.theme-icon:hover {
+    transform: scale(1.1);
+}
+
+/* Header Styles */
+header {
+    background: var(--surface);
+    color: var(--text-primary);
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    transition: all 0.3s ease;
+    /* Improve performance */
+    will-change: transform;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    min-height: 70px;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+    white-space: nowrap;
+    transition: color 0.3s ease;
+}
+
+.logo span {
+    color: var(--secondary);
+    background: linear-gradient(135deg, var(--secondary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: nowrap;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li a {
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    color: var(--text-primary);
+    position: relative;
+}
+
+nav ul li a:hover {
+    color: var(--secondary);
+    background-color: rgba(37, 99, 235, 0.1);
+    transform: translateY(-1px);
+}
+
+nav ul li a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--secondary);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+nav ul li a:hover::after {
+    width: 80%;
+}
+
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    z-index: 1001;
+}
+
+.mobile-menu-btn:hover {
+    background-color: var(--border);
+    transform: scale(1.1);
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 50%, var(--secondary) 100%);
+    color: white;
+    padding: 100px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="rgba(255,255,255,0.05)" points="0,1000 1000,0 1000,1000"/></svg>');
+    background-size: cover;
+    /* Improve performance */
+    will-change: transform;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    font-weight: 800;
+    line-height: 1.2;
+    position: relative;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.hero p {
+    font-size: 1.3rem;
+    max-width: 600px;
+    margin: 0 auto 40px;
+    opacity: 0.9;
+    font-weight: 400;
+    position: relative;
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.cta-button {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--secondary), var(--accent));
+    color: white;
+    padding: 16px 40px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow);
+    position: relative;
+    border: none;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+    overflow: hidden;
+}
+
+.cta-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+    background: linear-gradient(135deg, var(--accent), var(--secondary));
+}
+
+.cta-button:hover::before {
+    left: 100%;
+}
+
+/* Tools Section */
+.tools-section {
+    padding: 100px 0;
+    background-color: var(--light);
+    transition: background-color 0.3s ease;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 60px;
+    color: var(--text-primary);
+    position: relative;
+    font-size: 2.5rem;
+    font-weight: 800;
+    transition: color 0.3s ease;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 5px;
+    background: linear-gradient(90deg, var(--secondary), var(--accent));
+    margin: 20px auto;
+    border-radius: 3px;
+    animation: slideIn 0.8s ease-out 0.3s both;
+}
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+.tool-card {
+    background: var(--surface);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    border: 1px solid var(--border);
+    position: relative;
+    animation: fadeInUp 0.6s ease-out;
+    /* Improve performance */
+    will-change: transform;
+}
+
+.tool-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--secondary), var(--accent));
+}
+
+.tool-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-hover);
+}
+
+.tool-icon {
+    background: linear-gradient(135deg, var(--secondary), var(--accent));
+    color: white;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.tool-card:hover .tool-icon {
+    transform: scale(1.05);
+}
+
+.tool-content {
+    padding: 30px;
+}
+
+.tool-content h3 {
+    margin-bottom: 15px;
+    color: var(--text-primary);
+    font-size: 1.4rem;
+    font-weight: 700;
+    transition: color 0.3s ease;
+}
+
+.tool-content p {
+    color: var(--text-secondary);
+    margin-bottom: 25px;
+    line-height: 1.6;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+}
+
+.tool-button {
+    display: inline-block;
+    background-color: var(--primary);
+    color: var(--background);
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 2px solid var(--primary);
+    font-size: 0.9rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.tool-button:hover {
+    background-color: transparent;
+    color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Calculator Styles */
+.calculator {
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: var(--shadow);
+    margin-bottom: 60px;
+    border: 1px solid var(--border);
+    transition: all 0.3s ease;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.calculator h2 {
+    color: var(--text-primary);
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    transition: color 0.3s ease;
+}
+
+.input-group {
+    margin-bottom: 25px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+}
+
+.input-group input, .input-group select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: var(--surface);
+    color: var(--text-primary);
+}
+
+.input-group input:focus, .input-group select:focus {
+    border-color: var(--secondary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    transform: translateY(-1px);
+}
+
+.calculate-btn {
+    background: linear-gradient(135deg, var(--secondary), var(--accent));
+    color: white;
+    border: none;
+    padding: 16px 32px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: 10px;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.calculate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.calculate-btn:active {
+    transform: translateY(0);
+}
+
+.result {
+    margin-top: 30px;
+    padding: 25px;
+    background: linear-gradient(135deg, var(--light), color-mix(in srgb, var(--light) 80%, transparent 20%));
+    border-radius: 12px;
+    display: none;
+    border-left: 4px solid var(--secondary);
+    transition: all 0.3s ease;
+    animation: slideIn 0.5s ease-out;
+}
+
+.result.show {
+    display: block;
+}
+
+.result h3 {
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    transition: color 0.3s ease;
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 500;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.result-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.result-item span:last-child {
+    color: var(--secondary);
+    font-weight: 700;
+}
+
+/* Tool Description */
+.tool-description {
+    margin-bottom: 60px;
+    padding: 40px;
+    background: var(--surface);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    transition: all 0.3s ease;
+    animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+
+.tool-description h3 {
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    transition: color 0.3s ease;
+}
+
+.tool-description p {
+    margin-bottom: 20px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
+}
+
+.tool-description strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* Footer */
+footer {
+    background: var(--surface);
+    color: var(--text-primary);
+    padding: 80px 0 30px;
+    border-top: 1px solid var(--border);
+    transition: all 0.3s ease;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    margin-bottom: 50px;
+}
+
+.footer-column h3 {
+    margin-bottom: 25px;
+    font-size: 1.3rem;
+    position: relative;
+    padding-bottom: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
+}
+
+.footer-column h3::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 40px;
+    height: 3px;
+    background: var(--secondary);
+    border-radius: 2px;
+}
+
+.footer-column p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 20px;
+    transition: color 0.3s ease;
+}
+
+.footer-column ul {
+    list-style: none;
+}
+
+.footer-column ul li {
+    margin-bottom: 12px;
+}
+
+.footer-column ul li a {
+    transition: all 0.3s ease;
+    color: var(--text-secondary);
+    padding: 5px 0;
+    display: block;
+    position: relative;
+    padding-left: 15px;
+}
+
+.footer-column ul li a::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--secondary);
+    transition: transform 0.3s ease;
+}
+
+.footer-column ul li a:hover {
+    color: var(--secondary);
+    transform: translateX(5px);
+}
+
+.footer-column ul li a:hover::before {
+    transform: translateX(3px);
+}
+
+.copyright {
+    text-align: center;
+    padding-top: 30px;
+    border-top: 1px solid var(--border);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
+}
+
+/* Animation Keyframes */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Viewport animation classes */
+.in-view {
+    animation: fadeInUp 0.6s ease-out both;
+}
+
+/* Performance Optimizations */
+* {
+    box-sizing: border-box;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    .tool-card,
+    .calculator,
+    .tool-description,
+    .section-title,
+    .hero h1,
+    .hero p,
+    .cta-button {
+        animation: none;
     }
     
-    const amountNeeded = Math.max(0, savingsGoal - currentSavings);
-    const progressPercent = (currentSavings / savingsGoal) * 100;
-    
-    // Calculate time to reach goal with compound interest
-    const monthlyRate = expectedReturn / 12 / 100;
-    let futureValue = currentSavings;
-    let months = 0;
-    
-    while (futureValue < savingsGoal && months < 600) { // Max 50 years
-        futureValue = futureValue * (1 + monthlyRate) + monthlySaving;
-        months++;
+    .tool-card:hover,
+    .cta-button:hover,
+    .calculate-btn:hover,
+    .tool-button:hover {
+        transform: none;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    nav ul {
+        gap: 12px;
     }
     
-    const years = Math.floor(months / 12);
-    const remainingMonths = months % 12;
-    let timeToGoal = '';
-    
-    if (years > 0) {
-        timeToGoal = years + ' year' + (years > 1 ? 's' : '');
-        if (remainingMonths > 0) {
-            timeToGoal += ' ' + remainingMonths + ' month' + (remainingMonths > 1 ? 's' : '');
-        }
-    } else {
-        timeToGoal = months + ' month' + (months > 1 ? 's' : '');
+    nav ul li a {
+        padding: 8px 14px;
+        font-size: 0.88rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    nav ul {
+        gap: 10px;
     }
     
-    if (months >= 600) {
-        timeToGoal = 'More than 50 years';
+    nav ul li a {
+        padding: 8px 12px;
+        font-size: 0.85rem;
     }
     
-    document.getElementById('amount-needed').textContent = '₹' + amountNeeded.toFixed(2);
-    document.getElementById('progress-percent').textContent = progressPercent.toFixed(2) + '%';
-    document.getElementById('time-to-goal').textContent = timeToGoal;
-    document.getElementById('future-value').textContent = '₹' + futureValue.toFixed(2);
+    .logo {
+        font-size: 1.6rem;
+    }
     
-    document.getElementById('savings-result').classList.add('show');
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 968px) {
+    .header-container {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    
+    nav {
+        order: 3;
+        width: 100%;
+        display: none;
+    }
+    
+    nav.active {
+        display: block;
+        animation: slideIn 0.3s ease-out;
+    }
+    
+    nav ul {
+        flex-direction: column;
+        gap: 10px;
+        background: var(--surface);
+        padding: 20px;
+        border-radius: 12px;
+        margin-top: 15px;
+        border: 1px solid var(--border);
+    }
+    
+    .mobile-menu-btn {
+        display: block;
+        position: static;
+    }
+    
+    .header-container {
+        min-height: auto;
+        padding: 15px 0;
+    }
+    
+    .theme-toggle {
+        margin-left: auto;
+        margin-right: 15px;
+    }
+    
+    .tools-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .logo {
+        font-size: 1.5rem;
+    }
+    
+    .mobile-menu-btn {
+        display: block;
+    }
+    
+    nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--surface);
+        box-shadow: var(--shadow-hover);
+        display: none;
+        border: 1px solid var(--border);
+        border-top: none;
+    }
+    
+    nav.active {
+        display: block;
+    }
+    
+    nav ul {
+        flex-direction: column;
+        padding: 20px;
+        gap: 15px;
+    }
+    
+    nav ul li a {
+        padding: 12px 20px;
+        font-size: 1rem;
+        display: block;
+        text-align: center;
+        border: 1px solid var(--border);
+    }
+    
+    .theme-toggle {
+        margin: 10px auto;
+        justify-content: center;
+    }
+    
+    .hero {
+        padding: 80px 0;
+    }
+    
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+    
+    .hero p {
+        font-size: 1.1rem;
+    }
+    
+    .calculator {
+        padding: 30px 20px;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-container {
+        padding: 12px 0;
+    }
+    
+    .logo {
+        font-size: 1.4rem;
+    }
+    
+    nav ul {
+        padding: 15px;
+    }
+    
+    nav ul li a {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .hero h1 {
+        font-size: 2rem;
+    }
+    
+    .hero p {
+        font-size: 1rem;
+    }
+    
+    .cta-button {
+        padding: 14px 30px;
+        font-size: 1rem;
+    }
+    
+    .tools-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .calculator {
+        padding: 20px 15px;
+        margin-bottom: 40px;
+    }
+    
+    .tool-description {
+        padding: 30px 20px;
+    }
 }
