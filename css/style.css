@@ -40,12 +40,32 @@
     --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
 }
 
+/* Smooth scrolling for modern browsers */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+    
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
 body {
     background-color: var(--background);
     color: var(--text-primary);
     line-height: 1.6;
     font-weight: 400;
-    transition: all 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    /* Prevent horizontal scroll */
+    overflow-x: hidden;
 }
 
 a {
@@ -101,7 +121,7 @@ a {
     left: 4px;
     bottom: 4px;
     background-color: white;
-    transition: .4s;
+    transition: transform 0.4s ease;
     border-radius: 50%;
 }
 
@@ -115,6 +135,11 @@ input:checked + .slider:before {
 
 .theme-icon {
     font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.theme-icon:hover {
+    transform: scale(1.1);
 }
 
 /* Header Styles */
@@ -124,10 +149,12 @@ header {
     box-shadow: var(--shadow);
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 1000;
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border);
     transition: all 0.3s ease;
+    /* Improve performance */
+    will-change: transform;
 }
 
 .header-container {
@@ -173,12 +200,29 @@ nav ul li a {
     font-size: 0.9rem;
     white-space: nowrap;
     color: var(--text-primary);
+    position: relative;
 }
 
 nav ul li a:hover {
     color: var(--secondary);
     background-color: rgba(37, 99, 235, 0.1);
     transform: translateY(-1px);
+}
+
+nav ul li a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--secondary);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+nav ul li a:hover::after {
+    width: 80%;
 }
 
 .mobile-menu-btn {
@@ -190,11 +234,13 @@ nav ul li a:hover {
     cursor: pointer;
     padding: 5px;
     border-radius: 6px;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
+    z-index: 1001;
 }
 
 .mobile-menu-btn:hover {
     background-color: var(--border);
+    transform: scale(1.1);
 }
 
 /* Hero Section */
@@ -216,6 +262,8 @@ nav ul li a:hover {
     bottom: 0;
     background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="rgba(255,255,255,0.05)" points="0,1000 1000,0 1000,1000"/></svg>');
     background-size: cover;
+    /* Improve performance */
+    will-change: transform;
 }
 
 .hero h1 {
@@ -224,6 +272,7 @@ nav ul li a:hover {
     font-weight: 800;
     line-height: 1.2;
     position: relative;
+    animation: fadeInUp 0.8s ease-out;
 }
 
 .hero p {
@@ -233,6 +282,7 @@ nav ul li a:hover {
     opacity: 0.9;
     font-weight: 400;
     position: relative;
+    animation: fadeInUp 0.8s ease-out 0.2s both;
 }
 
 .cta-button {
@@ -248,12 +298,29 @@ nav ul li a:hover {
     border: none;
     font-size: 1.1rem;
     letter-spacing: 0.5px;
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+    overflow: hidden;
+}
+
+.cta-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
 }
 
 .cta-button:hover {
     transform: translateY(-3px);
     box-shadow: var(--shadow-hover);
     background: linear-gradient(135deg, var(--accent), var(--secondary));
+}
+
+.cta-button:hover::before {
+    left: 100%;
 }
 
 /* Tools Section */
@@ -271,6 +338,7 @@ nav ul li a:hover {
     font-size: 2.5rem;
     font-weight: 800;
     transition: color 0.3s ease;
+    animation: fadeInUp 0.8s ease-out;
 }
 
 .section-title::after {
@@ -281,6 +349,7 @@ nav ul li a:hover {
     background: linear-gradient(90deg, var(--secondary), var(--accent));
     margin: 20px auto;
     border-radius: 3px;
+    animation: slideIn 0.8s ease-out 0.3s both;
 }
 
 .tools-grid {
@@ -297,6 +366,9 @@ nav ul li a:hover {
     transition: all 0.3s ease;
     border: 1px solid var(--border);
     position: relative;
+    animation: fadeInUp 0.6s ease-out;
+    /* Improve performance */
+    will-change: transform;
 }
 
 .tool-card::before {
@@ -323,6 +395,11 @@ nav ul li a:hover {
     justify-content: center;
     font-size: 2.5rem;
     position: relative;
+    transition: all 0.3s ease;
+}
+
+.tool-card:hover .tool-icon {
+    transform: scale(1.05);
 }
 
 .tool-content {
@@ -355,12 +432,15 @@ nav ul li a:hover {
     transition: all 0.3s ease;
     border: 2px solid var(--primary);
     font-size: 0.9rem;
+    position: relative;
+    overflow: hidden;
 }
 
 .tool-button:hover {
     background-color: transparent;
     color: var(--primary);
     transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
 /* Calculator Styles */
@@ -372,6 +452,7 @@ nav ul li a:hover {
     margin-bottom: 60px;
     border: 1px solid var(--border);
     transition: all 0.3s ease;
+    animation: fadeInUp 0.6s ease-out;
 }
 
 .calculator h2 {
@@ -411,6 +492,7 @@ nav ul li a:hover {
     border-color: var(--secondary);
     outline: none;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    transform: translateY(-1px);
 }
 
 .calculate-btn {
@@ -426,11 +508,17 @@ nav ul li a:hover {
     width: 100%;
     margin-top: 10px;
     letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
 }
 
 .calculate-btn:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-hover);
+}
+
+.calculate-btn:active {
+    transform: translateY(0);
 }
 
 .result {
@@ -441,6 +529,11 @@ nav ul li a:hover {
     display: none;
     border-left: 4px solid var(--secondary);
     transition: all 0.3s ease;
+    animation: slideIn 0.5s ease-out;
+}
+
+.result.show {
+    display: block;
 }
 
 .result h3 {
@@ -482,6 +575,7 @@ nav ul li a:hover {
     box-shadow: var(--shadow);
     border: 1px solid var(--border);
     transition: all 0.3s ease;
+    animation: fadeInUp 0.6s ease-out 0.2s both;
 }
 
 .tool-description h3 {
@@ -561,11 +655,25 @@ footer {
     color: var(--text-secondary);
     padding: 5px 0;
     display: block;
+    position: relative;
+    padding-left: 15px;
+}
+
+.footer-column ul li a::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--secondary);
+    transition: transform 0.3s ease;
 }
 
 .footer-column ul li a:hover {
     color: var(--secondary);
     transform: translateX(5px);
+}
+
+.footer-column ul li a:hover::before {
+    transform: translateX(3px);
 }
 
 .copyright {
@@ -575,6 +683,43 @@ footer {
     font-size: 0.9rem;
     color: var(--text-secondary);
     transition: color 0.3s ease;
+}
+
+/* Animation Keyframes */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Viewport animation classes */
+.in-view {
+    animation: fadeInUp 0.6s ease-out both;
 }
 
 /* Performance Optimizations */
@@ -588,9 +733,24 @@ img {
     display: block;
 }
 
-/* Critical above-the-fold CSS */
-.hero, .tools-section {
-    will-change: transform;
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    .tool-card,
+    .calculator,
+    .tool-description,
+    .section-title,
+    .hero h1,
+    .hero p,
+    .cta-button {
+        animation: none;
+    }
+    
+    .tool-card:hover,
+    .cta-button:hover,
+    .calculate-btn:hover,
+    .tool-button:hover {
+        transform: none;
+    }
 }
 
 /* Responsive Design */
@@ -618,6 +778,10 @@ img {
     .logo {
         font-size: 1.6rem;
     }
+    
+    .hero h1 {
+        font-size: 2.5rem;
+    }
 }
 
 @media (max-width: 968px) {
@@ -634,6 +798,7 @@ img {
     
     nav.active {
         display: block;
+        animation: slideIn 0.3s ease-out;
     }
     
     nav ul {
@@ -659,6 +824,11 @@ img {
     .theme-toggle {
         margin-left: auto;
         margin-right: 15px;
+    }
+    
+    .tools-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
     }
 }
 
@@ -711,6 +881,26 @@ img {
         margin: 10px auto;
         justify-content: center;
     }
+    
+    .hero {
+        padding: 80px 0;
+    }
+    
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+    
+    .hero p {
+        font-size: 1.1rem;
+    }
+    
+    .calculator {
+        padding: 30px 20px;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -736,6 +926,24 @@ img {
     }
     
     .hero p {
-        font-size: 1.1rem;
+        font-size: 1rem;
+    }
+    
+    .cta-button {
+        padding: 14px 30px;
+        font-size: 1rem;
+    }
+    
+    .tools-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .calculator {
+        padding: 20px 15px;
+        margin-bottom: 40px;
+    }
+    
+    .tool-description {
+        padding: 30px 20px;
     }
 }
