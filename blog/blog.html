@@ -12,10 +12,23 @@
             padding: 40px 20px;
         }
         
-        .blog-header {
+        .blog-intro {
             text-align: center;
             margin-bottom: 60px;
-            padding: 60px 0;
+            padding: 40px 0;
+        }
+        
+        .blog-intro h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+        
+        .blog-intro p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
         }
         
         .blog-grid {
@@ -57,6 +70,7 @@
             margin-bottom: 15px;
             color: var(--text-primary);
             font-size: 1.3rem;
+            line-height: 1.4;
         }
         
         .blog-card p {
@@ -76,6 +90,21 @@
         .read-more:hover {
             color: var(--accent);
             transform: translateX(5px);
+        }
+        
+        @media (max-width: 768px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .blog-intro h1 {
+                font-size: 2rem;
+            }
+            
+            .blog-intro p {
+                font-size: 1.1rem;
+            }
         }
     </style>
 </head>
@@ -107,10 +136,10 @@
     <!-- Blog Page Content -->
     <main class="blog-page">
         <div class="container">
-            <header class="blog-header">
+            <div class="blog-intro">
                 <h1>Financial Calculator Blog</h1>
                 <p>Learn about financial planning, investment strategies, and how to make the most of our calculators</p>
-            </header>
+            </div>
             
             <div class="blog-grid">
                 <article class="blog-card">
@@ -136,6 +165,33 @@
                     <div class="blog-card-content">
                         <h3>SIP vs Lump Sum Investment: Which is Better?</h3>
                         <p>Compare Systematic Investment Plans with lump sum investments to determine the best strategy for your financial goals.</p>
+                        <a href="#" class="read-more">Read More →</a>
+                    </div>
+                </article>
+                
+                <article class="blog-card">
+                    <div class="blog-card-image">🏦</div>
+                    <div class="blog-card-content">
+                        <h3>FD vs RD: Which Fixed Income Option is Right for You?</h3>
+                        <p>Understand the differences between Fixed Deposits and Recurring Deposits to make the best choice for your savings.</p>
+                        <a href="#" class="read-more">Read More →</a>
+                    </div>
+                </article>
+                
+                <article class="blog-card">
+                    <div class="blog-card-image">📝</div>
+                    <div class="blog-card-content">
+                        <h3>Tax Saving Strategies for the Current Financial Year</h3>
+                        <p>Discover effective tax planning strategies and deductions you can claim to reduce your tax liability legally.</p>
+                        <a href="#" class="read-more">Read More →</a>
+                    </div>
+                </article>
+                
+                <article class="blog-card">
+                    <div class="blog-card-image">🎯</div>
+                    <div class="blog-card-content">
+                        <h3>Setting and Achieving Your Financial Goals</h3>
+                        <p>Learn how to set realistic financial goals and create a plan to achieve them using our savings tracker.</p>
                         <a href="#" class="read-more">Read More →</a>
                     </div>
                 </article>
