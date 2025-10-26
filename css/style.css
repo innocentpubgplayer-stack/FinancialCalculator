@@ -150,7 +150,7 @@ input:checked + .slider:before {
     transform: scale(1.1);
 }
 
-/* Header Styles */
+/* Header Styles - FIXED POSITIONING */
 header {
     background: var(--surface);
     color: var(--text-primary);
@@ -761,26 +761,29 @@ img {
     }
 }
 
-/* FIX: Mobile Menu Styles - Fixed Overlap Issue */
+/* FIX: Mobile Menu Styles - COMPLETELY FIXED Overlap Issue */
 @media (max-width: 968px) {
     .header-container {
         flex-wrap: wrap;
         gap: 15px;
     }
     
+    /* FIX: Mobile navigation positioning */
     nav {
         order: 3;
         width: 100%;
         display: none;
-        position: absolute;
-        top: 100%;
+        position: fixed; /* Changed from absolute to fixed */
+        top: 70px; /* Position below header */
         left: 0;
+        right: 0;
         background: var(--surface);
         box-shadow: var(--shadow-hover);
         border: 1px solid var(--border);
         border-top: none;
-        z-index: 999;
-        /* FIX: Ensure proper stacking context */
+        z-index: 999; /* Lower than header but above content */
+        max-height: calc(100vh - 70px);
+        overflow-y: auto;
         transform: translateY(-100%);
         opacity: 0;
         transition: transform 0.3s ease, opacity 0.3s ease;
@@ -794,12 +797,28 @@ img {
     
     nav ul {
         flex-direction: column;
-        gap: 10px;
+        gap: 0;
         background: var(--surface);
-        padding: 20px;
-        border-radius: 0 0 12px 12px;
+        padding: 0;
         margin-top: 0;
         border: none;
+    }
+    
+    nav ul li {
+        border-bottom: 1px solid var(--border);
+    }
+    
+    nav ul li:last-child {
+        border-bottom: none;
+    }
+    
+    nav ul li a {
+        padding: 15px 20px;
+        font-size: 1rem;
+        display: block;
+        text-align: left;
+        border: none;
+        border-radius: 0;
     }
     
     .mobile-menu-btn {
@@ -813,8 +832,10 @@ img {
     }
     
     .theme-toggle {
-        margin-left: auto;
-        margin-right: 15px;
+        margin: 0 auto;
+        padding: 15px 20px;
+        justify-content: center;
+        border-bottom: 1px solid var(--border);
     }
     
     .tools-grid {
@@ -839,6 +860,11 @@ img {
         position: relative;
         z-index: 1;
     }
+    
+    /* FIX: Adjust hero section margin for mobile */
+    .hero {
+        margin-top: 0;
+    }
 }
 
 @media (max-width: 768px) {
@@ -854,25 +880,6 @@ img {
     
     .mobile-menu-btn {
         display: block;
-    }
-    
-    nav ul {
-        flex-direction: column;
-        padding: 20px;
-        gap: 15px;
-    }
-    
-    nav ul li a {
-        padding: 12px 20px;
-        font-size: 1rem;
-        display: block;
-        text-align: center;
-        border: 1px solid var(--border);
-    }
-    
-    .theme-toggle {
-        margin: 10px auto;
-        justify-content: center;
     }
     
     .hero {
@@ -905,12 +912,8 @@ img {
         font-size: 1.4rem;
     }
     
-    nav ul {
-        padding: 15px;
-    }
-    
     nav ul li a {
-        padding: 10px 15px;
+        padding: 12px 15px;
         font-size: 0.9rem;
     }
     
