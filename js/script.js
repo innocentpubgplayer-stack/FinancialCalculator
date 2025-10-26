@@ -17,11 +17,12 @@ class ThemeManager {
             this.updateToggleSwitch(theme);
         });
         localStorage.setItem('theme', theme);
+        this.currentTheme = theme;
     }
 
     toggleTheme() {
-        this.currentTheme = this.currentTheme === 'light' ? 'dark' : 'light';
-        this.applyTheme(this.currentTheme);
+        const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+        this.applyTheme(newTheme);
     }
 
     updateToggleSwitch(theme) {
@@ -125,6 +126,67 @@ function debounce(func, wait) {
     };
 }
 
+// Formatters for numbers
+const formatters = {
+    currency: new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+    }),
+    
+    number: new Intl.NumberFormat('en-IN', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+    }),
+    
+    percent: new Intl.NumberFormat('en-IN', {
+        style: 'percent',
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 2
+    })
+};
+
+// Input validation utilities
+const validators = {
+    isPositiveNumber: (value) => {
+        const num = parseFloat(value);
+        return !isNaN(num) && num > 0;
+    },
+    
+    isNonNegativeNumber: (value) => {
+        const num = parseFloat(value);
+        return !isNaN(num) && num >= 0;
+    },
+    
+    isValidPercentage: (value) => {
+        const num = parseFloat(value);
+        return !isNaN(num) && num >= 0 && num <= 100;
+    }
+};
+
+// Animation utilities
+const animations = {
+    fadeIn: (element) => {
+        requestAnimationFrame(() => {
+            element.style.opacity = '0';
+            element.style.display = 'block';
+            
+            requestAnimationFrame(() => {
+                element.style.transition = 'opacity 0.3s ease';
+                element.style.opacity = '1';
+            });
+        });
+    },
+    
+    slideDown: (element) => {
+        requestAnimationFrame(() => {
+            element.style.display = 'block';
+            element.classList.add('show');
+        });
+    }
+};
+
 // Mobile menu toggle and main initialization
 document.addEventListener('DOMContentLoaded', function() {
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
@@ -139,6 +201,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 const isActive = !nav.classList.contains('active');
                 nav.classList.toggle('active');
                 this.textContent = isActive ? '✕' : '☰';
+                
+                // Prevent body scroll when menu is open
+                document.body.style.overflow = isActive ? 'hidden' : '';
             });
         });
     }
@@ -152,6 +217,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (mobileMenuBtn) {
                         mobileMenuBtn.textContent = '☰';
                     }
+                    document.body.style.overflow = '';
                 });
             }
         });
@@ -167,6 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (mobileMenuBtn) {
                     mobileMenuBtn.textContent = '☰';
                 }
+                document.body.style.overflow = '';
             });
         }
     });
@@ -178,7 +245,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const observerOptions = {
         root: null,
         rootMargin: '0px',
-        threshold: 0.3
+        threshold: 0.1
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -191,12 +258,21 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, observerOptions);
 
-    // Observe calculator sections
-    document.querySelectorAll('.calculator').forEach(section => {
+    // Observe calculator sections and other elements
+    document.querySelectorAll('.calculator, .tool-card, .tool-description').forEach(section => {
         observer.observe(section);
     });
 
-    // Debounced resize handler (if needed in future)
+    // Add loading animation to tools grid
+    const toolsGrid = document.querySelector('.tools-grid');
+    if (toolsGrid) {
+        const toolCards = toolsGrid.querySelectorAll('.tool-card');
+        toolCards.forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+        });
+    }
+
+    // Debounced resize handler
     window.addEventListener('resize', debounce(() => {
         // Handle resize events efficiently
         if (nav && nav.classList.contains('active')) {
@@ -205,12 +281,41 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (mobileMenuBtn) {
                     mobileMenuBtn.textContent = '☰';
                 }
+                document.body.style.overflow = '';
             });
         }
     }, 250));
+
+    // Add input auto-formatting
+    initInputFormatting();
 });
 
-// Calculator Functions
+// Input formatting and validation
+function initInputFormatting() {
+    // Format currency inputs on blur
+    document.querySelectorAll('input[data-type="currency"]').forEach(input => {
+        input.addEventListener('blur', function() {
+            if (this.value && validators.isPositiveNumber(this.value)) {
+                this.value = formatters.number.format(parseFloat(this.value));
+            }
+        });
+        
+        input.addEventListener('focus', function() {
+            this.value = this.value.replace(/[^\d.]/g, '');
+        });
+    });
+
+    // Format percentage inputs
+    document.querySelectorAll('input[data-type="percentage"]').forEach(input => {
+        input.addEventListener('blur', function() {
+            if (this.value && validators.isValidPercentage(this.value)) {
+                this.value = parseFloat(this.value).toFixed(1);
+            }
+        });
+    });
+}
+
+// Calculator Functions with enhanced validation and formatting
 
 // EMI Calculator Function
 function calculateEMI() {
@@ -218,8 +323,16 @@ function calculateEMI() {
     const annualRate = parseFloat(document.getElementById('interest-rate').value);
     const months = parseInt(document.getElementById('loan-tenure').value);
     
-    if (isNaN(principal) || isNaN(annualRate) || isNaN(months)) {
-        alert('Please enter valid numbers for all fields');
+    // Enhanced validation
+    if (!validators.isPositiveNumber(principal) || 
+        !validators.isPositiveNumber(annualRate) || 
+        !validators.isPositiveNumber(months)) {
+        showError('Please enter valid positive numbers for all fields');
+        return;
+    }
+    
+    if (months > 360) {
+        showError('Loan tenure cannot exceed 30 years (360 months)');
         return;
     }
     
@@ -228,12 +341,12 @@ function calculateEMI() {
     const totalPayment = emi * months;
     const totalInterest = totalPayment - principal;
     
-    // Batch DOM updates
+    // Batch DOM updates with animation
     requestAnimationFrame(() => {
-        document.getElementById('monthly-emi').textContent = '₹' + emi.toFixed(2);
-        document.getElementById('total-interest').textContent = '₹' + totalInterest.toFixed(2);
-        document.getElementById('total-payment').textContent = '₹' + totalPayment.toFixed(2);
-        document.getElementById('emi-result').style.display = 'block';
+        document.getElementById('monthly-emi').textContent = formatters.currency.format(emi);
+        document.getElementById('total-interest').textContent = formatters.currency.format(totalInterest);
+        document.getElementById('total-payment').textContent = formatters.currency.format(totalPayment);
+        animations.slideDown(document.getElementById('emi-result'));
     });
 }
 
@@ -244,8 +357,13 @@ function checkLoanEligibility() {
     const existingEMIs = parseFloat(document.getElementById('existing-emis').value) || 0;
     const loanType = document.getElementById('loan-type').value;
     
-    if (isNaN(income) || isNaN(expenses)) {
-        alert('Please enter valid numbers for income and expenses');
+    if (!validators.isPositiveNumber(income) || !validators.isNonNegativeNumber(expenses)) {
+        showError('Please enter valid numbers for income and expenses');
+        return;
+    }
+    
+    if (expenses >= income) {
+        showError('Expenses cannot be greater than or equal to income');
         return;
     }
     
@@ -277,15 +395,21 @@ function checkLoanEligibility() {
         if (eligibleAmount > 0) {
             eligibilityStatus = 'Eligible';
             recommendedTenure = '5 years';
+            
+            // Cap eligible amount at reasonable limit
+            if (eligibleAmount > 5000000) {
+                eligibleAmount = 5000000;
+            }
         }
     }
     
     // Batch DOM updates
     requestAnimationFrame(() => {
-        document.getElementById('eligible-amount').textContent = '₹' + Math.round(eligibleAmount);
+        document.getElementById('eligible-amount').textContent = formatters.currency.format(eligibleAmount);
         document.getElementById('eligibility-status').textContent = eligibilityStatus;
+        document.getElementById('eligibility-status').className = eligibilityStatus === 'Eligible' ? 'status-eligible' : 'status-not-eligible';
         document.getElementById('recommended-tenure').textContent = recommendedTenure;
-        document.getElementById('eligibility-result').style.display = 'block';
+        animations.slideDown(document.getElementById('eligibility-result'));
     });
 }
 
@@ -295,8 +419,15 @@ function calculateSIP() {
     const annualReturn = parseFloat(document.getElementById('sip-return').value);
     const years = parseInt(document.getElementById('sip-years').value);
     
-    if (isNaN(monthlyInvestment) || isNaN(annualReturn) || isNaN(years)) {
-        alert('Please enter valid numbers for all fields');
+    if (!validators.isPositiveNumber(monthlyInvestment) || 
+        !validators.isNonNegativeNumber(annualReturn) || 
+        !validators.isPositiveNumber(years)) {
+        showError('Please enter valid numbers for all fields');
+        return;
+    }
+    
+    if (years > 50) {
+        showError('Investment period cannot exceed 50 years');
         return;
     }
     
@@ -305,13 +436,15 @@ function calculateSIP() {
     const futureValue = monthlyInvestment * (Math.pow(1 + monthlyRate, months) - 1) / monthlyRate * (1 + monthlyRate);
     const totalInvestment = monthlyInvestment * months;
     const totalReturns = futureValue - totalInvestment;
+    const returnPercentage = (totalReturns / totalInvestment) * 100;
     
     // Batch DOM updates
     requestAnimationFrame(() => {
-        document.getElementById('sip-future-value').textContent = '₹' + Math.round(futureValue);
-        document.getElementById('sip-total-investment').textContent = '₹' + totalInvestment;
-        document.getElementById('sip-total-returns').textContent = '₹' + Math.round(totalReturns);
-        document.getElementById('sip-result').style.display = 'block';
+        document.getElementById('sip-future-value').textContent = formatters.currency.format(futureValue);
+        document.getElementById('sip-total-investment').textContent = formatters.currency.format(totalInvestment);
+        document.getElementById('sip-total-returns').textContent = formatters.currency.format(totalReturns);
+        document.getElementById('sip-return-percentage').textContent = formatters.percent.format(returnPercentage / 100);
+        animations.slideDown(document.getElementById('sip-result'));
     });
 }
 
@@ -320,8 +453,8 @@ function calculateGST() {
     const amount = parseFloat(document.getElementById('gst-amount').value);
     const gstRate = parseFloat(document.getElementById('gst-rate').value);
     
-    if (isNaN(amount) || isNaN(gstRate)) {
-        alert('Please enter valid numbers for all fields');
+    if (!validators.isPositiveNumber(amount) || !validators.isNonNegativeNumber(gstRate)) {
+        showError('Please enter valid numbers for all fields');
         return;
     }
     
@@ -330,9 +463,9 @@ function calculateGST() {
     
     // Batch DOM updates
     requestAnimationFrame(() => {
-        document.getElementById('gst-tax-amount').textContent = '₹' + gstAmount.toFixed(2);
-        document.getElementById('gst-total-amount').textContent = '₹' + totalAmount.toFixed(2);
-        document.getElementById('gst-result').style.display = 'block';
+        document.getElementById('gst-tax-amount').textContent = formatters.currency.format(gstAmount);
+        document.getElementById('gst-total-amount').textContent = formatters.currency.format(totalAmount);
+        animations.slideDown(document.getElementById('gst-result'));
     });
 }
 
@@ -343,8 +476,15 @@ function calculateFD() {
     const annualRate = parseFloat(document.getElementById('interest-rate-fd').value);
     const years = parseFloat(document.getElementById('tenure-fd').value);
     
-    if (isNaN(principal) || isNaN(annualRate) || isNaN(years)) {
-        alert('Please enter valid numbers for all fields');
+    if (!validators.isPositiveNumber(principal) || 
+        !validators.isPositiveNumber(annualRate) || 
+        !validators.isPositiveNumber(years)) {
+        showError('Please enter valid numbers for all fields');
+        return;
+    }
+    
+    if (years > 30) {
+        showError('Tenure cannot exceed 30 years');
         return;
     }
     
@@ -366,13 +506,15 @@ function calculateFD() {
     }
     
     const totalInterest = maturityAmount - totalInvestment;
+    const effectiveRate = (Math.pow(maturityAmount / totalInvestment, 1/years) - 1) * 100;
     
     // Batch DOM updates
     requestAnimationFrame(() => {
-        document.getElementById('maturity-amount').textContent = '₹' + Math.round(maturityAmount).toLocaleString();
-        document.getElementById('total-interest-fd').textContent = '₹' + Math.round(totalInterest).toLocaleString();
-        document.getElementById('total-investment').textContent = '₹' + Math.round(totalInvestment).toLocaleString();
-        document.getElementById('fd-result').style.display = 'block';
+        document.getElementById('maturity-amount').textContent = formatters.currency.format(maturityAmount);
+        document.getElementById('total-interest-fd').textContent = formatters.currency.format(totalInterest);
+        document.getElementById('total-investment').textContent = formatters.currency.format(totalInvestment);
+        document.getElementById('effective-rate').textContent = formatters.percent.format(effectiveRate / 100);
+        animations.slideDown(document.getElementById('fd-result'));
     });
 }
 
@@ -382,8 +524,8 @@ function calculateTax() {
     const ageGroup = document.getElementById('age-group').value;
     const deductions = parseFloat(document.getElementById('deductions').value) || 0;
 
-    if (isNaN(income)) {
-        alert('Please enter a valid annual income');
+    if (!validators.isNonNegativeNumber(income)) {
+        showError('Please enter a valid annual income');
         return;
     }
 
@@ -415,14 +557,16 @@ function calculateTax() {
     // Health & Education Cess (4%)
     const cess = tax * 0.04;
     const totalTax = tax + cess;
+    const effectiveTaxRate = (totalTax / taxableIncome) * 100;
 
-    // Batch DOM updates
+    // Display Results
     requestAnimationFrame(() => {
-        document.getElementById('taxable-income').textContent = '₹' + Math.round(taxableIncome).toLocaleString();
-        document.getElementById('income-tax').textContent = '₹' + Math.round(tax).toLocaleString();
-        document.getElementById('cess-amount').textContent = '₹' + Math.round(cess).toLocaleString();
-        document.getElementById('total-tax').textContent = '₹' + Math.round(totalTax).toLocaleString();
-        document.getElementById('tax-result').style.display = 'block';
+        document.getElementById('taxable-income').textContent = formatters.currency.format(taxableIncome);
+        document.getElementById('income-tax').textContent = formatters.currency.format(tax);
+        document.getElementById('cess-amount').textContent = formatters.currency.format(cess);
+        document.getElementById('total-tax').textContent = formatters.currency.format(totalTax);
+        document.getElementById('effective-tax-rate').textContent = formatters.percent.format(effectiveTaxRate / 100);
+        animations.slideDown(document.getElementById('tax-result'));
     });
 }
 
@@ -433,8 +577,13 @@ function calculateSavings() {
     const monthly = parseFloat(document.getElementById('monthly-saving').value);
     const annualReturn = parseFloat(document.getElementById('expected-return').value) || 6;
     
-    if (isNaN(goal) || isNaN(monthly)) {
+    if (!validators.isPositiveNumber(goal) || !validators.isNonNegativeNumber(monthly)) {
         alert('Please enter valid savings goal and monthly saving amount');
+        return;
+    }
+    
+    if (current > goal) {
+        showError('Current savings already exceed your goal!');
         return;
     }
     
@@ -463,19 +612,178 @@ function calculateSavings() {
     
     const years = Math.ceil(months / 12);
     
+    // Update progress bar if exists
+    const progressBar = document.getElementById('savings-progress-bar');
+    if (progressBar) {
+        progressBar.style.width = progressPercent + '%';
+    }
+    
     // Batch DOM updates
     requestAnimationFrame(() => {
-        document.getElementById('amount-needed').textContent = '₹' + Math.round(needed).toLocaleString();
-        document.getElementById('progress-percent').textContent = progressPercent.toFixed(1) + '%';
-        document.getElementById('time-to-goal').textContent = months < 600 ? `${Math.ceil(months)} months (${years} years)` : 'More than 50 years';
-        document.getElementById('future-value').textContent = '₹' + Math.round(futureValue).toLocaleString();
-        document.getElementById('savings-result').style.display = 'block';
+        document.getElementById('amount-needed').textContent = formatters.currency.format(needed);
+        document.getElementById('progress-percent').textContent = formatters.number.format(progressPercent) + '%';
+        document.getElementById('time-to-goal').textContent = months < 600 ? 
+            `${Math.ceil(months)} months (${years} years)` : 'More than 50 years';
+        document.getElementById('future-value').textContent = formatters.currency.format(futureValue);
+        animations.slideDown(document.getElementById('savings-result'));
     });
 }
 
-// Contact Form Handler
+// Error handling utility
+function showError(message) {
+    // Create or show error message
+    let errorDiv = document.getElementById('calculator-error');
+    if (!errorDiv) {
+        errorDiv = document.createElement('div');
+        errorDiv.id = 'calculator-error';
+        errorDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ef4444;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 10000;
+            max-width: 300px;
+            animation: slideInRight 0.3s ease;
+        `;
+        document.body.appendChild(errorDiv);
+    }
+    
+    errorDiv.textContent = message;
+    errorDiv.style.display = 'block';
+    
+    // Auto hide after 5 seconds
+    setTimeout(() => {
+        animations.fadeIn(errorDiv);
+        setTimeout(() => {
+            errorDiv.style.display = 'none';
+        }, 300);
+    }, 5000);
+}
+
+// Contact Form Handler with validation
 function handleContactForm(event) {
     event.preventDefault();
-    alert('Thank you for your message! We will get back to you soon.');
-    event.target.reset();
+    
+    const form = event.target;
+    const formData = new FormData(form);
+    const name = formData.get('name');
+    const email = formData.get('email');
+    const message = formData.get('message');
+    
+    // Simple validation
+    if (!name || !email || !message) {
+        showError('Please fill in all fields');
+        return;
+    }
+    
+    if (!isValidEmail(email)) {
+        showError('Please enter a valid email address');
+        return;
+    }
+    
+    // Show success message
+    showSuccess('Thank you for your message! We will get back to you soon.');
+    form.reset();
 }
+
+// Email validation
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+// Success message
+function showSuccess(message) {
+    let successDiv = document.getElementById('calculator-success');
+    if (!successDiv) {
+        successDiv = document.createElement('div');
+        successDiv.id = 'calculator-success';
+        successDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 10000;
+            max-width: 300px;
+            animation: slideInRight 0.3s ease;
+        `;
+        document.body.appendChild(successDiv);
+    }
+    
+    successDiv.textContent = message;
+    successDiv.style.display = 'block';
+    
+    // Auto hide after 5 seconds
+    setTimeout(() => {
+        successDiv.style.opacity = '0';
+        successDiv.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => {
+            successDiv.style.display = 'none';
+            successDiv.style.opacity = '1';
+        }, 300);
+    }, 5000);
+}
+
+// Add CSS for animations
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideInRight {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    .status-eligible {
+        color: #10b981;
+        font-weight: bold;
+    }
+    
+    .status-not-eligible {
+        color: #ef4444;
+        font-weight: bold;
+    }
+    
+    .progress-bar {
+        width: 100%;
+        height: 8px;
+        background-color: #e5e7eb;
+        border-radius: 4px;
+        overflow: hidden;
+        margin: 10px 0;
+    }
+    
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--secondary), var(--accent));
+        transition: width 0.3s ease;
+    }
+    
+    .calculator-loading {
+        opacity: 0.7;
+        pointer-events: none;
+    }
+`;
+document.head.appendChild(style);
+
+// Export functions for global access (if needed)
+window.calculateEMI = calculateEMI;
+window.checkLoanEligibility = checkLoanEligibility;
+window.calculateSIP = calculateSIP;
+window.calculateGST = calculateGST;
+window.calculateFD = calculateFD;
+window.calculateTax = calculateTax;
+window.calculateSavings = calculateSavings;
+window.handleContactForm = handleContactForm;
