@@ -307,7 +307,35 @@ function initCalculatorEventListeners() {
         emiButton.addEventListener('click', calculateEMI);
     }
 
-    // Other calculator buttons...
+    // Loan Eligibility Calculator
+    const loanEligibilityButton = document.querySelector('button[onclick="checkLoanEligibility()"]');
+    if (loanEligibilityButton) {
+        loanEligibilityButton.addEventListener('click', checkLoanEligibility);
+    }
+
+    // GST Calculator
+    const gstButton = document.querySelector('button[onclick="calculateGST()"]');
+    if (gstButton) {
+        gstButton.addEventListener('click', calculateGST);
+    }
+
+    // FD/RD Calculator
+    const fdButton = document.querySelector('button[onclick="calculateFD()"]');
+    if (fdButton) {
+        fdButton.addEventListener('click', calculateFD);
+    }
+
+    // Tax Calculator
+    const taxButton = document.querySelector('button[onclick="calculateTax()"]');
+    if (taxButton) {
+        taxButton.addEventListener('click', calculateTax);
+    }
+
+    // Savings Calculator
+    const savingsButton = document.querySelector('button[onclick="calculateSavings()"]');
+    if (savingsButton) {
+        savingsButton.addEventListener('click', calculateSavings);
+    }
 }
 
 // Input formatting and validation
@@ -502,7 +530,7 @@ function calculateGST() {
     });
 }
 
-// FD/RD Calculator Function
+// CORRECTED FD/RD Calculator Function
 function calculateFD() {
     const depositType = document.getElementById('deposit-type').value;
     const principal = parseFloat(document.getElementById('principal-amount').value);
@@ -521,8 +549,6 @@ function calculateFD() {
         return;
     }
     
-    const monthlyRate = annualRate / 100 / 12;
-    const months = years * 12;
     let maturityAmount = 0;
     let totalInvestment = 0;
     
@@ -533,9 +559,12 @@ function calculateFD() {
         maturityAmount = principal * Math.pow(1 + quarterlyRate, quarters);
         totalInvestment = principal;
     } else {
-        // RD calculation
+        // RD calculation (monthly compounding)
+        const monthlyRate = annualRate / 100 / 12;
+        const months = years * 12;
         totalInvestment = principal * months;
-        maturityAmount = principal * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate);
+        // RD formula: M = R * [(1+i)^n - 1] / (1 - (1+i)^(-1/3))
+        maturityAmount = principal * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate);
     }
     
     const totalInterest = maturityAmount - totalInvestment;
@@ -545,13 +574,13 @@ function calculateFD() {
     requestAnimationFrame(() => {
         document.getElementById('maturity-amount').textContent = formatters.currency.format(maturityAmount);
         document.getElementById('total-interest-fd').textContent = formatters.currency.format(totalInterest);
-        document.getElementById('total-investment').textContent = formatters.currency.format(totalInvestment);
+        document.getElementById('total-investment-fd').textContent = formatters.currency.format(totalInvestment);
         document.getElementById('effective-rate').textContent = formatters.percent.format(effectiveRate / 100);
         animations.slideDown(document.getElementById('fd-result'));
     });
 }
 
-// Income Tax Calculator Function (New Regime FY 2025–26)
+// CORRECTED Income Tax Calculator Function (New Regime FY 2025–26)
 function calculateTax() {
     const income = parseFloat(document.getElementById('annual-income').value);
     const ageGroup = document.getElementById('age-group').value;
@@ -562,8 +591,8 @@ function calculateTax() {
         return;
     }
 
-    // Under the New Regime, deductions are mostly not applicable
-    const taxableIncome = Math.max(0, income);
+    // Using New Regime (default for FY 2025-26)
+    const taxableIncome = Math.max(0, income - deductions);
 
     let tax = 0;
 
@@ -590,7 +619,7 @@ function calculateTax() {
     // Health & Education Cess (4%)
     const cess = tax * 0.04;
     const totalTax = tax + cess;
-    const effectiveTaxRate = (totalTax / taxableIncome) * 100;
+    const effectiveTaxRate = taxableIncome > 0 ? (totalTax / taxableIncome) * 100 : 0;
 
     // Display Results
     requestAnimationFrame(() => {
@@ -611,7 +640,7 @@ function calculateSavings() {
     const annualReturn = parseFloat(document.getElementById('expected-return').value) || 6;
     
     if (!validators.isPositiveNumber(goal) || !validators.isNonNegativeNumber(monthly)) {
-        alert('Please enter valid savings goal and monthly saving amount');
+        showError('Please enter valid savings goal and monthly saving amount');
         return;
     }
     
@@ -821,23 +850,38 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Test function for SIP calculator
-function testSIPCalculation() {
-    // Test with known values: ₹10,000 monthly, 12% annual return, 10 years
+// Test function for calculators
+function testCalculators() {
+    console.log('Testing all calculators...');
+    
+    // Test SIP
+    console.log('SIP Test - ₹10,000 monthly, 12% return, 10 years:');
     const monthlyInvestment = 10000;
     const annualReturn = 12;
     const years = 10;
-    
     const monthlyRate = annualReturn / 12 / 100;
     const months = years * 12;
     const futureValue = monthlyInvestment * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate);
-    
-    console.log('SIP Test Calculation:');
-    console.log('Monthly Investment:', monthlyInvestment);
-    console.log('Annual Return:', annualReturn + '%');
-    console.log('Years:', years);
     console.log('Future Value:', formatters.currency.format(futureValue));
-    console.log('Expected (approx): ₹23,00,000');
+    
+    // Test FD
+    console.log('FD Test - ₹1,00,000 principal, 7% interest, 5 years:');
+    const principal = 100000;
+    const fdRate = 7;
+    const fdYears = 5;
+    const quarterlyRate = fdRate / 100 / 4;
+    const quarters = fdYears * 4;
+    const fdMaturity = principal * Math.pow(1 + quarterlyRate, quarters);
+    console.log('Maturity Amount:', formatters.currency.format(fdMaturity));
+    
+    // Test Tax
+    console.log('Tax Test - ₹8,00,000 income:');
+    const income = 800000;
+    let tax = 0;
+    if (income <= 300000) tax = 0;
+    else if (income <= 600000) tax = (income - 300000) * 0.05;
+    else if (income <= 900000) tax = (300000 * 0.05) + (income - 600000) * 0.10;
+    console.log('Tax Amount:', formatters.currency.format(tax));
 }
 
 // Export functions for global access
@@ -849,4 +893,4 @@ window.calculateFD = calculateFD;
 window.calculateTax = calculateTax;
 window.calculateSavings = calculateSavings;
 window.handleContactForm = handleContactForm;
-window.testSIPCalculation = testSIPCalculation;
+window.testCalculators = testCalculators;
