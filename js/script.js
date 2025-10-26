@@ -145,7 +145,6 @@ function calculateGST() {
     document.getElementById('gst-result').style.display = 'block';
 }
 
-
 // FD/RD Calculator Function
 function calculateFD() {
     const depositType = document.getElementById('deposit-type').value;
@@ -286,5 +285,4 @@ function handleContactForm(event) {
     event.preventDefault();
     alert('Thank you for your message! We will get back to you soon.');
     event.target.reset();
-
 }
