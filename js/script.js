@@ -187,13 +187,13 @@ const animations = {
     }
 };
 
-// Mobile menu toggle and main initialization
+// FIXED: Mobile menu toggle and main initialization
 document.addEventListener('DOMContentLoaded', function() {
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const nav = document.querySelector('nav');
     const themeManager = new ThemeManager();
     
-    // Mobile menu functionality - FIXED VERSION
+    // FIXED: Mobile menu functionality
     if (mobileMenuBtn && nav) {
         mobileMenuBtn.addEventListener('click', function(e) {
             e.stopPropagation(); // Prevent event bubbling
