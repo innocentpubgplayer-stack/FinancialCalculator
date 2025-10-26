@@ -80,7 +80,7 @@ a {
     padding: 0 15px;
 }
 
-/* Theme Toggle Switch */
+/* ===== THEME TOGGLE ===== */
 .theme-toggle {
     display: flex;
     align-items: center;
@@ -109,7 +109,7 @@ a {
     right: 0;
     bottom: 0;
     background-color: #ccc;
-    transition: .4s;
+    transition: 0.4s;
     border-radius: 34px;
 }
 
@@ -142,7 +142,7 @@ input:checked + .slider:before {
     transform: scale(1.1);
 }
 
-/* Header Styles */
+/* ===== HEADER ===== */
 header {
     background: var(--surface);
     color: var(--text-primary);
@@ -243,7 +243,7 @@ nav ul li a:hover::after {
     transform: scale(1.1);
 }
 
-/* Hero Section */
+/* ===== HERO SECTION ===== */
 .hero {
     background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 50%, var(--secondary) 100%);
     color: white;
@@ -309,7 +309,7 @@ nav ul li a:hover::after {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
     transition: left 0.5s;
 }
 
@@ -323,7 +323,7 @@ nav ul li a:hover::after {
     left: 100%;
 }
 
-/* Tools Section */
+/* ===== TOOLS SECTION ===== */
 .tools-section {
     padding: 100px 0;
     background-color: var(--light);
@@ -440,10 +440,10 @@ nav ul li a:hover::after {
     background-color: transparent;
     color: var(--primary);
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Calculator Styles */
+/* ===== CALCULATOR ===== */
 .calculator {
     background: var(--surface);
     border-radius: 16px;
@@ -477,7 +477,8 @@ nav ul li a:hover::after {
     transition: color 0.3s ease;
 }
 
-.input-group input, .input-group select {
+.input-group input,
+.input-group select {
     width: 100%;
     padding: 14px 16px;
     border: 2px solid var(--border);
@@ -488,7 +489,8 @@ nav ul li a:hover::after {
     color: var(--text-primary);
 }
 
-.input-group input:focus, .input-group select:focus {
+.input-group input:focus,
+.input-group select:focus {
     border-color: var(--secondary);
     outline: none;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
@@ -566,7 +568,7 @@ nav ul li a:hover::after {
     font-weight: 700;
 }
 
-/* Tool Description */
+/* ===== TOOL DESCRIPTION ===== */
 .tool-description {
     margin-bottom: 60px;
     padding: 40px;
@@ -598,7 +600,7 @@ nav ul li a:hover::after {
     font-weight: 600;
 }
 
-/* Footer */
+/* ===== FOOTER ===== */
 footer {
     background: var(--surface);
     color: var(--text-primary);
@@ -685,7 +687,7 @@ footer {
     transition: color 0.3s ease;
 }
 
-/* Animation Keyframes */
+/* ===== ANIMATIONS ===== */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -722,7 +724,7 @@ footer {
     animation: fadeInUp 0.6s ease-out both;
 }
 
-/* Performance Optimizations */
+/* ===== PERFORMANCE OPTIMIZATIONS ===== */
 * {
     box-sizing: border-box;
 }
@@ -753,7 +755,7 @@ img {
     }
 }
 
-/* Responsive Design */
+/* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 1200px) {
     nav ul {
         gap: 12px;
