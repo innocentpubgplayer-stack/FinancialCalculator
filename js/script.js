@@ -145,9 +145,146 @@ function calculateGST() {
     document.getElementById('gst-result').style.display = 'block';
 }
 
+
+// FD/RD Calculator Function
+function calculateFD() {
+    const depositType = document.getElementById('deposit-type').value;
+    const principal = parseFloat(document.getElementById('principal-amount').value);
+    const annualRate = parseFloat(document.getElementById('interest-rate-fd').value);
+    const years = parseFloat(document.getElementById('tenure-fd').value);
+    
+    if (isNaN(principal) || isNaN(annualRate) || isNaN(years)) {
+        alert('Please enter valid numbers for all fields');
+        return;
+    }
+    
+    const monthlyRate = annualRate / 100 / 12;
+    const months = years * 12;
+    let maturityAmount = 0;
+    let totalInvestment = 0;
+    
+    if (depositType === 'fd') {
+        // FD calculation (compound interest quarterly)
+        const quarterlyRate = annualRate / 100 / 4;
+        const quarters = years * 4;
+        maturityAmount = principal * Math.pow(1 + quarterlyRate, quarters);
+        totalInvestment = principal;
+    } else {
+        // RD calculation
+        totalInvestment = principal * months;
+        maturityAmount = principal * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate);
+    }
+    
+    const totalInterest = maturityAmount - totalInvestment;
+    
+    document.getElementById('maturity-amount').textContent = '₹' + Math.round(maturityAmount).toLocaleString();
+    document.getElementById('total-interest-fd').textContent = '₹' + Math.round(totalInterest).toLocaleString();
+    document.getElementById('total-investment').textContent = '₹' + Math.round(totalInvestment).toLocaleString();
+    document.getElementById('fd-result').style.display = 'block';
+}
+
+// Income Tax Calculator Function
+function calculateTax() {
+    const income = parseFloat(document.getElementById('annual-income').value);
+    const ageGroup = document.getElementById('age-group').value;
+    const deductions = parseFloat(document.getElementById('deductions').value) || 0;
+    
+    if (isNaN(income)) {
+        alert('Please enter valid annual income');
+        return;
+    }
+    
+    // Calculate taxable income
+    const taxableIncome = Math.max(0, income - deductions);
+    
+    // Set basic exemption limit based on age
+    let exemptionLimit = 250000; // Below 60
+    if (ageGroup === '60-80') exemptionLimit = 300000;
+    if (ageGroup === 'above-80') exemptionLimit = 500000;
+    
+    const incomeAfterExemption = Math.max(0, taxableIncome - exemptionLimit);
+    
+    // Calculate tax as per slabs
+    let tax = 0;
+    
+    if (incomeAfterExemption > 0) {
+        // 0-2.5L already exempted, calculate from 2.5L onwards
+        const slab1 = Math.min(incomeAfterExemption, 250000);
+        const slab2 = Math.min(Math.max(incomeAfterExemption - 250000, 0), 250000);
+        const slab3 = Math.max(incomeAfterExemption - 500000, 0);
+        
+        tax = (slab1 * 0) + (slab2 * 0.05) + (slab3 * 0.20);
+        
+        // For income above 10L, additional 30% on excess
+        if (incomeAfterExemption > 1000000) {
+            const slab4 = incomeAfterExemption - 1000000;
+            tax += slab4 * 0.30;
+        }
+    }
+    
+    // Apply rebate under Section 87A if applicable
+    if (taxableIncome <= 500000) {
+        tax = Math.max(0, tax - 12500);
+    }
+    
+    const cess = tax * 0.04; // Health and education cess
+    const totalTax = tax + cess;
+    
+    document.getElementById('taxable-income').textContent = '₹' + Math.round(taxableIncome).toLocaleString();
+    document.getElementById('income-tax').textContent = '₹' + Math.round(tax).toLocaleString();
+    document.getElementById('cess-amount').textContent = '₹' + Math.round(cess).toLocaleString();
+    document.getElementById('total-tax').textContent = '₹' + Math.round(totalTax).toLocaleString();
+    document.getElementById('tax-result').style.display = 'block';
+}
+
+// Savings Goal Tracker Function
+function calculateSavings() {
+    const goal = parseFloat(document.getElementById('savings-goal').value);
+    const current = parseFloat(document.getElementById('current-savings').value) || 0;
+    const monthly = parseFloat(document.getElementById('monthly-saving').value);
+    const annualReturn = parseFloat(document.getElementById('expected-return').value) || 6;
+    
+    if (isNaN(goal) || isNaN(monthly)) {
+        alert('Please enter valid savings goal and monthly saving amount');
+        return;
+    }
+    
+    const needed = Math.max(0, goal - current);
+    const progressPercent = current > 0 ? Math.min(100, (current / goal) * 100) : 0;
+    
+    // Calculate time to reach goal with compound interest
+    const monthlyRate = annualReturn / 100 / 12;
+    let months = 0;
+    let futureValue = current;
+    
+    if (monthly > 0) {
+        // Using formula for future value of series with compound interest
+        while (futureValue < goal && months < 600) { // Max 50 years
+            months++;
+            futureValue = futureValue * (1 + monthlyRate) + monthly;
+        }
+    } else {
+        // Without monthly contributions
+        if (current > 0 && annualReturn > 0) {
+            months = Math.log(goal / current) / Math.log(1 + monthlyRate);
+        } else {
+            months = needed > 0 ? Infinity : 0;
+        }
+    }
+    
+    const years = Math.ceil(months / 12);
+    
+    document.getElementById('amount-needed').textContent = '₹' + Math.round(needed).toLocaleString();
+    document.getElementById('progress-percent').textContent = progressPercent.toFixed(1) + '%';
+    document.getElementById('time-to-goal').textContent = months < 600 ? `${Math.ceil(months)} months (${years} years)` : 'More than 50 years';
+    document.getElementById('future-value').textContent = '₹' + Math.round(futureValue).toLocaleString();
+    document.getElementById('savings-result').style.display = 'block';
+}
+
 // Contact Form Handler
 function handleContactForm(event) {
     event.preventDefault();
     alert('Thank you for your message! We will get back to you soon.');
     event.target.reset();
+
 }
