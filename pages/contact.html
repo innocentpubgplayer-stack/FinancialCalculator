@@ -6,7 +6,717 @@
     <title>Contact Us - FinancialCalculator | Get in Touch</title>
     <meta name="description" content="Contact FinancialCalculator for questions, feedback, or support. We're here to help you with your financial planning needs.">
     <link rel="icon" type="image/x-icon" href="images/logo.jpg">
-    <link rel="stylesheet" href="../css/style.css">
+    
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            /* Light Theme Colors */
+            --primary: #1a1a1a;
+            --secondary: #2563eb;
+            --accent: #3b82f6;
+            --light: #f8fafc;
+            --dark: #0f172a;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --background: #ffffff;
+            --surface: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #6b7280;
+            --border: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        [data-theme="dark"] {
+            /* Dark Theme Colors */
+            --primary: #f8fafc;
+            --secondary: #60a5fa;
+            --accent: #3b82f6;
+            --light: #1e293b;
+            --dark: #0f172a;
+            --background: #0f172a;
+            --surface: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --border: #334155;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-weight: 400;
+            transition: all 0.3s ease;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Theme Toggle Switch */
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: 20px;
+        }
+
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+
+        .theme-icon {
+            font-size: 1.2rem;
+        }
+
+        /* Header Styles */
+        header {
+            background: var(--surface);
+            color: var(--text-primary);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            min-height: 70px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+            white-space: nowrap;
+            transition: color 0.3s ease;
+        }
+
+        .logo span {
+            color: var(--secondary);
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: nowrap;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li a {
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            color: var(--text-primary);
+        }
+
+        nav ul li a:hover {
+            color: var(--secondary);
+            background-color: rgba(37, 99, 235, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+        }
+
+        .mobile-menu-btn:hover {
+            background-color: var(--border);
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 50%, var(--secondary) 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="rgba(255,255,255,0.05)" points="0,1000 1000,0 1000,1000"/></svg>');
+            background-size: cover;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-weight: 800;
+            line-height: 1.2;
+            position: relative;
+        }
+
+        .breadcrumb {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 0.5rem;
+            position: relative;
+        }
+
+        .breadcrumb a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .breadcrumb a:hover {
+            color: white;
+        }
+
+        .breadcrumb li:not(:last-child)::after {
+            content: ">";
+            margin-left: 0.5rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Contact Content */
+        .content-section {
+            padding: 80px 0;
+        }
+
+        .content-section h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .content-section p {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        /* Contact Layout */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            margin-top: 40px;
+        }
+
+        /* Contact Form */
+        .contact-form {
+            background: var(--surface);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .contact-form:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--surface);
+            color: var(--text-primary);
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--secondary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Contact Info */
+        .contact-info {
+            background: var(--surface);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            height: fit-content;
+            transition: all 0.3s ease;
+        }
+
+        .contact-info:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .contact-info h3 {
+            margin-bottom: 25px;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .contact-info h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--secondary);
+            border-radius: 2px;
+        }
+
+        .contact-details {
+            margin-bottom: 30px;
+        }
+
+        .contact-detail {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-detail:hover {
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .contact-detail i {
+            margin-right: 15px;
+            color: var(--secondary);
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+            margin-top: 2px;
+        }
+
+        .contact-detail div h4 {
+            margin-bottom: 5px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .contact-detail div p {
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            margin-top: 50px;
+        }
+
+        .faq-item {
+            background: var(--surface);
+            margin-bottom: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .faq-question {
+            padding: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.1rem;
+        }
+
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: var(--secondary);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 0 20px 20px;
+            max-height: 500px;
+        }
+
+        /* Success/Error Messages */
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            font-weight: 500;
+        }
+
+        .message.success {
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .message.error {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error);
+            color: var(--error);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--surface);
+            color: var(--text-primary);
+            padding: 80px 0 30px;
+            border-top: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 25px;
+            font-size: 1.3rem;
+            position: relative;
+            padding-bottom: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--secondary);
+            border-radius: 2px;
+        }
+
+        .footer-column p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-column ul li a {
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            padding: 5px 0;
+            display: block;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--secondary);
+            transform: translateX(5px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid var(--border);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .header-container {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            
+            nav {
+                order: 3;
+                width: 100%;
+                display: none;
+            }
+            
+            nav.active {
+                display: block;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+                background: var(--surface);
+                padding: 20px;
+                border-radius: 12px;
+                margin-top: 15px;
+                border: 1px solid var(--border);
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                position: static;
+            }
+            
+            .header-container {
+                min-height: auto;
+                padding: 15px 0;
+            }
+            
+            .theme-toggle {
+                margin-left: auto;
+                margin-right: 15px;
+            }
+
+            .contact-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            nav {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--surface);
+                box-shadow: var(--shadow-hover);
+                display: none;
+                border: 1px solid var(--border);
+                border-top: none;
+            }
+            
+            nav.active {
+                display: block;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                padding: 20px;
+                gap: 15px;
+            }
+            
+            nav ul li a {
+                padding: 12px 20px;
+                font-size: 1rem;
+                display: block;
+                text-align: center;
+                border: 1px solid var(--border);
+            }
+            
+            .theme-toggle {
+                margin: 10px auto;
+                justify-content: center;
+            }
+
+            .page-header {
+                padding: 60px 0;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .content-section {
+                padding: 60px 0;
+            }
+
+            .contact-form, .contact-info {
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-container {
+                padding: 12px 0;
+            }
+            
+            .logo {
+                font-size: 1.4rem;
+            }
+            
+            nav ul {
+                padding: 15px;
+            }
+            
+            nav ul li a {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+
+            .contact-form, .contact-info {
+                padding: 20px;
+            }
+        }
+    </style>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <!-- Header -->
@@ -24,6 +734,14 @@
                     <li><a href="disclaimer.html">Disclaimer</a></li>
                     <li><a href="terms-conditions.html">Terms & Conditions</a></li>
                 </ul>
+                <div class="theme-toggle">
+                    <span class="theme-icon">🌙</span>
+                    <label class="theme-switch">
+                        <input type="checkbox" id="theme-toggle">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="theme-icon">☀️</span>
+                </div>
             </nav>
         </div>
     </header>
@@ -46,48 +764,102 @@
                 <h2>Get in Touch</h2>
                 <p>We'd love to hear from you! Whether you have questions about our financial tools, need assistance, want to provide feedback, or are interested in partnering with us, please don't hesitate to reach out. Our team is here to help you with all your financial planning needs.</p>
                 
-                <div class="contact-form">
-                    <form onsubmit="handleContactForm(event)">
-                        <div class="form-group">
-                            <label for="name">Full Name</label>
-                            <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                <div class="contact-container">
+                    <div class="contact-form">
+                        <div id="form-message" class="message"></div>
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <label for="name">Full Name</label>
+                                <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" required placeholder="Enter your email address">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <select id="subject" name="subject" required>
+                                    <option value="">Select a subject</option>
+                                    <option value="general">General Inquiry</option>
+                                    <option value="support">Technical Support</option>
+                                    <option value="feedback">Feedback</option>
+                                    <option value="partnership">Partnership</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" name="message" required placeholder="Enter your message here..."></textarea>
+                            </div>
+                            
+                            <button type="submit" class="submit-btn">Send Message</button>
+                        </form>
+                    </div>
+                    
+                    <div class="contact-info">
+                        <h3>Other Ways to Reach Us</h3>
+                        <div class="contact-details">
+                            <div class="contact-detail">
+                                <i class="fas fa-envelope"></i>
+                                <div>
+                                    <h4>Email</h4>
+                                    <p>info@FinancialCalculator.com</p>
+                                </div>
+                            </div>
+                            <div class="contact-detail">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div>
+                                    <h4>Address</h4>
+                                    <p>New Delhi-110044, Delhi, India</p>
+                                </div>
+                            </div>
+                            <div class="contact-detail">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="contact-detail">
+                                <i class="fas fa-clock"></i>
+                                <div>
+                                    <h4>Business Hours</h4>
+                                    <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
+                                </div>
+                            </div>
                         </div>
                         
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" name="email" required placeholder="Enter your email address">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="subject">Subject</label>
-                            <select id="subject" name="subject" required>
-                                <option value="">Select a subject</option>
-                                <option value="general">General Inquiry</option>
-                                <option value="support">Technical Support</option>
-                                <option value="feedback">Feedback</option>
-                                <option value="partnership">Partnership</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="message">Message</label>
-                            <textarea id="message" name="message" required placeholder="Enter your message here..."></textarea>
-                        </div>
-                        
-                        <button type="submit" class="submit-btn">Send Message</button>
-                    </form>
+                        <h3>Why Choose Us?</h3>
+                        <p>We provide accurate, easy-to-use financial calculators that help you make informed decisions about your money. Our tools are completely free and designed with your privacy in mind.</p>
+                    </div>
                 </div>
                 
-                <h2>Other Ways to Reach Us</h2>
-                <p><strong>Email:</strong> info@FinancialCalculator.com</p>
-                <p><strong>Address:</strong> FNew Delhi-110044, Delhi, India</p>
-                
-                <h2>Frequently Asked Questions</h2>
-                <p><strong>Are your financial calculators really free?</strong> Yes, all our calculators and tools are completely free to use with no hidden charges or registration requirements.</p>
-                <p><strong>Do you store my financial data?</strong> No, we take your privacy seriously. All calculations are done locally in your browser, and we don't store any of your personal or financial information.</p>
-                <p><strong>Can I use your calculators on mobile devices?</strong> Absolutely! Our website is fully responsive and works perfectly on all devices including smartphones and tablets.</p>
-                <p><strong>How often are your calculators updated?</strong> We regularly update our calculators to reflect changes in tax laws, interest rates, and financial regulations.</p>
+                <div class="faq-section">
+                    <h2>Frequently Asked Questions</h2>
+                    <div class="faq-item">
+                        <div class="faq-question">Are your financial calculators really free?</div>
+                        <div class="faq-answer">
+                            <p>Yes, all our calculators and tools are completely free to use with no hidden charges or registration requirements. We believe financial education should be accessible to everyone.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Do you store my financial data?</div>
+                        <div class="faq-answer">
+                            <p>No, we take your privacy seriously. All calculations are done locally in your browser, and we don't store any of your personal or financial information on our servers.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Can I use your calculators on mobile devices?</div>
+                        <div class="faq-answer">
+                            <p>Absolutely! Our website is fully responsive and works perfectly on all devices including smartphones and tablets. You can access our calculators anytime, anywhere.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">How often are your calculators updated?</div>
+                        <div class="faq-answer">
+                            <p>We regularly update our calculators to reflect changes in tax laws, interest rates, and financial regulations. Our team monitors financial news and updates our tools accordingly.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -131,9 +903,88 @@
         </div>
     </footer>
 
-    <script src="../js/script.js"></script>
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            document.querySelector('nav').classList.toggle('active');
+        });
+
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        
+        // Set initial theme
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        themeToggle.checked = savedTheme === 'dark';
+        
+        // Toggle theme
+        themeToggle.addEventListener('change', function() {
+            const theme = this.checked ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        });
+
+        // FAQ accordion functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentNode;
+                item.classList.toggle('active');
+                
+                // Close other items
+                document.querySelectorAll('.faq-item').forEach(otherItem => {
+                    if (otherItem !== item) {
+                        otherItem.classList.remove('active');
+                    }
+                });
+            });
+        });
+
+        // Contact form handling
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const subject = formData.get('subject');
+            const message = formData.get('message');
+            
+            // Simple validation
+            if (!name || !email || !subject || !message) {
+                showMessage('Please fill in all required fields.', 'error');
+                return;
+            }
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showMessage('Please enter a valid email address.', 'error');
+                return;
+            }
+            
+            // In a real application, you would send the form data to a server here
+            // For this example, we'll just simulate a successful submission
+            
+            // Show success message
+            showMessage('Thank you for your message! We will get back to you soon.', 'success');
+            
+            // Reset form
+            this.reset();
+        });
+
+        // Function to show messages
+        function showMessage(text, type) {
+            const messageEl = document.getElementById('form-message');
+            messageEl.textContent = text;
+            messageEl.className = `message ${type}`;
+            messageEl.style.display = 'block';
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                messageEl.style.display = 'none';
+            }, 5000);
+        }
+    </script>
 </body>
-
 </html>
-
-
